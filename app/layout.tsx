@@ -36,21 +36,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="tr" className={`${inter.className} dark`} suppressHydrationWarning>
+    <html lang="tr" className={inter.className} suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                var t = localStorage.getItem('theme');
-                if (t === 'light') document.documentElement.classList.remove('dark');
-                else document.documentElement.classList.add('dark');
-              })();
-            `,
-          }}
-        />
         {/* Google AdSense */}
         <script
           async
