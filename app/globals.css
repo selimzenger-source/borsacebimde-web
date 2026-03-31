@@ -2,12 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Light Theme (default) ─── */
 :root {
-  --bg-primary: #071A14;
-  --bg-secondary: #0A2E1F;
-  --bg-surface: #0D3627;
-  --accent-green: #4CAF50;
-  --accent-gold: #FFD700;
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #FFFFFF;
+  --bg-surface: #F1F5F9;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F8FAFC;
+  --border-primary: #E2E8F0;
+  --border-secondary: #CBD5E1;
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-card-hover: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+}
+
+/* ─── Dark Theme ─── */
+.dark {
+  --bg-primary: #0B1120;
+  --bg-secondary: #111827;
+  --bg-surface: #1E293B;
+  --bg-card: #1E293B;
+  --bg-card-hover: #253449;
+  --border-primary: rgba(255,255,255,0.08);
+  --border-secondary: rgba(255,255,255,0.12);
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-card-hover: 0 4px 16px rgba(0,0,0,0.4), 0 2px 6px rgba(0,0,0,0.3);
 }
 
 * {
@@ -22,63 +46,25 @@ html {
 
 body {
   background-color: var(--bg-primary);
-  color: #fff;
+  color: var(--text-primary);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
-
-/* Glass card */
-.glass-card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px;
-  backdrop-filter: blur(12px);
+/* ─── Card ─── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.card:hover {
+  box-shadow: var(--shadow-card-hover);
 }
 
-/* Glow effects */
-.glow-green { box-shadow: 0 0 20px rgba(76,175,80,0.15), inset 0 1px 0 rgba(76,175,80,0.1); }
-.glow-gold { box-shadow: 0 0 20px rgba(255,215,0,0.15), inset 0 1px 0 rgba(255,215,0,0.1); }
-.glow-blue { box-shadow: 0 0 20px rgba(41,121,255,0.15), inset 0 1px 0 rgba(41,121,255,0.1); }
-.glow-cyan { box-shadow: 0 0 20px rgba(38,198,218,0.15), inset 0 1px 0 rgba(38,198,218,0.1); }
-.glow-purple { box-shadow: 0 0 20px rgba(179,136,255,0.15), inset 0 1px 0 rgba(179,136,255,0.1); }
-.glow-orange { box-shadow: 0 0 20px rgba(255,152,0,0.15), inset 0 1px 0 rgba(255,152,0,0.1); }
-
-/* Skeleton loading */
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-.skeleton {
-  background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: 8px;
-}
-
-/* AdSense responsive */
-.ad-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 90px;
-  background: rgba(255,255,255,0.01);
-  border: 1px dashed rgba(255,255,255,0.06);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.ad-sidebar {
-  position: sticky;
-  top: 80px;
-}
-
-/* Badge */
+/* ─── Badge ─── */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -86,11 +72,29 @@ body {
   padding: 2px 8px;
   border-radius: 6px;
   font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
 }
 
-/* Pulse dot */
+/* ─── Custom scrollbar ─── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; opacity: 0.3; }
+::-webkit-scrollbar-thumb:hover { opacity: 0.5; }
+
+/* ─── Skeleton loading ─── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-surface) 25%, var(--bg-card-hover) 50%, var(--bg-surface) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+
+/* ─── Pulse dot ─── */
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
@@ -102,24 +106,15 @@ body {
   animation: pulse-dot 2s infinite;
 }
 
-/* App store buttons */
-.store-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 14px;
-  transition: all 0.2s;
-  border: 1px solid rgba(255,255,255,0.1);
-}
-.store-btn:hover {
-  transform: translateY(-1px);
-  border-color: rgba(255,255,255,0.2);
+/* ─── Ad container ─── */
+/* Ads are hidden until loaded - no placeholder boxes */
+
+/* ─── Ad sidebar ─── */
+.ad-sidebar {
+  position: sticky;
+  top: 80px;
 }
 
-/* Responsive ads */
 @media (max-width: 1024px) {
   .ad-sidebar { display: none; }
 }
