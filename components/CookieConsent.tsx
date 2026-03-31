@@ -73,22 +73,22 @@ export default function CookieConsent() {
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-              Bu web sitesi, deneyiminizi iyile\u015ftirmek ve reklam hizmetleri sunmak i\u00e7in \u00e7erezler kullan\u0131r.
+              Bu web sitesi, deneyiminizi iyileştirmek ve reklam hizmetleri sunmak için çerezler kullanır.
               Siteyi kullanmaya devam ederek{' '}
               <Link
                 href="/cerez-politikasi"
                 style={{ color: '#2979FF', textDecoration: 'underline' }}
               >
-                \u00c7erez Politikam\u0131z\u0131
+                Çerez Politikamızı
               </Link>{' '}
               ve{' '}
               <Link
                 href="/gizlilik-politikasi"
                 style={{ color: '#2979FF', textDecoration: 'underline' }}
               >
-                Gizlilik Politikam\u0131z\u0131
+                Gizlilik Politikamızı
               </Link>{' '}
-              kabul etmi\u015f olursunuz.
+              kabul etmiş olursunuz.
             </p>
           </div>
         </div>
