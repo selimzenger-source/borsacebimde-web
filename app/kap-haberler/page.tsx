@@ -1,97 +1,19 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api, cleanText, formatDate, formatTime, NewsFeedItem } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
 
-// ─── Source metadata ───────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
-type SourceKey =
-  | 'tweet_daily_tracking'
-  | 'tweet_market_snapshot'
-  | 'tweet_kap_news'
-  | 'bot_proxy'
-  | 'morning_market_report'
-  | 'evening_market_report'
-  | 'market_close_tavan'
-  | 'market_close_taban'
-  | 'kap_news'
-  | 'bist30'
-  | '__all__';
+const API_BASE = 'https://sz-bist-finans-api.onrender.com';
 
-interface SourceMeta {
-  label: string;
-  color: string;       // Tailwind text color class
-  bgClass: string;     // Tailwind bg color class (badge background)
-  borderClass: string; // Tailwind border class
+function getImageUrl(url: string | null): string | null {
+  if (!url) return null;
+  if (url.startsWith('http')) return url;
+  return API_BASE + url;
 }
-
-const SOURCE_META: Record<string, SourceMeta> = {
-  tweet_daily_tracking:  { label: 'Günlük Takip',   color: 'text-accent-green', bgClass: 'bg-accent-green/15', borderClass: 'border-accent-green/30' },
-  tweet_market_snapshot: { label: 'Piyasa Özeti',   color: 'text-accent-cyan',  bgClass: 'bg-accent-cyan/15',  borderClass: 'border-accent-cyan/30'  },
-  tweet_kap_news:        { label: 'KAP Bildirim',   color: 'text-accent-gold',  bgClass: 'bg-accent-gold/15',  borderClass: 'border-accent-gold/30'  },
-  kap_news:              { label: 'KAP Bildirim',   color: 'text-accent-gold',  bgClass: 'bg-accent-gold/15',  borderClass: 'border-accent-gold/30'  },
-  bist30:                { label: 'BIST 30',         color: 'text-accent-gold',  bgClass: 'bg-accent-gold/15',  borderClass: 'border-accent-gold/30'  },
-  bot_proxy:             { label: 'Haber',           color: 'text-accent-cyan',  bgClass: 'bg-accent-cyan/15',  borderClass: 'border-accent-cyan/30'  },
-  morning_market_report: { label: 'Sabah Raporu',   color: 'text-accent-blue',  bgClass: 'bg-accent-blue/15',  borderClass: 'border-accent-blue/30'  },
-  evening_market_report: { label: 'Akşam Raporu',   color: 'text-accent-blue',  bgClass: 'bg-accent-blue/15',  borderClass: 'border-accent-blue/30'  },
-  market_close_tavan:    { label: 'Tavan Kapanış',  color: 'text-accent-green', bgClass: 'bg-accent-green/15', borderClass: 'border-accent-green/30' },
-  market_close_taban:    { label: 'Taban Kapanış',  color: 'text-accent-gold',  bgClass: 'bg-accent-gold/15',  borderClass: 'border-accent-gold/30'  },
-};
-
-const DEFAULT_META: SourceMeta = {
-  label: 'Diğer',
-  color: 'text-text-muted',
-  bgClass: 'bg-white/10',
-  borderClass: 'border-white/15',
-};
-
-function getSourceMeta(source: string): SourceMeta {
-  if (SOURCE_META[source]) return SOURCE_META[source];
-  // Partial match
-  for (const [key, meta] of Object.entries(SOURCE_META)) {
-    if (source.includes(key)) return meta;
-  }
-  return DEFAULT_META;
-}
-
-// ─── Filter helpers ────────────────────────────────────────────────────────────
-
-const FILTER_ORDER: SourceKey[] = [
-  '__all__',
-  'tweet_kap_news',
-  'kap_news',
-  'bist30',
-  'tweet_daily_tracking',
-  'tweet_market_snapshot',
-  'bot_proxy',
-  'morning_market_report',
-  'evening_market_report',
-  'market_close_tavan',
-  'market_close_taban',
-];
-
-const FILTER_LABELS: Record<SourceKey, string> = {
-  __all__:               'Tümü',
-  tweet_kap_news:        'KAP Bildirim',
-  kap_news:              'KAP Bildirim',
-  bist30:                'BIST 30',
-  tweet_daily_tracking:  'Günlük Takip',
-  tweet_market_snapshot: 'Piyasa Özeti',
-  bot_proxy:             'Haber',
-  morning_market_report: 'Sabah Raporu',
-  evening_market_report: 'Akşam Raporu',
-  market_close_tavan:    'Tavan Kapanış',
-  market_close_taban:    'Taban Kapanış',
-};
-
-function itemMatchesFilter(item: NewsFeedItem, filter: SourceKey): boolean {
-  if (filter === '__all__') return true;
-  return item.source === filter || item.source.includes(filter);
-}
-
-// ─── Grouping ─────────────────────────────────────────────────────────────────
 
 function groupByDate(items: NewsFeedItem[]): [string, NewsFeedItem[]][] {
   const map = new Map<string, NewsFeedItem[]>();
@@ -121,69 +43,128 @@ function formatDayLabel(dateKey: string): string {
 
 function SkeletonCard() {
   return (
-    <div className="rounded-xl border border-white/8 bg-white/3 p-4 animate-pulse">
-      <div className="flex items-start gap-3">
-        <div className="h-6 w-20 rounded-full bg-white/10 shrink-0 mt-0.5" />
-        <div className="h-5 w-14 rounded-full bg-white/10 shrink-0 mt-0.5" />
-        <div className="flex-1 space-y-2">
-          <div className="h-3 bg-white/10 rounded w-full" />
-          <div className="h-3 bg-white/10 rounded w-4/5" />
-          <div className="h-3 bg-white/10 rounded w-3/5" />
+    <div className="card overflow-hidden" style={{ opacity: 0.7 }}>
+      <div className="skeleton" style={{ width: '100%', height: 180 }} />
+      <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div className="flex items-center gap-2">
+          <div className="skeleton" style={{ height: 20, width: 56, borderRadius: 10 }} />
+          <div className="skeleton" style={{ height: 16, width: 40, borderRadius: 8 }} />
         </div>
+        <div className="skeleton" style={{ height: 14, width: '100%' }} />
+        <div className="skeleton" style={{ height: 14, width: '85%' }} />
+        <div className="skeleton" style={{ height: 14, width: '65%' }} />
       </div>
     </div>
   );
 }
 
-function SkeletonGroup() {
-  return (
-    <div className="mb-8">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="h-px flex-1 bg-white/8" />
-        <div className="h-6 w-52 bg-white/10 rounded-full animate-pulse" />
-        <div className="h-px flex-1 bg-white/8" />
-      </div>
-      <div className="space-y-3">
-        {Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)}
-      </div>
-    </div>
-  );
-}
-
-// ─── News Card ─────────────────────────────────────────────────────────────────
+// ─── News Card ────────────────────────────────────────────────────────────────
 
 function NewsCard({ item }: { item: NewsFeedItem }) {
   const timeStr = item.sent_at ? formatTime(item.sent_at) : (item.created_at ? formatTime(item.created_at) : '');
   const cleaned = cleanText(item.text);
-  const meta = getSourceMeta(item.source);
+  const imageUrl = getImageUrl(item.image_url);
+
+  // Extract title (first line or first sentence)
+  const lines = cleaned.split('\n').filter(l => l.trim());
+  let title = lines[0] || '';
+  let body = lines.slice(1).join('\n').trim();
+
+  // If title is too long, split at first period
+  if (title.length > 120 && !body) {
+    const dotIdx = title.indexOf('. ', 30);
+    if (dotIdx > 0 && dotIdx < 140) {
+      body = title.slice(dotIdx + 2).trim();
+      title = title.slice(0, dotIdx + 1);
+    }
+  }
 
   return (
-    <article className="group rounded-xl border border-white/8 bg-white/3 p-4 transition-all hover:border-white/15 hover:bg-white/5">
-      <div className="flex flex-wrap items-start gap-2 mb-2">
-        {/* Source badge */}
-        <span
-          className={[
-            'shrink-0 px-2 py-0.5 rounded-full border text-xs font-semibold',
-            meta.color,
-            meta.bgClass,
-            meta.borderClass,
-          ].join(' ')}
+    <article className="card overflow-hidden transition-all">
+      {/* Cover image */}
+      {imageUrl && (
+        <div
+          style={{
+            width: '100%',
+            height: 200,
+            background: 'var(--bg-surface)',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
         >
-          {meta.label}
-        </span>
+          <img
+            src={imageUrl}
+            alt=""
+            loading="lazy"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
+          />
+        </div>
+      )}
 
-        {/* Time badge */}
-        {timeStr && (
-          <span className="shrink-0 px-2 py-0.5 rounded-full bg-white/8 border border-white/10 text-text-muted text-xs tabular-nums">
-            {timeStr}
+      <div style={{ padding: '14px 16px' }}>
+        {/* Badge row */}
+        <div className="flex flex-wrap items-center gap-2 mb-2">
+          <span
+            className="badge"
+            style={{
+              background: 'rgba(38,198,218,0.1)',
+              color: '#26C6DA',
+              border: '1px solid rgba(38,198,218,0.25)',
+            }}
+          >
+            Haber
           </span>
+          {timeStr && (
+            <span
+              className="badge"
+              style={{
+                background: 'var(--bg-surface)',
+                color: 'var(--text-muted)',
+                border: '1px solid var(--border-primary)',
+                fontVariantNumeric: 'tabular-nums',
+              }}
+            >
+              {timeStr}
+            </span>
+          )}
+        </div>
+
+        {/* Title */}
+        {title && (
+          <h3
+            style={{
+              fontSize: 15,
+              fontWeight: 700,
+              color: 'var(--text-primary)',
+              lineHeight: 1.5,
+              marginBottom: body ? 8 : 0,
+            }}
+          >
+            {title}
+          </h3>
+        )}
+
+        {/* Body text */}
+        {body && (
+          <p
+            className="text-sm leading-relaxed"
+            style={{
+              color: 'var(--text-secondary)',
+              whiteSpace: 'pre-line',
+              display: '-webkit-box',
+              WebkitLineClamp: 6,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+            }}
+          >
+            {body}
+          </p>
         )}
       </div>
-
-      {/* News text */}
-      <p className="text-text-secondary text-sm leading-relaxed">
-        {cleaned}
-      </p>
     </article>
   );
 }
@@ -192,84 +173,67 @@ function NewsCard({ item }: { item: NewsFeedItem }) {
 
 const PAGE_SIZE = 20;
 
-export default function KapHaberlerPage() {
+export default function HaberlerPage() {
   const [allItems, setAllItems] = useState<NewsFeedItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeFilter, setActiveFilter] = useState<SourceKey>('__all__');
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-  const filterBarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     api.getNewsFeed(30, 200)
-      .then(setAllItems)
+      .then((items) => setAllItems(items.filter((it) => it.source === 'bot_proxy')))
       .catch(() => setError('Haberler yüklenirken bir sorun oluştu. Lütfen sayfayı yenileyin.'))
       .finally(() => setLoading(false));
   }, []);
 
-  // Reset visible count when filter changes
-  useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
-  }, [activeFilter]);
-
-  // Filtered items
-  const filteredItems = allItems.filter((it) => itemMatchesFilter(it, activeFilter));
-
-  // Count per source key (for chips)
-  const sourceCounts = new Map<SourceKey, number>();
-  sourceCounts.set('__all__', allItems.length);
-  for (const item of allItems) {
-    const key = (item.source as SourceKey);
-    sourceCounts.set(key, (sourceCounts.get(key) ?? 0) + 1);
-  }
-
-  // Available filter keys (only those with items)
-  const availableFilters = FILTER_ORDER.filter((key) => {
-    if (key === '__all__') return true;
-    return allItems.some((it) => itemMatchesFilter(it, key));
-  });
-
-  // Visible items for pagination
-  const visibleItems = filteredItems.slice(0, visibleCount);
-  const hasMore = visibleCount < filteredItems.length;
-
-  // Group visible items
+  const visibleItems = allItems.slice(0, visibleCount);
+  const hasMore = visibleCount < allItems.length;
   const groups = groupByDate(visibleItems);
 
-  // Track global index for ad placement
   let globalIndex = 0;
 
   return (
-    <div className="space-y-2">
-      {/* ── Page Header ── */}
-      <header className="mb-6 rounded-2xl border border-accent-cyan/20 bg-gradient-to-br from-bg-secondary to-bg-primary p-6 sm:p-8 relative overflow-hidden">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      {/* ── Sayfa Başlığı ── */}
+      <header
+        className="card relative overflow-hidden p-6 sm:p-8 mb-6"
+        style={{
+          background: 'linear-gradient(135deg, var(--bg-secondary), var(--bg-primary))',
+          borderColor: 'rgba(38,198,218,0.2)',
+        }}
+      >
         <div
           className="absolute -top-16 -right-16 w-56 h-56 rounded-full pointer-events-none"
           style={{ background: 'radial-gradient(circle, rgba(38,198,218,0.10) 0%, transparent 70%)' }}
         />
         <div className="relative flex flex-col sm:flex-row sm:items-center gap-4">
           <div className="flex-1">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full bg-accent-cyan/15 border border-accent-cyan/25">
-              <svg className="w-3.5 h-3.5 text-accent-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <div
+              className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full"
+              style={{ background: 'rgba(38,198,218,0.12)', border: '1px solid rgba(38,198,218,0.25)' }}
+            >
+              <svg className="w-3.5 h-3.5" style={{ color: '#26C6DA' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z" />
               </svg>
-              <span className="text-accent-cyan text-xs font-bold tracking-wide">Piyasa</span>
+              <span className="text-xs font-bold" style={{ color: '#26C6DA', letterSpacing: '0.3px' }}>Gündem</span>
             </div>
-            <h1 className="text-text-primary text-2xl sm:text-3xl font-bold mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
               Piyasa Haberleri
             </h1>
-            <p className="text-text-secondary text-sm sm:text-base leading-relaxed">
-              Son 30 günün tüm haberleri
+            <p className="text-sm sm:text-base leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+              Yapay zeka destekli güncel finans haberleri
             </p>
           </div>
 
           {!loading && (
-            <div className="shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl bg-accent-cyan/10 border border-accent-cyan/20">
-              <svg className="w-4 h-4 text-accent-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <div
+              className="shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl"
+              style={{ background: 'rgba(38,198,218,0.1)', border: '1px solid rgba(38,198,218,0.2)' }}
+            >
+              <svg className="w-4 h-4" style={{ color: '#26C6DA' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" />
               </svg>
-              <span className="text-accent-cyan text-sm font-semibold">
+              <span className="text-sm font-semibold" style={{ color: '#26C6DA' }}>
                 {allItems.length} haber
               </span>
             </div>
@@ -277,89 +241,62 @@ export default function KapHaberlerPage() {
         </div>
       </header>
 
-      {/* ── Error ── */}
+      {/* ── Hata ── */}
       {error && (
-        <div className="rounded-xl border border-accent-red/30 bg-accent-red/10 p-4 text-center text-text-secondary text-sm">
+        <div
+          className="card p-4 text-center text-sm mb-4"
+          style={{
+            color: 'var(--text-secondary)',
+            borderColor: 'rgba(255,82,82,0.3)',
+            background: 'rgba(255,82,82,0.06)',
+          }}
+        >
           {error}
         </div>
       )}
 
-      {/* ── Source Filter Chips ── */}
-      {!loading && !error && (
-        <div className="mb-6">
-          <div
-            ref={filterBarRef}
-            className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide"
-            style={{ scrollbarWidth: 'none' }}
-          >
-            {availableFilters.map((key) => {
-              const isActive = activeFilter === key;
-              const label = FILTER_LABELS[key] ?? key;
-              const count = key === '__all__'
-                ? allItems.length
-                : allItems.filter((it) => itemMatchesFilter(it, key)).length;
-
-              return (
-                <button
-                  key={key}
-                  onClick={() => setActiveFilter(key)}
-                  className={[
-                    'shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold transition-all whitespace-nowrap',
-                    isActive
-                      ? 'bg-accent-cyan/20 border-accent-cyan/50 text-accent-cyan'
-                      : 'bg-white/5 border-white/10 text-text-secondary hover:bg-white/8 hover:border-white/20 hover:text-text-primary',
-                  ].join(' ')}
-                >
-                  {label}
-                  <span
-                    className={[
-                      'px-1.5 py-0.5 rounded-full text-[10px] font-bold',
-                      isActive ? 'bg-accent-cyan/25 text-accent-cyan' : 'bg-white/10 text-text-muted',
-                    ].join(' ')}
-                  >
-                    {count}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* ── Loading skeleton ── */}
+      {/* ── Yükleniyor ── */}
       {loading && (
-        <div className="space-y-8">
-          {Array.from({ length: 3 }).map((_, i) => <SkeletonGroup key={i} />)}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {Array.from({ length: 5 }).map((_, i) => <SkeletonCard key={i} />)}
         </div>
       )}
 
-      {/* ── News feed grouped by date ── */}
+      {/* ── Tarihe göre gruplu haber akışı ── */}
       {!loading && !error && groups.map(([dateKey, dayItems]) => (
-        <section key={dateKey} className="mb-8">
-          {/* Day separator */}
+        <section key={dateKey} style={{ marginBottom: 24 }}>
+          {/* Gün ayırıcı */}
           <div className="flex items-center gap-3 mb-4">
-            <div className="h-px flex-1 bg-white/8" />
-            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-bg-secondary border border-white/10">
-              <svg className="w-3.5 h-3.5 text-text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <div style={{ height: 1, flex: 1, background: 'var(--border-primary)' }} />
+            <div
+              className="flex items-center gap-2 px-3 py-1 rounded-full"
+              style={{
+                background: 'var(--bg-surface)',
+                border: '1px solid var(--border-primary)',
+              }}
+            >
+              <svg className="w-3.5 h-3.5" style={{ color: 'var(--text-muted)' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
               </svg>
-              <span className="text-text-secondary text-xs font-semibold">
+              <span className="text-xs font-semibold" style={{ color: 'var(--text-secondary)' }}>
                 {formatDayLabel(dateKey)}
               </span>
-              <span className="text-text-muted text-xs">({dayItems.length})</span>
+              <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                ({dayItems.length})
+              </span>
             </div>
-            <div className="h-px flex-1 bg-white/8" />
+            <div style={{ height: 1, flex: 1, background: 'var(--border-primary)' }} />
           </div>
 
-          {/* Cards */}
-          <div className="space-y-3">
+          {/* Kartlar */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {dayItems.map((item) => {
               const idx = globalIndex++;
-              const showAd = idx > 0 && idx % 15 === 0;
+              const showAd = idx > 0 && idx % 5 === 0;
               return (
                 <div key={item.id}>
                   {showAd && (
-                    <div className="my-4">
+                    <div style={{ margin: '12px 0' }}>
                       <AdBanner slot="4045086866" format="horizontal" />
                     </div>
                   )}
@@ -371,38 +308,58 @@ export default function KapHaberlerPage() {
         </section>
       ))}
 
-      {/* ── Empty state ── */}
-      {!loading && !error && filteredItems.length === 0 && (
-        <div className="text-center py-16">
-          <div className="w-12 h-12 rounded-full bg-accent-cyan/10 border border-accent-cyan/20 flex items-center justify-center mx-auto mb-4">
-            <svg className="w-6 h-6 text-accent-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+      {/* ── Boş durum ── */}
+      {!loading && !error && allItems.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '64px 0' }}>
+          <div
+            style={{
+              width: 48,
+              height: 48,
+              borderRadius: '50%',
+              background: 'rgba(38,198,218,0.1)',
+              border: '1px solid rgba(38,198,218,0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 16px',
+            }}
+          >
+            <svg className="w-6 h-6" style={{ color: '#26C6DA' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" />
             </svg>
           </div>
-          <p className="text-text-muted text-sm">Bu kategoride haber bulunamadı.</p>
+          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+            Şu an haber bulunamadı.
+          </p>
         </div>
       )}
 
-      {/* ── Pagination ── */}
+      {/* ── Sayfalama ── */}
       {!loading && !error && hasMore && (
-        <div className="flex justify-center mt-6">
+        <div className="flex justify-center" style={{ marginTop: 24 }}>
           <button
             onClick={() => setVisibleCount((prev) => prev + PAGE_SIZE)}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-bg-secondary border border-white/10 text-text-secondary text-sm font-semibold transition-all hover:bg-white/8 hover:border-white/20 hover:text-text-primary active:scale-95"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all active:scale-95"
+            style={{
+              background: 'var(--bg-surface)',
+              border: '1px solid var(--border-primary)',
+              color: 'var(--text-secondary)',
+              cursor: 'pointer',
+            }}
           >
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
             </svg>
             Daha Fazla Yükle
-            <span className="text-text-muted text-xs">
-              ({filteredItems.length - visibleCount} haber daha)
+            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
+              ({allItems.length - visibleCount} haber daha)
             </span>
           </button>
         </div>
       )}
 
-      {/* ── App Store Banner ── */}
-      <div className="mt-10">
+      {/* ── Uygulama Banner ── */}
+      <div style={{ marginTop: 40 }}>
         <AppStoreBanner />
       </div>
     </div>

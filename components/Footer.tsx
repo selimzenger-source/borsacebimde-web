@@ -4,10 +4,11 @@ const quickLinks = [
   { href: '/', label: 'Ana Sayfa' },
   { href: '/halka-arz', label: 'Halka Arz' },
   { href: '/kap-ai', label: 'KAP Pozitif Haber' },
+  { href: '/kap-tum-haberler', label: 'Tüm KAP Haber' },
   { href: '/kap-haberler', label: 'Haberler' },
   { href: '/tavan-taban', label: 'Tavan Taban' },
-  { href: '/viop', label: 'VIOP' },
-  { href: '/spk-bulten', label: 'SPK Bulten' },
+  { href: '/viop', label: 'VİOP' },
+  { href: '/spk-bulten', label: 'SPK Bülten' },
 ];
 
 export default function Footer() {
@@ -89,9 +90,29 @@ export default function Footer() {
             <h3 className="text-xs font-semibold mb-3" style={{ color: 'var(--text-primary)' }}>
               Yasal
             </h3>
+            <ul className="flex flex-col gap-2 mb-3">
+              <li>
+                <Link
+                  href="/gizlilik-politikasi"
+                  className="text-xs transition-colors hover:text-brand"
+                  style={{ color: 'var(--text-muted)' }}
+                >
+                  Gizlilik Politikası
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/cerez-politikasi"
+                  className="text-xs transition-colors hover:text-brand"
+                  style={{ color: 'var(--text-muted)' }}
+                >
+                  Çerez Politikası
+                </Link>
+              </li>
+            </ul>
             <p className="text-[11px] leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-              Bu site yatirim tavsiyesi icermez. Tum veriler yalnizca bilgilendirme amaclidir.
-              Yatirim kararlarinizi almadan once lisansli bir yatirim danismanina basvurmaniz onerilir.
+              Bu site yatırım tavsiyesi içermez. Tüm veriler yalnızca bilgilendirme amaçlıdır.
+              Yatırım kararlarınızı almadan önce lisanslı bir yatırım danışmanına başvurmanız önerilir.
             </p>
           </div>
         </div>
@@ -101,8 +122,8 @@ export default function Footer() {
           className="border-t pt-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px]"
           style={{ borderColor: 'var(--border-primary)', color: 'var(--text-muted)' }}
         >
-          <p>2026 Borsa Cebimde. Tum haklari saklidir.</p>
-          <p>BIST verileri bilgilendirme amaclidir.</p>
+          <p>2026 Borsa Cebimde. Tüm hakları saklıdır.</p>
+          <p>BIST verileri bilgilendirme amaçlıdır.</p>
         </div>
       </div>
     </footer>

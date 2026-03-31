@@ -411,7 +411,7 @@ export default function KapAiPage() {
         setTotalCount(parsed.length);
         setGroups(groupByDate(parsed));
       })
-      .catch(() => setError('Haberler yuklenirken bir sorun olustu. Lutfen sayfayi yenileyin.'))
+      .catch(() => setError('Haberler yüklenirken bir sorun oluştu. Lütfen sayfayı yenileyin.'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -477,7 +477,7 @@ export default function KapAiPage() {
               KAP Pozitif Haber
             </h1>
             <p style={{ color: 'var(--text-secondary)', fontSize: 14, lineHeight: 1.5 }}>
-              Yapay zeka ile filtrelenmis pozitif KAP bildirimleri
+              Yapay zeka ile filtrelenmiş pozitif KAP bildirimleri
             </p>
           </div>
 
@@ -534,10 +534,10 @@ export default function KapAiPage() {
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <p style={{ color: 'var(--text-primary)', fontSize: 14, fontWeight: 600, marginBottom: 4 }}>
-            BIST 50 hisseleri ucretsiz!
+            BIST 50 hisseleri ücretsiz!
           </p>
           <p style={{ color: 'var(--text-secondary)', fontSize: 13, lineHeight: 1.5 }}>
-            Tum BIST hisselerinin AI haberlerini almak ve anlik bildirimler icin uygulamayi indirin.
+            Tüm BIST hisselerinin AI haberlerini almak ve anlık bildirimler için uygulamayı indirin.
           </p>
           <a
             href="https://play.google.com/store/apps/details?id=com.bistfinans.app"
@@ -554,7 +554,7 @@ export default function KapAiPage() {
               textDecoration: 'none',
             }}
           >
-            Uygulamayi Indir
+            Uygulamayı İndir
             <ExternalLinkIcon className="w-3.5 h-3.5" />
           </a>
         </div>
@@ -616,7 +616,7 @@ export default function KapAiPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {dayItems.map((parsed) => {
               const idx = globalIndex++;
-              const showAd = idx > 0 && idx % 10 === 0;
+              const showAd = idx > 0 && idx % 5 === 0;
               return (
                 <div key={parsed.item.id}>
                   {showAd && (
@@ -651,7 +651,7 @@ export default function KapAiPage() {
             <DocumentIcon className="w-6 h-6" />
           </div>
           <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>
-            Son 30 gunde pozitif KAP haberi bulunamadi.
+            Son 30 günde pozitif KAP haberi bulunamadı.
           </p>
         </div>
       )}

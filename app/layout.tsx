@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ThemeProvider from '@/components/ThemeProvider';
 import AdBanner from '@/components/AdBanner';
+import CookieConsent from '@/components/CookieConsent';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'tr_TR',
-    url: 'https://borsacebimde-web.onrender.com',
+    url: 'https://borsacebimde.app',
     siteName: 'Borsa Cebimde',
     title: 'Borsa Cebimde - Halka Arz, KAP Haberleri ve Borsa Takibi',
     description:
@@ -73,6 +74,7 @@ export default function RootLayout({
           </div>
 
           <Footer />
+          <CookieConsent />
         </ThemeProvider>
       </body>
     </html>

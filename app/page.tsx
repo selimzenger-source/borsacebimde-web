@@ -3,9 +3,17 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { api, cleanText, formatTime, type NewsFeedItem, type IPO, type DailyMarketStat } from '@/lib/api';
+import { api, cleanText, formatTime, sourceLabel, sourceBadgeStyle, type NewsFeedItem, type IPO, type DailyMarketStat } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
+
+const API_BASE = 'https://sz-bist-finans-api.onrender.com';
+
+function getImageUrl(url: string | null): string | null {
+  if (!url) return null;
+  if (url.startsWith('http')) return url;
+  return API_BASE + url;
+}
 
 // ─── Feature Grid Data ───────────────────────────────────────────────────────
 
@@ -13,7 +21,7 @@ const features = [
   {
     href: '/halka-arz',
     title: 'Halka Arz Takibi',
-    desc: 'SPK onayli halka arzlari anlik takip edin, dagitim ve islem tarihlerini kacirmayin.',
+    desc: 'SPK onaylı halka arzları anlık takip edin, dağıtım ve işlem tarihlerini kaçırmayın.',
     color: '#2979FF',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="w-6 h-6">
@@ -24,7 +32,7 @@ const features = [
   {
     href: '/kap-ai',
     title: 'KAP Pozitif Haber',
-    desc: 'Yapay zeka destekli KAP aciklama ozetleri. Uzun metinleri saniyede kavrayin.',
+    desc: 'Yapay zeka destekli KAP açıklama özetleri. Uzun metinleri saniyede kavrayın.',
     color: '#FFD700',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="w-6 h-6">
@@ -33,9 +41,20 @@ const features = [
     ),
   },
   {
+    href: '/kap-tum-haberler',
+    title: 'Tüm KAP Haber',
+    desc: 'Yapay zeka analizi ile tüm KAP bildirimlerini takip edin.',
+    color: '#FFD700',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="w-6 h-6">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+      </svg>
+    ),
+  },
+  {
     href: '/kap-haberler',
-    title: 'Tum KAP Haberler',
-    desc: 'KAP\'tan gelen tum sirket aciklamalarini gercek zamanli olarak takip edin.',
+    title: 'Piyasa Haberleri',
+    desc: 'Güncel finans haberlerini kapak görselleriyle birlikte takip edin.',
     color: '#26C6DA',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="w-6 h-6">
@@ -46,7 +65,7 @@ const features = [
   {
     href: '/tavan-taban',
     title: 'Tavan Taban',
-    desc: 'BIST\'te gunluk tavan ve taban yapan hisseleri anlik olarak goruntuleyin.',
+    desc: "BIST'te günlük tavan ve taban yapan hisseleri anlık olarak görüntüleyin.",
     color: '#4CAF50',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="w-6 h-6">
@@ -56,8 +75,8 @@ const features = [
   },
   {
     href: '/viop',
-    title: 'VIOP Gece Seansi',
-    desc: 'Vadeli islem piyasasini gece seansi verileriyle yakindan izleyin.',
+    title: 'VİOP Gece Seansı',
+    desc: 'Vadeli işlem piyasasını gece seansı verileriyle yakından izleyin.',
     color: '#B388FF',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="w-6 h-6">
@@ -67,8 +86,8 @@ const features = [
   },
   {
     href: '/spk-bulten',
-    title: 'SPK Bulten',
-    desc: 'Sermaye Piyasasi Kurulu guncel bultenlerini ve kararlarini takip edin.',
+    title: 'SPK Bülten',
+    desc: 'Sermaye Piyasası Kurulu güncel bültenlerini ve kararlarını takip edin.',
     color: '#FF9800',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="w-6 h-6">
@@ -77,29 +96,6 @@ const features = [
     ),
   },
 ];
-
-// ─── Source helpers ───────────────────────────────────────────────────────────
-
-function sourceLabel(source: string): string {
-  const map: Record<string, string> = {
-    kap: 'KAP',
-    kap_ai: 'KAP AI',
-    telegram: 'Telegram',
-    bloomberg: 'Bloomberg',
-    uzmanpara: 'Uzmanpara',
-    bigpara: 'BigPara',
-  };
-  return map[source?.toLowerCase()] ?? source;
-}
-
-function sourceBadgeStyle(source: string): React.CSSProperties {
-  const map: Record<string, React.CSSProperties> = {
-    kap: { background: 'rgba(41,121,255,0.1)', color: '#2979FF', border: '1px solid rgba(41,121,255,0.2)' },
-    kap_ai: { background: 'rgba(255,215,0,0.1)', color: '#FFD700', border: '1px solid rgba(255,215,0,0.2)' },
-    telegram: { background: 'rgba(38,198,218,0.1)', color: '#26C6DA', border: '1px solid rgba(38,198,218,0.2)' },
-  };
-  return map[source?.toLowerCase()] ?? { background: 'var(--bg-surface)', color: 'var(--text-secondary)', border: '1px solid var(--border-primary)' };
-}
 
 // ─── Skeleton Components ──────────────────────────────────────────────────────
 
@@ -114,13 +110,16 @@ function StatSkeleton() {
 
 function NewsSkeleton() {
   return (
-    <div className="card p-4 flex flex-col gap-3">
-      <div className="flex items-center gap-2">
-        <div className="skeleton h-5 w-14 rounded" />
-        <div className="skeleton h-4 w-10 rounded" />
+    <div className="card overflow-hidden">
+      <div className="skeleton" style={{ width: '100%', height: 140 }} />
+      <div className="p-4 flex flex-col gap-3">
+        <div className="flex items-center gap-2">
+          <div className="skeleton h-5 w-14 rounded" />
+          <div className="skeleton h-4 w-10 rounded" />
+        </div>
+        <div className="skeleton h-4 w-full rounded" />
+        <div className="skeleton h-4 w-4/5 rounded" />
       </div>
-      <div className="skeleton h-4 w-full rounded" />
-      <div className="skeleton h-4 w-4/5 rounded" />
     </div>
   );
 }
@@ -137,11 +136,11 @@ export default function HomePage() {
     Promise.allSettled([
       api.getIPOs(),
       api.getDailyMarketStats(1),
-      api.getNewsFeed(7, 20),
+      api.getNewsFeed(7, 50),
     ]).then(([iposRes, statsRes, newsRes]) => {
       if (iposRes.status === 'fulfilled') setIpos(iposRes.value);
       if (statsRes.status === 'fulfilled') setStats(statsRes.value);
-      if (newsRes.status === 'fulfilled') setNews(newsRes.value);
+      if (newsRes.status === 'fulfilled') setNews(newsRes.value.filter(n => n.source === 'bot_proxy'));
       setLoading(false);
     });
   }, []);
@@ -151,8 +150,8 @@ export default function HomePage() {
     const today = new Date().toISOString().slice(0, 10);
     return s.date?.slice(0, 10) === today;
   });
-  const ceilingCount = todaysStats.filter((s) => s.type === 'ceiling').length;
-  const floorCount = todaysStats.filter((s) => s.type === 'floor').length;
+  const ceilingCount = todaysStats.filter((s) => s.is_ceiling).length;
+  const floorCount = todaysStats.filter((s) => s.is_floor).length;
   const activeIpos = ipos.filter((i) => i.status !== 'awaiting_approval').length;
   const latestNews = news.slice(0, 5);
 
@@ -167,7 +166,6 @@ export default function HomePage() {
           minHeight: 320,
         }}
       >
-        {/* Decorative blobs */}
         <div
           className="absolute -top-20 -right-20 w-80 h-80 rounded-full pointer-events-none"
           style={{ background: 'radial-gradient(circle, rgba(41,121,255,0.15) 0%, transparent 70%)' }}
@@ -176,7 +174,6 @@ export default function HomePage() {
           className="absolute -bottom-16 -left-16 w-56 h-56 rounded-full pointer-events-none"
           style={{ background: 'radial-gradient(circle, rgba(41,121,255,0.08) 0%, transparent 70%)' }}
         />
-        {/* Grid pattern overlay */}
         <div
           className="absolute inset-0 pointer-events-none opacity-[0.03]"
           style={{
@@ -186,15 +183,13 @@ export default function HomePage() {
         />
 
         <div className="relative px-6 py-12 sm:px-10 sm:py-16 flex flex-col sm:flex-row items-center gap-8">
-          {/* Text */}
           <div className="flex-1 min-w-0 text-center sm:text-left">
-            {/* Live badge */}
             <div
               className="inline-flex items-center gap-1.5 mb-4 px-3 py-1 rounded-full"
               style={{ background: 'rgba(41,121,255,0.12)', border: '1px solid rgba(41,121,255,0.25)' }}
             >
               <span className="pulse-dot" style={{ background: '#2979FF' }} />
-              <span style={{ color: '#5C9AFF', fontSize: 12, fontWeight: 600 }}>Canli Veri</span>
+              <span style={{ color: '#5C9AFF', fontSize: 12, fontWeight: 600 }}>Canlı Veri</span>
             </div>
 
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-3 tracking-tight">
@@ -204,7 +199,6 @@ export default function HomePage() {
               Halka arz, KAP haberleri ve piyasa verileri tek elde
             </p>
 
-            {/* CTA buttons */}
             <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
               <Link
                 href="/halka-arz"
@@ -214,7 +208,7 @@ export default function HomePage() {
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75" />
                 </svg>
-                Halka Arzlari Incele
+                Halka Arzları İncele
               </Link>
               <a
                 href="https://play.google.com/store/apps/details?id=com.bistfinans.app"
@@ -226,12 +220,11 @@ export default function HomePage() {
                 <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
                   <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.42c1.32.07 2.24.73 3.01.77.97-.19 1.9-.81 3.01-.88 1.29-.09 2.61.43 3.57 1.56-3.1 1.86-2.58 5.96.41 7.65-.57 1.56-1.31 3.06-3 3.76zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
                 </svg>
-                Uygulamayi Indir
+                Uygulamayı İndir
               </a>
             </div>
           </div>
 
-          {/* Logo decorative */}
           <div className="shrink-0 flex items-center justify-center">
             <div
               className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden"
@@ -253,52 +246,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Live Stats Bar ────────────────────────────────────────────────── */}
-      <section className="mb-8">
-        <div className="overflow-x-auto pb-2 -mx-1 px-1">
-          <div className="flex gap-3 min-w-max">
-            {loading ? (
-              <>
-                <StatSkeleton />
-                <StatSkeleton />
-                <StatSkeleton />
-                <StatSkeleton />
-              </>
-            ) : (
-              <>
-                <div className="card px-6 py-4 flex flex-col gap-1 min-w-[150px]">
-                  <span style={{ color: 'var(--text-muted)', fontSize: 12, fontWeight: 500 }}>Toplam Halka Arz</span>
-                  <span className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{ipos.length}</span>
-                  <span style={{ color: '#2979FF', fontSize: 11 }}>{activeIpos} aktif</span>
-                </div>
-                <div className="card px-6 py-4 flex flex-col gap-1 min-w-[150px]">
-                  <span style={{ color: 'var(--text-muted)', fontSize: 12, fontWeight: 500 }}>Bugun Tavan</span>
-                  <span className="text-2xl font-bold" style={{ color: '#4CAF50' }}>
-                    {ceilingCount > 0 ? `+${ceilingCount}` : ceilingCount}
-                  </span>
-                  <span style={{ color: 'var(--text-muted)', fontSize: 11 }}>hisse</span>
-                </div>
-                <div className="card px-6 py-4 flex flex-col gap-1 min-w-[150px]">
-                  <span style={{ color: 'var(--text-muted)', fontSize: 12, fontWeight: 500 }}>Bugun Taban</span>
-                  <span className="text-2xl font-bold" style={{ color: '#FF5252' }}>
-                    {floorCount > 0 ? `-${floorCount}` : floorCount}
-                  </span>
-                  <span style={{ color: 'var(--text-muted)', fontSize: 11 }}>hisse</span>
-                </div>
-                <div className="card px-6 py-4 flex flex-col gap-1 min-w-[150px]">
-                  <span style={{ color: 'var(--text-muted)', fontSize: 12, fontWeight: 500 }}>Son Haberler</span>
-                  <span className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{news.length}</span>
-                  <span style={{ color: '#2979FF', fontSize: 11 }}>son 7 gun</span>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      </section>
+      {/* Stats bar removed - user requested */}
 
-      {/* ── Feature Grid ─────────────────────────────────────────────────── */}
+      {/* ── Özellikler ─────────────────────────────────────────────────── */}
       <section className="mb-8">
-        <h2 className="text-lg font-bold mb-4" style={{ color: 'var(--text-primary)' }}>Ozellikler</h2>
+        <h2 className="text-lg font-bold mb-4" style={{ color: 'var(--text-primary)' }}>Özellikler</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {features.map((f) => (
             <Link
@@ -307,7 +259,6 @@ export default function HomePage() {
               className="card p-4 flex flex-col gap-3 transition-all duration-200 hover:scale-[1.02] group"
               style={{ textDecoration: 'none' }}
             >
-              {/* Icon circle */}
               <div
                 className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-200 group-hover:scale-110"
                 style={{
@@ -328,9 +279,8 @@ export default function HomePage() {
                 </span>
               </div>
 
-              {/* Arrow */}
               <div className="mt-auto flex items-center gap-1" style={{ color: f.color }}>
-                <span style={{ fontSize: 11, fontWeight: 500, opacity: 0.7 }}>Incele</span>
+                <span style={{ fontSize: 11, fontWeight: 500, opacity: 0.7 }}>İncele</span>
                 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.8} className="w-3 h-3 opacity-70 group-hover:translate-x-0.5 transition-transform">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 8h10m-4-4 4 4-4 4" />
                 </svg>
@@ -340,12 +290,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── AdBanner ─────────────────────────────────────────────────────── */}
+      {/* ── Reklam ─────────────────────────────────────────────────────── */}
       <div className="mb-8">
         <AdBanner slot="4045086866" format="horizontal" />
       </div>
 
-      {/* ── Latest News Preview ──────────────────────────────────────────── */}
+      {/* ── Son Haberler ──────────────────────────────────────────────── */}
       <section className="mb-8">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
@@ -356,7 +306,7 @@ export default function HomePage() {
                 style={{ background: 'rgba(41,121,255,0.1)', color: '#2979FF', border: '1px solid rgba(41,121,255,0.2)' }}
               >
                 <span className="pulse-dot" style={{ background: '#2979FF' }} />
-                Canli
+                Canlı
               </span>
             )}
           </div>
@@ -365,7 +315,7 @@ export default function HomePage() {
             className="flex items-center gap-1 text-sm font-medium transition-colors"
             style={{ color: '#2979FF' }}
           >
-            Tumunu Gor
+            Tümünü Gör
             <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={2} className="w-3.5 h-3.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 8h10m-4-4 4 4-4 4" />
             </svg>
@@ -374,41 +324,70 @@ export default function HomePage() {
 
         <div className="flex flex-col gap-3">
           {loading ? (
-            Array.from({ length: 5 }).map((_, i) => <NewsSkeleton key={i} />)
+            Array.from({ length: 3 }).map((_, i) => <NewsSkeleton key={i} />)
           ) : latestNews.length === 0 ? (
             <div className="card p-8 flex flex-col items-center gap-3 text-center">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.4} className="w-10 h-10" style={{ color: 'var(--text-muted)', opacity: 0.5 }}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z" />
               </svg>
-              <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Su an haber bulunamadi.</p>
+              <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Şu an haber bulunamadı.</p>
             </div>
           ) : (
-            latestNews.map((item) => {
+            latestNews.map((item, idx) => {
               const timeStr = item.sent_at ?? item.created_at;
-              const preview = cleanText(item.text).slice(0, 150);
-              return (
+              const cleaned = cleanText(item.text);
+              const lines = cleaned.split('\n').filter(l => l.trim());
+              const title = lines[0] || '';
+              const body = lines.slice(1).join(' ').trim();
+              const imageUrl = getImageUrl(item.image_url);
+              const items = [];
+
+              items.push(
                 <div
                   key={item.id}
-                  className="card p-4 flex flex-col gap-2 transition-all duration-150"
+                  className="card overflow-hidden transition-all duration-150"
                 >
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="badge" style={sourceBadgeStyle(item.source)}>
-                      {sourceLabel(item.source)}
-                    </span>
-                    {timeStr && (
-                      <span style={{ color: 'var(--text-muted)', fontSize: 11 }}>
-                        {formatTime(timeStr)}
+                  {imageUrl && (
+                    <div style={{ width: '100%', height: 160, background: 'var(--bg-surface)', overflow: 'hidden' }}>
+                      <img src={imageUrl} alt="" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                  )}
+                  <div className="p-4 flex flex-col gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="badge" style={sourceBadgeStyle(item.source)}>
+                        {sourceLabel(item.source)}
                       </span>
+                      {timeStr && (
+                        <span style={{ color: 'var(--text-muted)', fontSize: 11 }}>
+                          {formatTime(timeStr)}
+                        </span>
+                      )}
+                    </div>
+                    {title && (
+                      <h3 className="text-sm font-bold leading-snug" style={{ color: 'var(--text-primary)' }}>
+                        {title}
+                      </h3>
+                    )}
+                    {body && (
+                      <p className="text-sm leading-relaxed line-clamp-2" style={{ color: 'var(--text-secondary)' }}>
+                        {body.slice(0, 150)}
+                        {body.length > 150 && <span style={{ color: 'var(--text-muted)' }}>...</span>}
+                      </p>
                     )}
                   </div>
-                  <p className="text-sm leading-relaxed line-clamp-2" style={{ color: 'var(--text-secondary)' }}>
-                    {preview}
-                    {preview.length >= 150 && (
-                      <span style={{ color: 'var(--text-muted)' }}>...</span>
-                    )}
-                  </p>
                 </div>
               );
+
+              // Ad after every 5 news items
+              if ((idx + 1) % 5 === 0 && idx + 1 < latestNews.length) {
+                items.push(
+                  <div key={`ad-${idx}`}>
+                    <AdBanner slot="4045086866" format="horizontal" />
+                  </div>
+                );
+              }
+
+              return items;
             })
           )}
         </div>
@@ -424,7 +403,7 @@ export default function HomePage() {
                 color: '#2979FF',
               }}
             >
-              Tum Haberleri Gor
+              Tüm Haberleri Gör
               <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={2} className="w-3.5 h-3.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 8h10m-4-4 4 4-4 4" />
               </svg>
@@ -433,7 +412,7 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* ── AppStoreBanner ───────────────────────────────────────────────── */}
+      {/* ── Uygulama Banner ───────────────────────────────────────────────── */}
       <AppStoreBanner />
     </div>
   );

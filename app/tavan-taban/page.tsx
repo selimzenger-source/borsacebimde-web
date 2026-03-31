@@ -18,8 +18,7 @@ interface DayGroup {
 type StockStatus = 'TAVAN' | 'TABAN' | 'ALICILI' | 'SATICILI';
 
 function getStatusFromStat(stat: DailyMarketStat): StockStatus {
-  const t = stat.type?.toLowerCase() ?? '';
-  if (t === 'ceiling') {
+  if (stat.is_ceiling) {
     return stat.percent_change >= 9.75 ? 'TAVAN' : 'ALICILI';
   }
   return stat.percent_change <= -9.75 ? 'TABAN' : 'SATICILI';
@@ -62,7 +61,7 @@ function SeriBadge({ count, type }: { count: number; type: 'ceiling' | 'floor' }
         border: `1px solid ${type === 'ceiling' ? 'rgba(76,175,80,0.25)' : 'rgba(255,82,82,0.25)'}`,
       }}
     >
-      {count}. Gun
+      {count}. Gün
     </span>
   );
 }
@@ -116,15 +115,15 @@ function StockTable({ stocks, type }: { stocks: DailyMarketStat[]; type: 'ceilin
         </p>
       ) : (
         <div className="overflow-x-auto -mx-1">
-          <table className="w-full text-sm min-w-[560px]">
+          <table className="w-full min-w-[520px]" style={{ fontSize: 12 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border-primary)' }}>
-                <th className="text-left text-xs font-semibold pb-2 px-2" style={{ color: 'var(--text-muted)' }}>Hisse</th>
-                <th className="text-right text-xs font-semibold pb-2 px-2" style={{ color: 'var(--text-muted)' }}>Fiyat</th>
-                <th className="text-right text-xs font-semibold pb-2 px-2" style={{ color: 'var(--text-muted)' }}>Degisim</th>
-                <th className="text-center text-xs font-semibold pb-2 px-2" style={{ color: 'var(--text-muted)' }}>Durum</th>
-                <th className="text-center text-xs font-semibold pb-2 px-2" style={{ color: 'var(--text-muted)' }}>Seri</th>
-                <th className="text-left text-xs font-semibold pb-2 px-2 pl-3" style={{ color: 'var(--text-muted)' }}>Neden</th>
+                <th className="text-left font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Hisse</th>
+                <th className="text-right font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Fiyat</th>
+                <th className="text-right font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Değişim</th>
+                <th className="text-center font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Durum</th>
+                <th className="text-center font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Seri</th>
+                <th className="text-left font-semibold pb-2 px-1.5 pl-2" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Neden (AI)</th>
               </tr>
             </thead>
             <tbody>
@@ -139,29 +138,29 @@ function StockTable({ stocks, type }: { stocks: DailyMarketStat[]; type: 'ceilin
                     onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-card-hover)'; }}
                     onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
                   >
-                    <td className="py-2.5 px-2">
-                      <span className="font-bold" style={{ color: 'var(--text-primary)' }}>{s.ticker}</span>
+                    <td className="py-2 px-1.5">
+                      <span className="font-bold" style={{ color: 'var(--text-primary)', fontSize: 12 }}>{s.ticker}</span>
                     </td>
-                    <td className="py-2.5 px-2 text-right font-mono" style={{ color: 'var(--text-secondary)' }}>
-                      {s.close_price.toFixed(2)} TL
+                    <td className="py-2 px-1.5 text-right font-mono" style={{ color: 'var(--text-secondary)', fontSize: 11 }}>
+                      {s.close_price.toFixed(2)} ₺
                     </td>
-                    <td className="py-2.5 px-2 text-right">
-                      <span className="font-bold" style={{ color: accentColor }}>
+                    <td className="py-2 px-1.5 text-right">
+                      <span className="font-bold" style={{ color: accentColor, fontSize: 11 }}>
                         {s.percent_change > 0 ? '+' : ''}
                         {s.percent_change.toFixed(2)}%
                       </span>
                     </td>
-                    <td className="py-2.5 px-2 text-center">
+                    <td className="py-2 px-1.5 text-center">
                       <StatusBadge status={status} />
                     </td>
-                    <td className="py-2.5 px-2 text-center">
+                    <td className="py-2 px-1.5 text-center">
                       <SeriBadge count={seriCount} type={type} />
                     </td>
-                    <td className="py-2.5 px-2 pl-3 max-w-[200px]" style={{ color: 'var(--text-secondary)' }}>
+                    <td className="py-2 px-1.5 pl-2 max-w-[180px]" style={{ color: 'var(--text-secondary)' }}>
                       {s.reason ? (
-                        <span className="text-xs leading-relaxed">{s.reason}</span>
+                        <span style={{ fontSize: 11, lineHeight: 1.4 }}>{s.reason}</span>
                       ) : (
-                        <span className="text-xs italic" style={{ color: 'var(--text-muted)' }}>--</span>
+                        <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>—</span>
                       )}
                     </td>
                   </tr>
@@ -267,7 +266,7 @@ function DayAccordion({ group, defaultOpen }: { group: DayGroup; defaultOpen: bo
           )}
           {group.ceiling.length === 0 && group.floor.length === 0 && (
             <p className="text-sm text-center py-4" style={{ color: 'var(--text-muted)' }}>
-              Bu gun veri yok.
+              Bu gün veri yok.
             </p>
           )}
         </div>
@@ -295,24 +294,27 @@ export default function TavanTabanPage() {
             map.set(dateKey, { date: dateKey, ceiling: [], floor: [] });
           }
           const g = map.get(dateKey)!;
-          if (stat.type === 'ceiling') g.ceiling.push(stat);
-          else if (stat.type === 'floor') g.floor.push(stat);
+          if (stat.is_ceiling) g.ceiling.push(stat);
+          else if (stat.is_floor) g.floor.push(stat);
         }
         const sorted = Array.from(map.values()).sort((a, b) =>
           b.date.localeCompare(a.date)
         );
         setGroups(sorted);
       })
-      .catch(() => setError('Veriler yuklenirken bir hata olustu. Lutfen sayfayi yenileyin.'))
+      .catch(() => setError('Veriler yüklenirken bir hata oluştu. Lütfen sayfayı yenileyin.'))
       .finally(() => setLoading(false));
   }, []);
 
   const visibleGroups = groups.slice(0, visibleCount);
   const hasMore = visibleCount < groups.length;
 
-  // Compute totals for header stats
+  // Compute daily averages for header stats
   const totalCeiling = groups.reduce((sum, g) => sum + g.ceiling.length, 0);
   const totalFloor = groups.reduce((sum, g) => sum + g.floor.length, 0);
+  const dayCount = groups.length || 1;
+  const avgCeiling = (totalCeiling / dayCount).toFixed(1);
+  const avgFloor = (totalFloor / dayCount).toFixed(1);
 
   return (
     <div className="space-y-6">
@@ -339,42 +341,47 @@ export default function TavanTabanPage() {
               <svg className="w-3.5 h-3.5" style={{ color: '#2979FF' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 7.5L7.5 3m0 0L12 7.5M7.5 3v13.5m13.5-6L16.5 15m0 0L12 10.5m4.5 4.5V1.5" />
               </svg>
-              <span className="text-xs font-semibold" style={{ color: '#2979FF' }}>Gunluk Veriler</span>
+              <span className="text-xs font-semibold" style={{ color: '#2979FF' }}>Günlük Veriler</span>
             </div>
 
             <h1 className="text-2xl sm:text-3xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
               Tavan ve Taban Hisseleri
             </h1>
             <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-              Son 30 gunun tavan ve taban verileri
+              Son 30 günün tavan ve taban verileri
             </p>
           </div>
 
-          {/* Stats */}
+          {/* Stats - günlük ortalama */}
           {!loading && groups.length > 0 && (
-            <div className="shrink-0 flex items-center gap-3">
-              <div
-                className="flex items-center gap-2 px-3 py-2 rounded-xl"
-                style={{ background: 'rgba(76,175,80,0.08)', border: '1px solid rgba(76,175,80,0.2)' }}
-              >
-                <svg className="w-4 h-4" style={{ color: '#4CAF50' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" />
-                </svg>
-                <span className="text-sm font-semibold" style={{ color: '#4CAF50' }}>
-                  {totalCeiling} tavan
-                </span>
+            <div className="shrink-0 flex flex-col items-end gap-1.5">
+              <div className="flex items-center gap-3">
+                <div
+                  className="flex items-center gap-2 px-3 py-2 rounded-xl"
+                  style={{ background: 'rgba(76,175,80,0.08)', border: '1px solid rgba(76,175,80,0.2)' }}
+                >
+                  <svg className="w-4 h-4" style={{ color: '#4CAF50' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" />
+                  </svg>
+                  <span className="text-sm font-semibold" style={{ color: '#4CAF50' }}>
+                    {avgCeiling} tavan
+                  </span>
+                </div>
+                <div
+                  className="flex items-center gap-2 px-3 py-2 rounded-xl"
+                  style={{ background: 'rgba(255,82,82,0.08)', border: '1px solid rgba(255,82,82,0.2)' }}
+                >
+                  <svg className="w-4 h-4" style={{ color: '#FF5252' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
+                  </svg>
+                  <span className="text-sm font-semibold" style={{ color: '#FF5252' }}>
+                    {avgFloor} taban
+                  </span>
+                </div>
               </div>
-              <div
-                className="flex items-center gap-2 px-3 py-2 rounded-xl"
-                style={{ background: 'rgba(255,82,82,0.08)', border: '1px solid rgba(255,82,82,0.2)' }}
-              >
-                <svg className="w-4 h-4" style={{ color: '#FF5252' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
-                </svg>
-                <span className="text-sm font-semibold" style={{ color: '#FF5252' }}>
-                  {totalFloor} taban
-                </span>
-              </div>
+              <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>
+                günlük ort. ({dayCount} gün)
+              </span>
             </div>
           )}
         </div>
@@ -390,9 +397,9 @@ export default function TavanTabanPage() {
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 16v-4m0-4h.01" />
         </svg>
         <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-          Gun sonunda <span className="font-semibold" style={{ color: '#4CAF50' }}>%9,75 ve uzeri</span> kapatan
-          hisseler tavan, <span className="font-semibold" style={{ color: '#FF5252' }}>%-9,75 ve alti</span> kapatan
-          hisseler taban olarak listelenir. Durum sutununda alici/satici bilgisi gosterilir.
+          Gün sonunda <span className="font-semibold" style={{ color: '#4CAF50' }}>%9,75 ve üzeri</span> kapatan
+          hisseler tavan, <span className="font-semibold" style={{ color: '#FF5252' }}>%-9,75 ve altı</span> kapatan
+          hisseler taban olarak listelenir. Durum sütununda alıcı/satıcı bilgisi gösterilir.
         </p>
       </div>
 
@@ -422,7 +429,7 @@ export default function TavanTabanPage() {
       {/* ─── Empty ─── */}
       {!loading && !error && groups.length === 0 && (
         <div className="card p-8 text-center text-sm" style={{ color: 'var(--text-muted)' }}>
-          Son 30 gun icinde tavan veya taban verisi bulunamadi.
+          Son 30 gün içinde tavan veya taban verisi bulunamadı.
         </div>
       )}
 
@@ -431,20 +438,20 @@ export default function TavanTabanPage() {
         <>
           <div className="space-y-3">
             {visibleGroups.map((group, idx) => (
-              <DayAccordion
-                key={group.date}
-                group={group}
-                defaultOpen={idx === 0}
-              />
+              <div key={group.date}>
+                <DayAccordion
+                  group={group}
+                  defaultOpen={idx === 0}
+                />
+                {/* Ad every 7 day groups */}
+                {(idx + 1) % 7 === 0 && idx + 1 < visibleGroups.length && (
+                  <div className="my-4">
+                    <AdBanner slot="4045086866" format="horizontal" />
+                  </div>
+                )}
+              </div>
             ))}
           </div>
-
-          {/* Ad after first batch */}
-          {visibleCount >= 5 && (
-            <div className="my-4">
-              <AdBanner slot="4045086866" format="horizontal" />
-            </div>
-          )}
 
           {/* Load more */}
           {hasMore && (
@@ -470,7 +477,7 @@ export default function TavanTabanPage() {
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                 </svg>
-                Daha Fazla Yukle
+                Daha Fazla Yükle
               </button>
             </div>
           )}

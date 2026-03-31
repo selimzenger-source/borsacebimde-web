@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useTheme } from './ThemeProvider';
 
@@ -9,10 +10,11 @@ const navLinks = [
   { href: '/', label: 'Ana Sayfa' },
   { href: '/halka-arz', label: 'Halka Arz' },
   { href: '/kap-ai', label: 'KAP Pozitif Haber' },
+  { href: '/kap-tum-haberler', label: 'Tüm KAP Haber' },
   { href: '/kap-haberler', label: 'Haberler' },
   { href: '/tavan-taban', label: 'Tavan Taban' },
-  { href: '/viop', label: 'VIOP' },
-  { href: '/spk-bulten', label: 'SPK Bulten' },
+  { href: '/viop', label: 'VİOP' },
+  { href: '/spk-bulten', label: 'SPK Bülten' },
 ];
 
 export default function Header() {
@@ -36,15 +38,21 @@ export default function Header() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 shrink-0">
-            <div className="w-7 h-7 rounded-lg bg-brand flex items-center justify-center">
-              <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2.2} className="w-4 h-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22" />
-              </svg>
+          <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
+            <div className="relative w-8 h-8 rounded-xl overflow-hidden shadow-md group-hover:shadow-lg transition-shadow">
+              <Image
+                src="/images/logo.png"
+                alt="Borsa Cebimde"
+                fill
+                className="object-contain"
+                priority
+              />
             </div>
-            <span className="text-[15px] font-bold" style={{ color: 'var(--text-primary)' }}>
-              Borsa Cebimde
-            </span>
+            <div className="flex flex-col">
+              <span className="text-[15px] font-extrabold leading-tight" style={{ color: 'var(--text-primary)' }}>
+                Borsa <span style={{ color: '#2979FF' }}>Cebimde</span>
+              </span>
+            </div>
           </Link>
 
           {/* Desktop nav */}
@@ -76,7 +84,7 @@ export default function Header() {
                 color: 'var(--text-muted)',
                 backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
               }}
-              aria-label="Tema degistir"
+              aria-label="Tema değiştir"
             >
               {theme === 'dark' ? (
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -96,7 +104,7 @@ export default function Header() {
               rel="noopener noreferrer"
               className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-brand text-white text-[13px] font-semibold transition-all hover:bg-brand-light"
             >
-              Uygulamayi Indir
+              Uygulamayı İndir
             </a>
 
             {/* Hamburger */}
@@ -104,7 +112,7 @@ export default function Header() {
               className="lg:hidden p-2 rounded-lg transition-colors"
               style={{ color: 'var(--text-secondary)' }}
               onClick={() => setMenuOpen((v) => !v)}
-              aria-label="Menu"
+              aria-label="Menü"
             >
               {menuOpen ? (
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -153,7 +161,7 @@ export default function Header() {
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-brand text-white text-sm font-semibold"
               >
-                Uygulamayi Indir
+                Uygulamayı İndir
               </a>
             </div>
           </nav>

@@ -23,16 +23,27 @@ export interface IPO {
   id: number;
   company_name: string;
   ticker: string | null;
-  share_price: number | null;
-  lot_count: number | null;
-  start_date: string | null;
-  end_date: string | null;
-  valuation_tl: number | null;
+  ipo_price: string | null;
+  total_lots: number | null;
+  offering_size_tl: string | null;
+  discount_pct: string | null;
+  distribution_method: string | null;
+  market_segment: string | null;
+  public_float_pct: string | null;
+  spk_bulletin_no: string | null;
+  spk_approval_date: string | null;
+  subscription_start: string | null;
+  subscription_end: string | null;
+  subscription_hours: string | null;
+  trading_start: string | null;
+  trading_day_count: number;
   status: string;
-  spk_status: string | null;
-  first_trading_date: string | null;
-  close_price: number | null;
-  percent_change: number | null;
+  close_price?: number | null;
+  percent_change?: number | null;
+  estimated_lots_per_person: number | null;
+  total_applicants: number | null;
+  katilim_endeksi: string | null;
+  participation_method: string | null;
   created_at: string | null;
 }
 
@@ -42,9 +53,12 @@ export interface DailyMarketStat {
   date: string;
   close_price: number;
   percent_change: number;
-  type: string;
+  is_ceiling: boolean;
+  is_floor: boolean;
   consecutive_ceiling_count: number;
   consecutive_floor_count: number;
+  monthly_ceiling_count: number;
+  monthly_floor_count: number;
   reason: string | null;
 }
 
@@ -65,6 +79,80 @@ export interface SpkBulletinAnalysis {
   sent_at: string | null;
 }
 
+export interface KapDisclosure {
+  id: number;
+  company_code: string;
+  title: string;
+  category: string | null;
+  is_bilanco: boolean;
+  kap_url: string | null;
+  published_at: string | null;
+  ai_sentiment: 'Olumlu' | 'Olumsuz' | 'Notr' | null;
+  ai_impact_score: number | null;
+  ai_summary: string | null;
+  created_at: string | null;
+}
+
+// ─── IPO Detail types ────────────────────────────────────────────────────────
+
+export interface IPOCeilingTrack {
+  id: number;
+  trading_day: number;
+  trade_date: string | null;
+  open_price: number | null;
+  close_price: number | null;
+  high_price: number | null;
+  low_price: number | null;
+  hit_ceiling: boolean;
+  hit_floor: boolean;
+  durum: string | null;
+  pct_change: number | null;
+  cumulative_edo_pct: number | null;
+  gunluk_adet: number | null;
+  senet_sayisi: number | null;
+  alis_lot: number | null;
+  satis_lot: number | null;
+}
+
+export interface IPOBroker {
+  id: number;
+  broker_name: string;
+  broker_type: string | null;
+  is_rejected: boolean;
+  application_url: string | null;
+  phone: string | null;
+}
+
+export interface IPOAllocation {
+  id: number;
+  group_name: string;
+  allocation_pct: number | null;
+  allocated_lots: number | null;
+  participant_count: number | null;
+  avg_lot_per_person: number | null;
+}
+
+export interface IPODetail extends IPO {
+  logo_url: string | null;
+  lead_broker: string | null;
+  participation_description: string | null;
+  kap_notification_url: string | null;
+  prospectus_url: string | null;
+  spk_bulletin_url: string | null;
+  ceiling_tracking_active: boolean;
+  first_day_close_price: number | null;
+  ceiling_broken: boolean;
+  ceiling_broken_at: string | null;
+  ai_report: string | null;
+  capital_increase_lots: number | null;
+  partner_sale_lots: number | null;
+  expected_trading_date: string | null;
+  allocation_announced: boolean;
+  ceiling_tracks: IPOCeilingTrack[];
+  brokers: IPOBroker[];
+  allocations: IPOAllocation[];
+}
+
 export const api = {
   getNewsFeed: (days = 30, limit = 100) =>
     fetchAPI<NewsFeedItem[]>('/api/v1/public/news-feed', { days, limit }),
@@ -80,6 +168,12 @@ export const api = {
 
   getSpkBulletins: (limit = 30) =>
     fetchAPI<SpkBulletinAnalysis[]>('/api/v1/public/spk-bulletin-analyses', { limit }),
+
+  getKapDisclosures: (params?: { hours?: number; ticker?: string; min_score?: number; max_score?: number; limit?: number; offset?: number }) =>
+    fetchAPI<KapDisclosure[]>('/api/v1/kap-all-disclosures', params as Record<string, string | number>),
+
+  getIPODetail: (id: number) =>
+    fetchAPI<IPODetail>(`/api/v1/ipos/${id}`),
 };
 
 /** Tweet text temizle */
@@ -91,10 +185,51 @@ export function cleanText(text: string): string {
     .replace(/📲?\s*(Detaylar\s*görselde|Android|szalgo)[^\n]*/gi, '')
     .replace(/🍏?\s*iOS:?[^\n]*/gi, '')
     .replace(/szalgo\.net\.tr/gi, '')
-    .replace(/👇/g, '')
+    .replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE00}-\u{FE0F}\u{1F000}-\u{1F02F}\u{1F0A0}-\u{1F0FF}\u{200D}\u{20E3}\u{FE0F}]/gu, '')
     .replace(/\n{3,}/g, '\n\n')
     .replace(/[ \t]+/g, ' ')
     .trim();
+}
+
+/** Kaynak etiketleri */
+export function sourceLabel(source: string): string {
+  const map: Record<string, string> = {
+    kap_news: 'KAP Bildirim',
+    bist30: 'BIST 30',
+    tweet_kap_news: 'KAP Bildirim',
+    tweet_daily_tracking: 'Günlük Takip',
+    tweet_market_snapshot: 'Piyasa Özeti',
+    bot_proxy: 'Haber',
+    morning_market_report: 'Sabah Raporu',
+    evening_market_report: 'Akşam Raporu',
+    market_close_tavan: 'Tavan Kapanış',
+    market_close_taban: 'Taban Kapanış',
+    reply_disclaimer: 'Uyarı',
+    kap: 'KAP',
+    kap_ai: 'KAP AI',
+    telegram: 'Telegram',
+    bloomberg: 'Bloomberg',
+    uzmanpara: 'Uzmanpara',
+    bigpara: 'BigPara',
+  };
+  return map[source] ?? source;
+}
+
+/** Kaynak badge stili */
+export function sourceBadgeStyle(source: string): React.CSSProperties {
+  const map: Record<string, React.CSSProperties> = {
+    kap_news: { background: 'rgba(255,215,0,0.1)', color: '#FFD700', border: '1px solid rgba(255,215,0,0.25)' },
+    bist30: { background: 'rgba(255,215,0,0.1)', color: '#FFD700', border: '1px solid rgba(255,215,0,0.25)' },
+    tweet_kap_news: { background: 'rgba(255,215,0,0.1)', color: '#FFD700', border: '1px solid rgba(255,215,0,0.25)' },
+    tweet_daily_tracking: { background: 'rgba(76,175,80,0.1)', color: '#4CAF50', border: '1px solid rgba(76,175,80,0.25)' },
+    tweet_market_snapshot: { background: 'rgba(38,198,218,0.1)', color: '#26C6DA', border: '1px solid rgba(38,198,218,0.25)' },
+    bot_proxy: { background: 'rgba(38,198,218,0.1)', color: '#26C6DA', border: '1px solid rgba(38,198,218,0.25)' },
+    morning_market_report: { background: 'rgba(41,121,255,0.1)', color: '#2979FF', border: '1px solid rgba(41,121,255,0.25)' },
+    evening_market_report: { background: 'rgba(41,121,255,0.1)', color: '#2979FF', border: '1px solid rgba(41,121,255,0.25)' },
+    market_close_tavan: { background: 'rgba(76,175,80,0.1)', color: '#4CAF50', border: '1px solid rgba(76,175,80,0.25)' },
+    market_close_taban: { background: 'rgba(255,82,82,0.1)', color: '#FF5252', border: '1px solid rgba(255,82,82,0.25)' },
+  };
+  return map[source] ?? { background: 'var(--bg-surface)', color: 'var(--text-secondary)', border: '1px solid var(--border-primary)' };
 }
 
 export function formatDate(dateStr: string): string {

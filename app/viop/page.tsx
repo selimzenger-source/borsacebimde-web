@@ -25,13 +25,13 @@ function detectTweetType(text: string): TweetBadgeType {
 
 const BADGE_CONFIG: Record<TweetBadgeType, { label: string; color: string; bg: string; border: string }> = {
   acilis: {
-    label: 'Acilis',
+    label: 'Açılış',
     color: '#4CAF50',
     bg: 'rgba(76,175,80,0.12)',
     border: 'rgba(76,175,80,0.3)',
   },
   kapanis: {
-    label: 'Kapanis',
+    label: 'Kapanış',
     color: '#FF5252',
     bg: 'rgba(255,82,82,0.12)',
     border: 'rgba(255,82,82,0.3)',
@@ -185,7 +185,7 @@ function DayAccordion({ group, defaultOpen }: { group: DayGroup; defaultOpen: bo
               border: '1px solid rgba(124,77,255,0.25)',
             }}
           >
-            {group.tweets.length} kayit
+            {group.tweets.length} kayıt
           </span>
           <svg
             className="w-4 h-4 transition-transform duration-200"
@@ -247,7 +247,7 @@ export default function ViopPage() {
         setGroups(sorted);
       })
       .catch(() =>
-        setError('Veriler yuklenirken bir hata olustu. Lutfen sayfayi yenileyin.')
+        setError('Veriler yüklenirken bir hata oluştu. Lütfen sayfayı yenileyin.')
       )
       .finally(() => setLoading(false));
   }, []);
@@ -279,14 +279,14 @@ export default function ViopPage() {
               <svg className="w-3.5 h-3.5" style={{ color: '#7C4DFF' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
               </svg>
-              <span className="text-xs font-semibold" style={{ color: '#7C4DFF' }}>Gece Seansi</span>
+              <span className="text-xs font-semibold" style={{ color: '#7C4DFF' }}>Gece Seansı</span>
             </div>
 
             <h1 className="text-2xl sm:text-3xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
-              VIOP Gece Seansi
+              VIOP Gece Seansı
             </h1>
             <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-              Son 5 gunun gece seansi verileri
+              Son 5 günün gece seansı verileri
             </p>
           </div>
 
@@ -300,7 +300,7 @@ export default function ViopPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z" />
               </svg>
               <span className="text-sm font-semibold" style={{ color: '#7C4DFF' }}>
-                {totalTweets} kayit
+                {totalTweets} kayıt
               </span>
             </div>
           )}
@@ -317,8 +317,8 @@ export default function ViopPage() {
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 16v-4m0-4h.01" />
         </svg>
         <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-          VIOP gece seansi <span className="font-medium" style={{ color: 'var(--text-primary)' }}>acilis</span>,{' '}
-          <span className="font-medium" style={{ color: 'var(--text-primary)' }}>kapanis</span> ve{' '}
+          VIOP gece seansı <span className="font-medium" style={{ color: 'var(--text-primary)' }}>açılış</span>,{' '}
+          <span className="font-medium" style={{ color: 'var(--text-primary)' }}>kapanış</span> ve{' '}
           <span className="font-medium" style={{ color: 'var(--text-primary)' }}>saatlik seyir</span> verileri.
         </p>
       </div>
@@ -349,7 +349,7 @@ export default function ViopPage() {
       {/* ─── Empty ─── */}
       {!loading && !error && groups.length === 0 && (
         <div className="card p-8 text-center text-sm" style={{ color: 'var(--text-muted)' }}>
-          Son 5 gun icinde VIOP verisi bulunamadi.
+          Son 5 gün içinde VIOP verisi bulunamadı.
         </div>
       )}
 
