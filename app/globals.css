@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #071A14;
+  --bg-secondary: #0A2E1F;
+  --bg-surface: #0D3627;
+  --accent-green: #4CAF50;
+  --accent-gold: #FFD700;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: #fff;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+/* Glass card */
+.glass-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+}
+
+/* Glow effects */
+.glow-green { box-shadow: 0 0 20px rgba(76,175,80,0.15), inset 0 1px 0 rgba(76,175,80,0.1); }
+.glow-gold { box-shadow: 0 0 20px rgba(255,215,0,0.15), inset 0 1px 0 rgba(255,215,0,0.1); }
+.glow-blue { box-shadow: 0 0 20px rgba(41,121,255,0.15), inset 0 1px 0 rgba(41,121,255,0.1); }
+.glow-cyan { box-shadow: 0 0 20px rgba(38,198,218,0.15), inset 0 1px 0 rgba(38,198,218,0.1); }
+.glow-purple { box-shadow: 0 0 20px rgba(179,136,255,0.15), inset 0 1px 0 rgba(179,136,255,0.1); }
+.glow-orange { box-shadow: 0 0 20px rgba(255,152,0,0.15), inset 0 1px 0 rgba(255,152,0,0.1); }
+
+/* Skeleton loading */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+/* AdSense responsive */
+.ad-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90px;
+  background: rgba(255,255,255,0.01);
+  border: 1px dashed rgba(255,255,255,0.06);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ad-sidebar {
+  position: sticky;
+  top: 80px;
+}
+
+/* Badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+/* Pulse dot */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  animation: pulse-dot 2s infinite;
+}
+
+/* App store buttons */
+.store-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.store-btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,0.2);
+}
+
+/* Responsive ads */
+@media (max-width: 1024px) {
+  .ad-sidebar { display: none; }
+}
