@@ -114,58 +114,60 @@ function StockTable({ stocks, type }: { stocks: DailyMarketStat[]; type: 'ceilin
           {isCeiling ? 'Tavan hissesi yok' : 'Taban hissesi yok'}
         </p>
       ) : (
-        <div className="flex flex-col gap-2">
-          {stocks.map((s) => {
-            const seriCount = isCeiling ? s.consecutive_ceiling_count : s.consecutive_floor_count;
-            return (
-              <div
-                key={s.id}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors"
-                style={{ background: accentBg, border: `1px solid ${isCeiling ? 'rgba(76,175,80,0.15)' : 'rgba(255,82,82,0.15)'}` }}
-              >
-                {/* Ticker */}
-                <span className="font-bold text-sm shrink-0" style={{ color: 'var(--text-primary)', minWidth: 52 }}>
-                  {s.ticker}
-                </span>
-
-                {/* Price + Change */}
-                <div className="flex flex-col min-w-0">
-                  <span className="font-mono text-xs" style={{ color: 'var(--text-secondary)' }}>
-                    {s.close_price.toFixed(2)} ₺
-                  </span>
-                  <span className="font-bold text-xs" style={{ color: accentColor }}>
-                    {s.percent_change > 0 ? '+' : ''}{s.percent_change.toFixed(2)}%
-                  </span>
-                </div>
-
-                {/* Seri badge */}
-                <div className="ml-auto flex items-center gap-1.5 shrink-0">
-                  <SeriBadge count={seriCount} type={type} />
-                </div>
-              </div>
-            );
-          })}
-
-          {/* AI Reason - show below if any stock has reason */}
-          {stocks.some((s) => s.reason) && (
-            <div
-              className="mt-1 p-3 rounded-xl text-xs leading-relaxed"
-              style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-primary)', color: 'var(--text-secondary)' }}
-            >
-              <div className="flex items-center gap-1.5 mb-2">
-                <svg className="w-3.5 h-3.5" style={{ color: '#FFD700' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-                </svg>
-                <span className="font-semibold" style={{ color: '#FFD700' }}>AI Analiz</span>
-              </div>
-              {stocks.filter((s) => s.reason).map((s) => (
-                <p key={s.id} className="mb-1 last:mb-0">
-                  <span className="font-bold" style={{ color: 'var(--text-primary)' }}>{s.ticker}:</span>{' '}
-                  {s.reason}
-                </p>
-              ))}
-            </div>
-          )}
+        <div className="overflow-x-auto -mx-1">
+          <table className="w-full min-w-[520px]" style={{ fontSize: 12 }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid var(--border-primary)' }}>
+                <th className="text-left font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Hisse</th>
+                <th className="text-right font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Fiyat</th>
+                <th className="text-right font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Değişim</th>
+                <th className="text-center font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Durum</th>
+                <th className="text-center font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Seri</th>
+                <th className="text-left font-semibold pb-2 px-1.5 pl-2" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Neden (AI)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {stocks.map((s) => {
+                const status = getStatusFromStat(s);
+                const seriCount = isCeiling ? s.consecutive_ceiling_count : s.consecutive_floor_count;
+                return (
+                  <tr
+                    key={s.id}
+                    className="transition-colors"
+                    style={{ borderBottom: '1px solid var(--border-primary)' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-card-hover)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
+                  >
+                    <td className="py-2 px-1.5">
+                      <span className="font-bold" style={{ color: 'var(--text-primary)', fontSize: 12 }}>{s.ticker}</span>
+                    </td>
+                    <td className="py-2 px-1.5 text-right font-mono" style={{ color: 'var(--text-secondary)', fontSize: 11 }}>
+                      {s.close_price.toFixed(2)} ₺
+                    </td>
+                    <td className="py-2 px-1.5 text-right">
+                      <span className="font-bold" style={{ color: accentColor, fontSize: 11 }}>
+                        {s.percent_change > 0 ? '+' : ''}
+                        {s.percent_change.toFixed(2)}%
+                      </span>
+                    </td>
+                    <td className="py-2 px-1.5 text-center">
+                      <StatusBadge status={status} />
+                    </td>
+                    <td className="py-2 px-1.5 text-center">
+                      <SeriBadge count={seriCount} type={type} />
+                    </td>
+                    <td className="py-2 px-1.5 pl-2 max-w-[180px]" style={{ color: 'var(--text-secondary)' }}>
+                      {s.reason ? (
+                        <span style={{ fontSize: 11, lineHeight: 1.4 }}>{s.reason}</span>
+                      ) : (
+                        <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>—</span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
@@ -397,7 +399,7 @@ export default function TavanTabanPage() {
         <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
           Gün sonunda <span className="font-semibold" style={{ color: '#4CAF50' }}>%9,75 ve üzeri</span> kapatan
           hisseler tavan, <span className="font-semibold" style={{ color: '#FF5252' }}>%-9,75 ve altı</span> kapatan
-          hisseler taban olarak listelenir. Seri gün sayısı ve AI analiz bilgisi gösterilir.
+          hisseler taban olarak listelenir. Durum sütununda alıcı/satıcı bilgisi gösterilir.
         </p>
       </div>
 
