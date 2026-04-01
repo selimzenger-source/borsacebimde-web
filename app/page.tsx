@@ -132,6 +132,7 @@ export default function HomePage() {
   const [stats, setStats] = useState<DailyMarketStat[]>([]);
   const [news, setNews] = useState<NewsFeedItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [expandedNews, setExpandedNews] = useState<Set<number>>(new Set());
   const [store, setStore] = useState(getStoreInfo());
   useEffect(() => { setStore(getStoreInfo()); }, []);
 
@@ -350,10 +351,21 @@ export default function HomePage() {
               const imageUrl = getImageUrl(item.image_url);
               const items = [];
 
+              const isExpanded = expandedNews.has(item.id);
+              const toggleExpand = () => {
+                setExpandedNews((prev) => {
+                  const next = new Set(prev);
+                  if (next.has(item.id)) next.delete(item.id);
+                  else next.add(item.id);
+                  return next;
+                });
+              };
+
               items.push(
                 <div
                   key={item.id}
-                  className="card overflow-hidden transition-all duration-150"
+                  className="card overflow-hidden transition-all duration-150 cursor-pointer hover:scale-[1.005]"
+                  onClick={toggleExpand}
                 >
                   {imageUrl && (
                     <div style={{ width: '100%', height: 160, background: 'var(--bg-surface)', overflow: 'hidden' }}>
@@ -377,11 +389,27 @@ export default function HomePage() {
                       </h3>
                     )}
                     {body && (
-                      <p className="text-sm leading-relaxed line-clamp-2" style={{ color: 'var(--text-secondary)' }}>
-                        {body.slice(0, 150)}
-                        {body.length > 150 && <span style={{ color: 'var(--text-muted)' }}>...</span>}
+                      <p
+                        className={`text-sm leading-relaxed ${isExpanded ? '' : 'line-clamp-2'}`}
+                        style={{ color: 'var(--text-secondary)' }}
+                      >
+                        {isExpanded ? body : body.slice(0, 150)}
+                        {!isExpanded && body.length > 150 && <span style={{ color: 'var(--text-muted)' }}>...</span>}
                       </p>
                     )}
+                    <div className="flex items-center gap-1 mt-1" style={{ color: '#2979FF', fontSize: 12, fontWeight: 500 }}>
+                      {isExpanded ? 'Küçült' : 'Devamını Oku'}
+                      <svg
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        className="w-3 h-3 transition-transform"
+                        style={{ transform: isExpanded ? 'rotate(180deg)' : 'none' }}
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 6l4 4 4-4" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
               );
