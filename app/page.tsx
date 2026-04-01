@@ -156,7 +156,7 @@ export default function HomePage() {
   const ceilingCount = todaysStats.filter((s) => s.is_ceiling).length;
   const floorCount = todaysStats.filter((s) => s.is_floor).length;
   const activeIpos = ipos.filter((i) => i.status !== 'awaiting_approval').length;
-  const latestNews = news.slice(0, 5);
+  const latestNews = news.slice(0, 8);
 
   return (
     <div className="flex flex-col gap-0">
@@ -296,17 +296,12 @@ export default function HomePage() {
               </div>
             </Link>
           ))}
-          {/* Ad card in feature grid - fills empty space */}
-          <div className="card p-4 flex items-center justify-center col-span-2 sm:col-span-2" style={{ minHeight: 120 }}>
-            <AdBanner slot="3455837962" format="in-article" />
+          {/* Ad card - fills empty spot next to SPK Bülten */}
+          <div className="card p-4 flex items-center justify-center" style={{ minHeight: 120 }}>
+            <AdBanner slot="3455837962" format="rectangle" />
           </div>
         </div>
       </section>
-
-      {/* ── Reklam ─────────────────────────────────────────────────────── */}
-      <div className="mb-8">
-        <AdBanner slot="1823621352" format="horizontal" />
-      </div>
 
       {/* ── Son Haberler ──────────────────────────────────────────────── */}
       <section className="mb-8">
@@ -391,11 +386,11 @@ export default function HomePage() {
                 </div>
               );
 
-              // Ad after every 5 news items
-              if ((idx + 1) % 5 === 0 && idx + 1 < latestNews.length) {
+              // Banner ad after 6th news item
+              if (idx === 5) {
                 items.push(
                   <div key={`ad-${idx}`}>
-                    <AdBanner slot="3567518609" format="in-feed" layoutKey="-ef+6k-30-ac+ty" />
+                    <AdBanner slot="1823621352" format="horizontal" />
                   </div>
                 );
               }
