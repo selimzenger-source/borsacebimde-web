@@ -102,8 +102,6 @@ export default function IndirPage() {
         alignItems: 'center',
         padding: '0 20px',
         overflowY: 'auto',
-        overflow: 'hidden',
-        position: 'relative',
       }}
     >
       {/* Ambient glow */}
