@@ -404,7 +404,7 @@ export default function KapAiPage() {
   const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
-    api.getNewsFeed(30, 300)
+    api.getNewsFeed(30, 200)
       .then((items) => {
         const filtered = items.filter((it) => isKapPositive(it.source));
         const parsed = filtered.map(parseNewsItem);
