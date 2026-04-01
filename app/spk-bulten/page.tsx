@@ -259,7 +259,7 @@ export default function SpkBultenPage() {
 
               {(idx + 1) % 3 === 0 && idx < bulletins.length - 1 && (
                 <div style={{ margin: '16px 0' }}>
-                  <AdBanner slot="4045086866" format="horizontal" />
+                  <AdBanner slot="1819751923" format="horizontal" />
                 </div>
               )}
             </div>

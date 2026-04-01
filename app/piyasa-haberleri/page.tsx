@@ -295,7 +295,7 @@ export default function HaberlerPage() {
                 <div key={item.id}>
                   {showAd && (
                     <div style={{ margin: '12px 0' }}>
-                      <AdBanner slot="4045086866" format="horizontal" />
+                      <AdBanner slot="9899719208" format="horizontal" />
                     </div>
                   )}
                   <NewsCard item={item} />

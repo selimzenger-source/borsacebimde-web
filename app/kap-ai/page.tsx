@@ -633,7 +633,7 @@ export default function KapAiPage() {
                 <div key={parsed.item.id}>
                   {showAd && (
                     <div style={{ margin: '16px 0' }}>
-                      <AdBanner slot="4045086866" format="horizontal" />
+                      <AdBanner slot="9899719208" format="horizontal" />
                     </div>
                   )}
                   <NewsCard parsed={parsed} />

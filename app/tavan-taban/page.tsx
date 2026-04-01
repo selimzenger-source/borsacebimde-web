@@ -446,7 +446,7 @@ export default function TavanTabanPage() {
                 {/* Ad every 7 day groups */}
                 {(idx + 1) % 7 === 0 && idx + 1 < visibleGroups.length && (
                   <div className="my-4">
-                    <AdBanner slot="4045086866" format="horizontal" />
+                    <AdBanner slot="1819751923" format="horizontal" />
                   </div>
                 )}
               </div>

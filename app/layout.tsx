@@ -184,7 +184,7 @@ export default function RootLayout({
 
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8">
             {/* Top ad */}
-            <AdBanner slot="3394160229" format="horizontal" className="mb-6" />
+            <AdBanner slot="1819751923" format="horizontal" className="mb-6" />
 
             {/* Main + sidebar */}
             <div className="flex gap-6 items-start">
@@ -194,7 +194,7 @@ export default function RootLayout({
 
               <aside className="hidden lg:block w-[300px] shrink-0">
                 <div className="ad-sidebar flex flex-col gap-6">
-                  <AdBanner slot="3394160229" format="rectangle" />
+                  <AdBanner slot="6884376342" format="rectangle" />
                 </div>
               </aside>
             </div>

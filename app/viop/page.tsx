@@ -364,7 +364,7 @@ export default function ViopPage() {
 
       {/* ─── Ad Banner ─── */}
       {!loading && (
-        <AdBanner slot="4045086866" format="horizontal" />
+        <AdBanner slot="1819751923" format="horizontal" />
       )}
 
       {/* ─── AppStore Banner ─── */}

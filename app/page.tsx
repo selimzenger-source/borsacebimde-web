@@ -301,7 +301,7 @@ export default function HomePage() {
 
       {/* ── Reklam ─────────────────────────────────────────────────────── */}
       <div className="mb-8">
-        <AdBanner slot="4045086866" format="horizontal" />
+        <AdBanner slot="1823621352" format="horizontal" />
       </div>
 
       {/* ── Son Haberler ──────────────────────────────────────────────── */}
@@ -391,7 +391,7 @@ export default function HomePage() {
               if ((idx + 1) % 5 === 0 && idx + 1 < latestNews.length) {
                 items.push(
                   <div key={`ad-${idx}`}>
-                    <AdBanner slot="4045086866" format="horizontal" />
+                    <AdBanner slot="1823621352" format="horizontal" />
                   </div>
                 );
               }
