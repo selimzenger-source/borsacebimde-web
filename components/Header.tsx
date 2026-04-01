@@ -41,7 +41,7 @@ export default function Header() {
           <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
             <div className="relative w-8 h-8 rounded-xl overflow-hidden shadow-md group-hover:shadow-lg transition-shadow">
               <Image
-                src="/images/logo.png"
+                src="/images/icon-192.png"
                 alt="Borsa Cebimde"
                 fill
                 className="object-contain"

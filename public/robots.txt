@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://borsacebimde-web.onrender.com/sitemap.xml
+Sitemap: https://borsacebimde.app/sitemap.xml
