@@ -64,6 +64,7 @@ function NewsCard({ item }: { item: NewsFeedItem }) {
   const timeStr = item.sent_at ? formatTime(item.sent_at) : (item.created_at ? formatTime(item.created_at) : '');
   const cleaned = cleanText(item.text);
   const imageUrl = getImageUrl(item.image_url);
+  const [imgError, setImgError] = useState(false);
 
   // Extract title (first line or first sentence)
   const lines = cleaned.split('\n').filter(l => l.trim());
@@ -82,7 +83,7 @@ function NewsCard({ item }: { item: NewsFeedItem }) {
   return (
     <article className="card overflow-hidden transition-all">
       {/* Cover image */}
-      {imageUrl && (
+      {imageUrl && !imgError && (
         <div
           style={{
             width: '100%',
@@ -96,6 +97,7 @@ function NewsCard({ item }: { item: NewsFeedItem }) {
             src={imageUrl}
             alt=""
             loading="lazy"
+            onError={() => setImgError(true)}
             style={{
               width: '100%',
               height: '100%',
