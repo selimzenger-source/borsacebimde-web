@@ -296,6 +296,10 @@ export default function HomePage() {
               </div>
             </Link>
           ))}
+          {/* Ad card in feature grid - fills empty space */}
+          <div className="card p-4 flex items-center justify-center col-span-2 sm:col-span-2" style={{ minHeight: 120 }}>
+            <AdBanner slot="3455837962" format="in-article" />
+          </div>
         </div>
       </section>
 
@@ -391,7 +395,7 @@ export default function HomePage() {
               if ((idx + 1) % 5 === 0 && idx + 1 < latestNews.length) {
                 items.push(
                   <div key={`ad-${idx}`}>
-                    <AdBanner slot="1823621352" format="horizontal" />
+                    <AdBanner slot="3567518609" format="in-feed" layoutKey="-ef+6k-30-ac+ty" />
                   </div>
                 );
               }

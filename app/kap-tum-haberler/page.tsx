@@ -669,7 +669,7 @@ export default function KapTumHaberlerPage() {
                 <div key={item.id}>
                   {showAd && (
                     <div style={{ margin: '8px 0' }}>
-                      <AdBanner slot="9899719208" format="horizontal" />
+                      <AdBanner slot="3567518609" format="in-feed" layoutKey="-ef+6k-30-ac+ty" />
                     </div>
                   )}
                   <DisclosureCard item={item} />

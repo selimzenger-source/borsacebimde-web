@@ -193,8 +193,9 @@ export default function RootLayout({
               </main>
 
               <aside className="hidden lg:block w-[300px] shrink-0">
-                <div className="ad-sidebar flex flex-col gap-6">
+                <div className="ad-sidebar flex flex-col gap-6 sticky top-24">
                   <AdBanner slot="6884376342" format="rectangle" />
+                  <AdBanner slot="1897984416" format="multiplex" />
                 </div>
               </aside>
             </div>

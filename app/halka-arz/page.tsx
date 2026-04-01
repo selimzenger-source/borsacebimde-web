@@ -524,7 +524,7 @@ function IPOCard({ ipo }: { ipo: IPO }) {
               </div>
 
               {/* Ad after ARZ BİLGİLERİ */}
-              <AdBanner slot="4042299005" format="horizontal" />
+              <AdBanner slot="3455837962" format="in-article" />
 
               {/* Dates */}
               <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs">
@@ -570,7 +570,7 @@ function IPOCard({ ipo }: { ipo: IPO }) {
               )}
 
               {/* Ad before links */}
-              <AdBanner slot="4042299005" format="horizontal" />
+              <AdBanner slot="3455837962" format="in-article" />
 
               {/* Links */}
               <div className="flex flex-wrap gap-3">
@@ -671,7 +671,7 @@ function IPOSection({ section, items, adCounter }: { section: StatusSection; ite
             <IPOCard ipo={ipo} />
             {showAd && (
               <div style={{ marginTop: 12 }}>
-                <AdBanner slot="4042299005" format="horizontal" />
+                <AdBanner slot="4042299005" format="in-feed" layoutKey="-ef+6k-30-ac+ty" />
               </div>
             )}
           </div>
@@ -771,7 +771,7 @@ export default function HalkaArzPage() {
         </p>
       </div>
 
-      <AdBanner slot="4042299005" format="horizontal" />
+      <AdBanner slot="1897984416" format="multiplex" />
       <AppStoreBanner />
     </div>
   );
