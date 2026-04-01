@@ -96,7 +96,7 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.json',
   verification: {
-    google: 'GOOGLE_SEARCH_CONSOLE_VERIFICATION_CODE',
+    google: 'j_zSJPqft3itjE5qK5MddE8b4kMPljzcCyCLl6dnWho',
   },
   category: 'finance',
 };
