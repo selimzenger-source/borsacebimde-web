@@ -1,28 +1,30 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'SPK Bulten Analizleri - Sermaye Piyasasi Kurulu Kararlari',
+  title: 'SPK Bülten Analizleri - Haftalık Bülten Özetleri',
   description:
-    'SPK bulten analizleri, Sermaye Piyasasi Kurulu kararlari ve duzenlemeleri. SPK onay, iptal ve idari yaptirim kararlari takibi.',
-  keywords: [
-    'SPK bülten',
-    'SPK kararları',
-    'Sermaye Piyasası Kurulu',
-    'SPK analiz',
-    'SPK onay',
-    'SPK düzenlemeleri',
-    'borsa düzenleme',
-  ],
-  alternates: {
-    canonical: 'https://borsacebimde.app/spk-bulten/',
-  },
+    'SPK haftalık bültenlerinin yapay zeka destekli analizleri ve özetleri. Halka arz kararları ve düzenleyici gelişmeler.',
+  alternates: { canonical: 'https://borsacebimde.app/spk-bulten' },
   openGraph: {
-    title: 'SPK Bulten Analizleri - Borsa Cebimde',
-    description: 'SPK bulten analizleri ve Sermaye Piyasasi Kurulu kararlari.',
-    url: 'https://borsacebimde.app/spk-bulten/',
+    title: 'SPK Bülten Analizleri | Borsa Cebimde',
+    description: 'SPK haftalık bültenlerinin AI destekli analizleri ve özetleri.',
   },
 };
 
 export default function SpkBultenLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return (
+    <>
+      {children}
+      <noscript>
+        <div style={{ padding: 20 }}>
+          <h1>SPK Bülten Analizleri</h1>
+          <p>
+            Sermaye Piyasası Kurulu haftalık bültenlerinin yapay zeka destekli özetlerini bu
+            sayfada bulabilirsiniz. Halka arz kararları, yaptırımlar ve düzenleyici gelişmeler
+            otomatik olarak analiz edilir.
+          </p>
+        </div>
+      </noscript>
+    </>
+  );
 }

@@ -1,29 +1,30 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Haber Analizi - Yapay Zeka ile KAP Haber Ozeti ve Yorumu',
+  title: 'KAP Pozitif Haberler - AI Destekli KAP Haber Analizi',
   description:
-    'Yapay zeka destekli KAP haber analizi. AI ile ozetlenmis borsa haberleri, sirket bildirimleri ve piyasa yorumlari. Hizli ve anlasilir haber ozeti.',
-  keywords: [
-    'AI haber analizi',
-    'yapay zeka borsa',
-    'KAP AI analiz',
-    'borsa yapay zeka',
-    'haber özeti',
-    'AI borsa haberleri',
-    'akıllı haber analizi',
-    'otomatik haber özeti',
-  ],
-  alternates: {
-    canonical: 'https://borsacebimde.app/kap-ai/',
-  },
+    'Yapay zeka destekli KAP haber analizi. Kamuyu Aydınlatma Platformu bildirimlerinin otomatik özetleri, pozitif ve negatif sınıflandırma.',
+  alternates: { canonical: 'https://borsacebimde.app/kap-ai' },
   openGraph: {
-    title: 'AI Haber Analizi - Borsa Cebimde',
-    description: 'Yapay zeka ile KAP haber ozeti ve borsa analizi.',
-    url: 'https://borsacebimde.app/kap-ai/',
+    title: 'KAP Pozitif Haberler - AI Analiz | Borsa Cebimde',
+    description: 'Yapay zeka destekli KAP haber analizi ve pozitif/negatif sınıflandırma.',
   },
 };
 
 export default function KapAiLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return (
+    <>
+      {children}
+      <noscript>
+        <div style={{ padding: 20 }}>
+          <h1>KAP Pozitif Haberler - AI Analiz</h1>
+          <p>
+            Borsa Cebimde KAP haber analizi sayfasında Kamuyu Aydınlatma Platformu bildirimlerinin
+            yapay zeka ile hazırlanmış özetlerini okuyabilirsiniz. Her haber pozitif, negatif veya
+            nötr olarak sınıflandırılır.
+          </p>
+        </div>
+      </noscript>
+    </>
+  );
 }

@@ -1,27 +1,30 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Tum KAP Haberleri - Borsa Bildirimleri Arsivi',
+  title: 'Tüm KAP Haberleri - Kamuyu Aydınlatma Platformu Bildirimleri',
   description:
-    'Tum KAP haberleri ve borsa bildirimleri arsivi. Sirket bazli filtreleme, tarih arama ve gecmis bildirimler. BIST sirketlerinin tum KAP aciklamalari.',
-  keywords: [
-    'KAP haberleri arşivi',
-    'tüm KAP bildirimleri',
-    'borsa bildirimleri',
-    'şirket bildirimleri',
-    'KAP arşiv',
-    'geçmiş KAP haberleri',
-  ],
-  alternates: {
-    canonical: 'https://borsacebimde.app/kap-tum-haberler/',
-  },
+    'KAP bildirimlerinin tam listesi. Tüm hisse senetleri için KAP haberleri, özel durum açıklamaları ve finansal raporlar.',
+  alternates: { canonical: 'https://borsacebimde.app/kap-tum-haberler' },
   openGraph: {
-    title: 'Tum KAP Haberleri - Borsa Cebimde',
-    description: 'KAP haberleri arsivi ve borsa bildirimleri.',
-    url: 'https://borsacebimde.app/kap-tum-haberler/',
+    title: 'Tüm KAP Haberleri | Borsa Cebimde',
+    description: 'KAP bildirimlerinin tam listesi, özel durum açıklamaları ve finansal raporlar.',
   },
 };
 
-export default function KapTumLayout({ children }: { children: React.ReactNode }) {
-  return children;
+export default function KapTumHaberlerLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      {children}
+      <noscript>
+        <div style={{ padding: 20 }}>
+          <h1>Tüm KAP Haberleri</h1>
+          <p>
+            Kamuyu Aydınlatma Platformu üzerinden yayınlanan tüm bildirimleri bu sayfada
+            takip edebilirsiniz. Özel durum açıklamaları, finansal raporlar ve genel kurul kararları
+            filtreleme seçenekleriyle listelenir.
+          </p>
+        </div>
+      </noscript>
+    </>
+  );
 }

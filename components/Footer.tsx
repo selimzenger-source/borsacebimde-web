@@ -93,6 +93,15 @@ export default function Footer() {
             <ul className="flex flex-col gap-2 mb-3">
               <li>
                 <Link
+                  href="/hakkimizda"
+                  className="text-xs transition-colors hover:text-brand"
+                  style={{ color: 'var(--text-muted)' }}
+                >
+                  Hakkımızda
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/gizlilik-politikasi"
                   className="text-xs transition-colors hover:text-brand"
                   style={{ color: 'var(--text-muted)' }}
@@ -110,6 +119,16 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
+            <a
+              href="mailto:borsacebimde@gmail.com"
+              className="text-xs transition-colors hover:text-brand flex items-center gap-1 mb-3"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+              </svg>
+              borsacebimde@gmail.com
+            </a>
             <p className="text-[11px] leading-relaxed" style={{ color: 'var(--text-muted)' }}>
               Bu site yatırım tavsiyesi içermez. Tüm veriler yalnızca bilgilendirme amaçlıdır.
               Yatırım kararlarınızı almadan önce lisanslı bir yatırım danışmanına başvurmanız önerilir.

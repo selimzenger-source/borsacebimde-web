@@ -1,30 +1,30 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Halka Arz Takvimi 2026 - Yeni Halka Arzlar ve SPK Onaylı Başvurular',
+  title: 'Halka Arz Takvimi 2026 - Güncel Halka Arz Listesi',
   description:
-    'Guncel halka arz takvimi 2026. SPK onayli halka arz basvurulari, dagitim tarihleri, lot buyuklukleri ve halka arz sonuclari. Yeni halka arzlari kacirmayin.',
-  keywords: [
-    'halka arz',
-    'halka arz takvimi',
-    'halka arz 2026',
-    'yeni halka arz',
-    'SPK onaylı halka arz',
-    'halka arz başvuruları',
-    'halka arz sonuçları',
-    'borsa halka arz',
-    'BIST halka arz',
-  ],
-  alternates: {
-    canonical: 'https://borsacebimde.app/halka-arz/',
-  },
+    'Güncel halka arz takvimi, onaylanan ve dağıtımda olan halka arzlar, tahmini lot dağılımı, eşit dağıtım bilgileri ve detaylı halka arz analizleri.',
+  alternates: { canonical: 'https://borsacebimde.app/halka-arz' },
   openGraph: {
     title: 'Halka Arz Takvimi 2026 - Borsa Cebimde',
-    description: 'SPK onayli halka arz basvurulari, dagitim tarihleri ve halka arz sonuclari.',
-    url: 'https://borsacebimde.app/halka-arz/',
+    description: 'Güncel halka arz takvimi, onaylanan ve dağıtımda olan halka arzlar ve detaylı analizler.',
   },
 };
 
 export default function HalkaArzLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return (
+    <>
+      {children}
+      <noscript>
+        <div style={{ padding: 20 }}>
+          <h1>Halka Arz Takvimi 2026</h1>
+          <p>
+            Borsa Cebimde halka arz takvimi sayfasında güncel halka arzları takip edebilirsiniz.
+            SPK onaylı halka arzlar, dağıtımda olan halka arzlar, tahmini lot bilgileri ve eşit
+            dağıtım detayları bu sayfada listelenir.
+          </p>
+        </div>
+      </noscript>
+    </>
+  );
 }

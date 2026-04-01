@@ -1,29 +1,29 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Piyasa Haberleri - Güncel Finans ve Borsa Haberleri',
+  title: 'Piyasa Haberleri - Borsa ve Finans Haberleri',
   description:
-    'Yapay zeka destekli güncel piyasa haberleri. BIST borsa haberleri, şirket gelişmeleri, global piyasa haberleri ve ekonomi gündemi.',
-  keywords: [
-    'piyasa haberleri',
-    'borsa haberleri',
-    'finans haberleri',
-    'şirket haberleri',
-    'BIST haberler',
-    'ekonomi gündemi',
-    'global piyasalar',
-    'borsa gündem',
-  ],
-  alternates: {
-    canonical: 'https://borsacebimde.app/piyasa-haberleri/',
-  },
+    'Güncel borsa haberleri, piyasa analizleri, ekonomi haberleri. BIST, döviz, altın ve emtia piyasalarından son gelişmeler.',
+  alternates: { canonical: 'https://borsacebimde.app/piyasa-haberleri' },
   openGraph: {
-    title: 'Piyasa Haberleri - Borsa Cebimde',
-    description: 'Yapay zeka destekli güncel finans ve borsa haberleri.',
-    url: 'https://borsacebimde.app/piyasa-haberleri/',
+    title: 'Piyasa Haberleri | Borsa Cebimde',
+    description: 'Güncel borsa haberleri, piyasa analizleri ve ekonomi haberleri.',
   },
 };
 
-export default function PiyasaHaberlerLayout({ children }: { children: React.ReactNode }) {
-  return children;
+export default function PiyasaHaberleriLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      {children}
+      <noscript>
+        <div style={{ padding: 20 }}>
+          <h1>Piyasa Haberleri</h1>
+          <p>
+            Borsa ve finans dünyasından güncel haberler. BIST borsası, döviz kurları, altın fiyatları
+            ve emtia piyasalarından anlık gelişmeleri takip edin.
+          </p>
+        </div>
+      </noscript>
+    </>
+  );
 }

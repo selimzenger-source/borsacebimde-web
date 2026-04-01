@@ -1,29 +1,30 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'VIOP Gece Seansi - Vadeli Islem ve Opsiyon Piyasasi Verileri',
+  title: 'VİOP Gece Seansı - Vadeli İşlem ve Opsiyon Piyasası',
   description:
-    'VIOP gece seansi verileri, vadeli islem ve opsiyon piyasasi anlık takip. BIST 30 vadeli, dolar vadeli ve diger VIOP kontratları.',
-  keywords: [
-    'VIOP',
-    'VIOP gece seansı',
-    'vadeli işlem',
-    'opsiyon piyasası',
-    'BIST 30 vadeli',
-    'dolar vadeli',
-    'VIOP verileri',
-    'gece seansı',
-  ],
-  alternates: {
-    canonical: 'https://borsacebimde.app/viop/',
-  },
+    'VİOP gece seansı verileri, vadeli işlem kontratları, endeks ve döviz vadeli fiyatları. VIOP gece seansı anlık takip.',
+  alternates: { canonical: 'https://borsacebimde.app/viop' },
   openGraph: {
-    title: 'VIOP Gece Seansi - Borsa Cebimde',
-    description: 'VIOP gece seansi verileri ve vadeli islem piyasasi.',
-    url: 'https://borsacebimde.app/viop/',
+    title: 'VİOP Gece Seansı | Borsa Cebimde',
+    description: 'VİOP gece seansı verileri, vadeli işlem kontratları ve anlık fiyatlar.',
   },
 };
 
 export default function ViopLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return (
+    <>
+      {children}
+      <noscript>
+        <div style={{ padding: 20 }}>
+          <h1>VİOP Gece Seansı</h1>
+          <p>
+            Vadeli İşlem ve Opsiyon Piyasası gece seansı verilerini bu sayfada takip edebilirsiniz.
+            Endeks vadeli kontratları, döviz vadeli fiyatları ve diğer VİOP enstrümanlarının
+            verileri anlık olarak güncellenir.
+          </p>
+        </div>
+      </noscript>
+    </>
+  );
 }

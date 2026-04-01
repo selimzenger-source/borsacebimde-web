@@ -20,6 +20,11 @@ export default function CookieConsent() {
     setVisible(false);
   }
 
+  function reject() {
+    localStorage.setItem('cookie_consent', 'rejected');
+    setVisible(false);
+  }
+
   if (!visible) return null;
 
   return (
@@ -94,6 +99,24 @@ export default function CookieConsent() {
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+          <button
+            onClick={reject}
+            style={{
+              padding: '8px 16px',
+              borderRadius: 10,
+              background: 'transparent',
+              color: 'var(--text-muted)',
+              fontSize: 13,
+              fontWeight: 500,
+              border: '1px solid var(--border-primary)',
+              cursor: 'pointer',
+              transition: 'opacity 0.15s',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.7'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+          >
+            Reddet
+          </button>
           <button
             onClick={accept}
             style={{
