@@ -523,6 +523,9 @@ function IPOCard({ ipo }: { ipo: IPO }) {
                 </div>
               </div>
 
+              {/* Ad after ARZ BİLGİLERİ */}
+              <AdBanner slot="4045086866" format="horizontal" />
+
               {/* Dates */}
               <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs">
                 {detail.subscription_start && detail.subscription_end && (
@@ -565,6 +568,9 @@ function IPOCard({ ipo }: { ipo: IPO }) {
                   </div>
                 </div>
               )}
+
+              {/* Ad before links */}
+              <AdBanner slot="4045086866" format="horizontal" />
 
               {/* Links */}
               <div className="flex flex-wrap gap-3">
