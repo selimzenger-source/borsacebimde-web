@@ -114,21 +114,18 @@ function StockTable({ stocks, type }: { stocks: DailyMarketStat[]; type: 'ceilin
           {isCeiling ? 'Tavan hissesi yok' : 'Taban hissesi yok'}
         </p>
       ) : (
-        <div className="overflow-x-auto -mx-1">
-          <table className="w-full min-w-[520px]" style={{ fontSize: 12 }}>
+        <div className="-mx-1">
+          <table className="w-full" style={{ fontSize: 12 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border-primary)' }}>
                 <th className="text-left font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Hisse</th>
                 <th className="text-right font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Fiyat</th>
                 <th className="text-right font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Değişim</th>
-                <th className="text-center font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Durum</th>
                 <th className="text-center font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Seri</th>
-                <th className="text-left font-semibold pb-2 px-1.5 pl-2" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Neden (AI)</th>
               </tr>
             </thead>
             <tbody>
               {stocks.map((s) => {
-                const status = getStatusFromStat(s);
                 const seriCount = isCeiling ? s.consecutive_ceiling_count : s.consecutive_floor_count;
                 return (
                   <tr
@@ -139,7 +136,12 @@ function StockTable({ stocks, type }: { stocks: DailyMarketStat[]; type: 'ceilin
                     onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
                   >
                     <td className="py-2 px-1.5">
-                      <span className="font-bold" style={{ color: 'var(--text-primary)', fontSize: 12 }}>{s.ticker}</span>
+                      <div className="flex flex-col">
+                        <span className="font-bold" style={{ color: 'var(--text-primary)', fontSize: 12 }}>{s.ticker}</span>
+                        {s.reason && (
+                          <span style={{ fontSize: 10, lineHeight: 1.4, color: 'var(--text-muted)', marginTop: 2 }}>{s.reason}</span>
+                        )}
+                      </div>
                     </td>
                     <td className="py-2 px-1.5 text-right font-mono" style={{ color: 'var(--text-secondary)', fontSize: 11 }}>
                       {s.close_price.toFixed(2)} ₺
@@ -151,17 +153,7 @@ function StockTable({ stocks, type }: { stocks: DailyMarketStat[]; type: 'ceilin
                       </span>
                     </td>
                     <td className="py-2 px-1.5 text-center">
-                      <StatusBadge status={status} />
-                    </td>
-                    <td className="py-2 px-1.5 text-center">
                       <SeriBadge count={seriCount} type={type} />
-                    </td>
-                    <td className="py-2 px-1.5 pl-2 max-w-[180px]" style={{ color: 'var(--text-secondary)' }}>
-                      {s.reason ? (
-                        <span style={{ fontSize: 11, lineHeight: 1.4 }}>{s.reason}</span>
-                      ) : (
-                        <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>—</span>
-                      )}
                     </td>
                   </tr>
                 );
