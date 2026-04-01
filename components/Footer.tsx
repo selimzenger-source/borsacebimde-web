@@ -50,7 +50,7 @@ export default function Footer() {
                 Google Play
               </a>
               <a
-                href="https://apps.apple.com/us/app/borsa-cebimde-haber-arz/id6760570446"
+                href="https://apps.apple.com/tr/app/borsa-cebimde-haber-arz/id6760570446?l=tr"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"

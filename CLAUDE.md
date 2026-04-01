@@ -22,7 +22,7 @@
 
 ## App Store Linkleri
 - Google Play: https://play.google.com/store/apps/details?id=com.bistfinans.app
-- App Store: https://apps.apple.com/us/app/borsa-cebimde-haber-arz/id6760570446
+- App Store: https://apps.apple.com/tr/app/borsa-cebimde-haber-arz/id6760570446?l=tr
 
 ## Build
 ```bash
