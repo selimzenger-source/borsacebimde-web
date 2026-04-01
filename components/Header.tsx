@@ -10,9 +10,9 @@ import { getStoreInfo } from '@/lib/platform';
 const navLinks = [
   { href: '/', label: 'Ana Sayfa' },
   { href: '/halka-arz', label: 'Halka Arz' },
-  { href: '/kap-ai', label: 'KAP Pozitif Haber' },
-  { href: '/kap-tum-haberler', label: 'Tüm KAP Haber' },
-  { href: '/piyasa-haberleri', label: 'Piyasa Haberleri' },
+  { href: '/kap-ai', label: 'KAP Pozitif' },
+  { href: '/kap-tum-haberler', label: 'Tüm KAP' },
+  { href: '/piyasa-haberleri', label: 'Haberler' },
   { href: '/tavan-taban', label: 'Tavan Taban' },
   { href: '/viop', label: 'VİOP' },
   { href: '/spk-bulten', label: 'SPK Bülten' },
@@ -59,12 +59,12 @@ export default function Header() {
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden lg:flex items-center gap-0.5">
+          <nav className="hidden lg:flex items-center gap-0">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-3 py-1.5 rounded-lg text-[13px] font-medium transition-all duration-150"
+                className="px-2.5 py-1.5 rounded-lg text-[12px] font-medium transition-all duration-150 whitespace-nowrap"
                 style={{
                   color: isActive(link.href) ? '#2979FF' : 'var(--text-secondary)',
                   backgroundColor: isActive(link.href)
