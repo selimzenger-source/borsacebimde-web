@@ -144,7 +144,7 @@ function StockTable({ stocks, type }: { stocks: DailyMarketStat[]; type: 'ceilin
                       </div>
                     </td>
                     <td className="py-2 px-1.5 text-right font-mono" style={{ color: 'var(--text-secondary)', fontSize: 11 }}>
-                      {s.close_price.toFixed(2)} ₺
+                      {s.close_price.toFixed(2)}
                     </td>
                     <td className="py-2 px-1.5 text-right">
                       <span className="font-bold" style={{ color: accentColor, fontSize: 11 }}>
