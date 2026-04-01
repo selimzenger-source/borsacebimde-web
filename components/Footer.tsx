@@ -5,7 +5,7 @@ const quickLinks = [
   { href: '/halka-arz', label: 'Halka Arz' },
   { href: '/kap-ai', label: 'KAP Pozitif Haber' },
   { href: '/kap-tum-haberler', label: 'Tüm KAP Haber' },
-  { href: '/kap-haberler', label: 'Haberler' },
+  { href: '/piyasa-haberleri', label: 'Piyasa Haberleri' },
   { href: '/tavan-taban', label: 'Tavan Taban' },
   { href: '/viop', label: 'VİOP' },
   { href: '/spk-bulten', label: 'SPK Bülten' },

@@ -155,10 +155,6 @@ function NewsCard({ item }: { item: NewsFeedItem }) {
             style={{
               color: 'var(--text-secondary)',
               whiteSpace: 'pre-line',
-              display: '-webkit-box',
-              WebkitLineClamp: 6,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
             }}
           >
             {body}
@@ -181,7 +177,7 @@ export default function HaberlerPage() {
 
   useEffect(() => {
     api.getNewsFeed(30, 200)
-      .then((items) => setAllItems(items.filter((it) => it.source === 'bot_proxy')))
+      .then((items) => setAllItems(items.filter((it) => ['bot_proxy', 'news_scanner'].includes(it.source))))
       .catch(() => setError('Haberler yüklenirken bir sorun oluştu. Lütfen sayfayı yenileyin.'))
       .finally(() => setLoading(false));
   }, []);

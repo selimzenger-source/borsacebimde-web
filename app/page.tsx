@@ -53,7 +53,7 @@ const features = [
     ),
   },
   {
-    href: '/kap-haberler',
+    href: '/piyasa-haberleri',
     title: 'Piyasa Haberleri',
     desc: 'Güncel finans haberlerini kapak görselleriyle birlikte takip edin.',
     color: '#26C6DA',
@@ -320,7 +320,7 @@ export default function HomePage() {
             )}
           </div>
           <Link
-            href="/kap-haberler"
+            href="/piyasa-haberleri"
             className="flex items-center gap-1 text-sm font-medium transition-colors"
             style={{ color: '#2979FF' }}
           >
@@ -404,7 +404,7 @@ export default function HomePage() {
         {!loading && latestNews.length > 0 && (
           <div className="mt-4 flex justify-center">
             <Link
-              href="/kap-haberler"
+              href="/piyasa-haberleri"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 hover:scale-[1.01]"
               style={{
                 background: 'rgba(41,121,255,0.08)',

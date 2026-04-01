@@ -121,7 +121,7 @@ const jsonLd = {
     '@type': 'SearchAction',
     target: {
       '@type': 'EntryPoint',
-      urlTemplate: 'https://borsacebimde.app/kap-haberler/?q={search_term_string}',
+      urlTemplate: 'https://borsacebimde.app/piyasa-haberleri/?q={search_term_string}',
     },
     'query-input': 'required name=search_term_string',
   },
