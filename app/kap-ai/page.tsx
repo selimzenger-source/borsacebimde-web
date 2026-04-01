@@ -23,8 +23,12 @@ interface ParsedNews {
 function parseNewsItem(item: NewsFeedItem): ParsedNews {
   const text = item.text || '';
 
-  // Extract ticker - look for patterns like "CEMAS", "AVTUR" at start or in brackets
-  const tickerMatch = text.match(/^([A-Z]{3,5})\b/) || text.match(/\[([A-Z]{3,5})\]/) || text.match(/\b([A-Z]{3,5})\s*[-:]/);
+  // Extract ticker - look for patterns like "TCELL," "ONCSM'nin" after metadata lines
+  const tickerMatch = text.match(/^([A-Z]{3,5})\b/)
+    || text.match(/\n([A-Z]{3,5})[,'\s]/)
+    || text.match(/\[([A-Z]{3,5})\]/)
+    || text.match(/\b([A-Z]{3,5})\s*[-:]/)
+    || text.match(/(?:AI Puanı[^\n]*\n)([A-Z]{3,5})[,'\s]/);
   const ticker = tickerMatch ? tickerMatch[1] : null;
 
   // Extract AI score - patterns like "7.3/10", "Skor: 8/10", "Puan: 6.5"
@@ -46,12 +50,20 @@ function parseNewsItem(item: NewsFeedItem): ParsedNews {
     else if (score <= 4) sentiment = 'olumsuz';
   }
 
-  // Split title and analysis
+  // Split title and analysis — skip metadata lines
   const cleaned = cleanText(text);
-  const lines = cleaned.split('\n').filter(l => l.trim());
+  const allLines = cleaned.split('\n').filter(l => l.trim());
 
-  let title = lines[0] || cleaned.slice(0, 120);
-  let analysis = lines.slice(1).join('\n').trim();
+  // Skip metadata lines (Anlık Haber, İlişkili Kelime, AI Puanı, KAP:, Her X haberden, YT değildir)
+  const metaPatterns = [
+    /^Anlık Haber/i, /^İlişkili Kelime/i, /^AI Puan/i,
+    /^KAP\s*:/i, /^Her \d+ haber/i, /^YT değildir/i,
+    /^Haber Bildirimi/i, /^—\s*Haber/i,
+  ];
+  const contentLines = allLines.filter(l => !metaPatterns.some(p => p.test(l.trim())));
+
+  let title = contentLines[0] || allLines[0] || cleaned.slice(0, 120);
+  let analysis = contentLines.slice(1).join('\n').trim();
 
   // If title is very long, try to find a natural break
   if (title.length > 150 && !analysis) {
