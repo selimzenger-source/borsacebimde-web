@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { api, cleanText, formatTime, sourceLabel, sourceBadgeStyle, type NewsFeedItem, type IPO, type DailyMarketStat } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
+import { getStoreInfo } from '@/lib/platform';
 
 const API_BASE = 'https://sz-bist-finans-api.onrender.com';
 
@@ -131,6 +132,8 @@ export default function HomePage() {
   const [stats, setStats] = useState<DailyMarketStat[]>([]);
   const [news, setNews] = useState<NewsFeedItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [store, setStore] = useState(getStoreInfo());
+  useEffect(() => { setStore(getStoreInfo()); }, []);
 
   useEffect(() => {
     Promise.allSettled([
@@ -211,16 +214,22 @@ export default function HomePage() {
                 Halka Arzları İncele
               </Link>
               <a
-                href="https://play.google.com/store/apps/details?id=com.bistfinans.app"
+                href={store.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white font-semibold text-sm backdrop-blur-sm transition-all duration-150 active:scale-95"
                 style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.15)' }}
               >
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-                  <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.42c1.32.07 2.24.73 3.01.77.97-.19 1.9-.81 3.01-.88 1.29-.09 2.61.43 3.57 1.56-3.1 1.86-2.58 5.96.41 7.65-.57 1.56-1.31 3.06-3 3.76zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
-                </svg>
-                Uygulamayı İndir
+                {store.isIOS ? (
+                  <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                    <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.42c1.32.07 2.24.73 3.01.77.97-.19 1.9-.81 3.01-.88 1.29-.09 2.61.43 3.57 1.56-3.1 1.86-2.58 5.96.41 7.65-.57 1.56-1.31 3.06-3 3.76zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                    <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.199l2.807 1.626a1 1 0 010 1.732l-2.807 1.626L15.206 12l2.492-2.492zM5.864 2.658L16.8 8.99l-2.302 2.302-8.635-8.635z" />
+                  </svg>
+                )}
+                {store.label}
               </a>
             </div>
           </div>
@@ -235,7 +244,7 @@ export default function HomePage() {
               }}
             >
               <Image
-                src="/images/logo.png"
+                src="/images/icon-192.png"
                 alt="Borsa Cebimde logosu"
                 fill
                 className="object-contain p-3"

@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useTheme } from './ThemeProvider';
+import { getStoreInfo } from '@/lib/platform';
 
 const navLinks = [
   { href: '/', label: 'Ana Sayfa' },
@@ -21,6 +22,8 @@ export default function Header() {
   const pathname = usePathname();
   const { theme, toggle } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [store, setStore] = useState(getStoreInfo());
+  useEffect(() => { setStore(getStoreInfo()); }, []);
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
@@ -99,7 +102,7 @@ export default function Header() {
 
             {/* Download CTA */}
             <a
-              href="https://play.google.com/store/apps/details?id=com.bistfinans.app"
+              href={store.url}
               target="_blank"
               rel="noopener noreferrer"
               className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-brand text-white text-[13px] font-semibold transition-all hover:bg-brand-light"
@@ -156,7 +159,7 @@ export default function Header() {
             ))}
             <div className="pt-2 mt-1" style={{ borderTop: '1px solid var(--border-primary)' }}>
               <a
-                href="https://play.google.com/store/apps/details?id=com.bistfinans.app"
+                href={store.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-brand text-white text-sm font-semibold"
