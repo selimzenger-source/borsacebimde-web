@@ -32,8 +32,8 @@ const BANNERS = [
     icon: '\u{1F4CA}',
   },
   {
-    title: 'Tavan & Taban Bildirimleri',
-    desc: 'Hisseleriniz tavana veya tabana gidince an\u0131nda haberiniz olsun',
+    title: 'Tavan & Taban Hisseleri',
+    desc: 'G\u00fcn\u00fcn tavan ve taban hisseleri ve sebepleri',
     color: 'rgba(245,158,11,0.12)',
     border: 'rgba(245,158,11,0.25)',
     icon: '\u{1F680}',
