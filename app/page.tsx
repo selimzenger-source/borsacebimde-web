@@ -258,33 +258,6 @@ export default function HomePage() {
 
       {/* Stats bar removed - user requested */}
 
-      {/* ── Tanıtım Videosu ──────────────────────────────────────────── */}
-      <section className="mb-8">
-        <h2 className="text-lg font-bold mb-4" style={{ color: 'var(--text-primary)' }}>Uygulama Tanıtımı</h2>
-        <div className="flex justify-center">
-          <div
-            className="relative overflow-hidden rounded-2xl"
-            style={{
-              maxWidth: 280,
-              width: '100%',
-              background: 'rgba(255,255,255,0.03)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              boxShadow: '0 4px 24px rgba(0,0,0,0.3)',
-            }}
-          >
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              style={{ width: '100%', display: 'block', borderRadius: 16 }}
-            >
-              <source src="/videos/tanitim.mp4" type="video/mp4" />
-            </video>
-          </div>
-        </div>
-      </section>
-
       {/* ── Özellikler ─────────────────────────────────────────────────── */}
       <section className="mb-8">
         <h2 className="text-lg font-bold mb-4" style={{ color: 'var(--text-primary)' }}>Özellikler</h2>
