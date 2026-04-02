@@ -1,19 +1,22 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
 export default function CookieConsent() {
   const [visible, setVisible] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
+    // /indir sayfasında çerez banner'ı gösterme
+    if (pathname === '/indir') return;
     const consent = localStorage.getItem('cookie_consent');
     if (!consent) {
-      // Small delay so it doesn't flash on load
       const timer = setTimeout(() => setVisible(true), 1000);
       return () => clearTimeout(timer);
     }
-  }, []);
+  }, [pathname]);
 
   function accept() {
     localStorage.setItem('cookie_consent', 'accepted');
