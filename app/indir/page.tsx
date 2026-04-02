@@ -59,7 +59,7 @@ export default function IndirPage() {
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveBanner((prev) => (prev + 1) % BANNERS.length);
-    }, 3500);
+    }, 2500);
     return () => clearInterval(interval);
   }, []);
 
@@ -151,7 +151,7 @@ export default function IndirPage() {
       {/* Logo */}
       <div
         style={{
-          marginTop: 32,
+          marginTop: 18,
           position: 'relative',
           opacity: isVisible ? 1 : 0,
           transform: isVisible ? 'scale(1)' : 'scale(0.8)',
@@ -161,7 +161,7 @@ export default function IndirPage() {
         <div
           style={{
             position: 'absolute',
-            inset: -16,
+            inset: -12,
             background: 'radial-gradient(circle, rgba(34,197,94,0.2) 0%, transparent 70%)',
             borderRadius: '50%',
             filter: 'blur(20px)',
@@ -170,10 +170,10 @@ export default function IndirPage() {
         <Image
           src="/images/icon-512.png"
           alt="Borsa Cebimde"
-          width={110}
-          height={110}
+          width={88}
+          height={88}
           style={{
-            borderRadius: 28,
+            borderRadius: 24,
             position: 'relative',
             boxShadow: '0 8px 32px rgba(0,0,0,0.4), 0 0 60px rgba(34,197,94,0.1)',
           }}
@@ -184,8 +184,8 @@ export default function IndirPage() {
       {/* App name */}
       <h1
         style={{
-          marginTop: 20,
-          fontSize: 28,
+          marginTop: 12,
+          fontSize: 26,
           fontWeight: 700,
           background: 'linear-gradient(135deg, #4ade80, #22d3ee)',
           WebkitBackgroundClip: 'text',
@@ -201,12 +201,12 @@ export default function IndirPage() {
 
       <p
         style={{
-          marginTop: 6,
-          fontSize: 14,
+          marginTop: 4,
+          fontSize: 13,
           color: '#94A3B8',
           textAlign: 'center',
           maxWidth: 280,
-          lineHeight: 1.5,
+          lineHeight: 1.4,
           opacity: isVisible ? 1 : 0,
           transition: 'opacity 0.5s 0.3s',
         }}
@@ -217,11 +217,11 @@ export default function IndirPage() {
       {/* Feature pills */}
       <div
         style={{
-          marginTop: 20,
+          marginTop: 14,
           display: 'flex',
           flexWrap: 'wrap',
           justifyContent: 'center',
-          gap: 8,
+          gap: 6,
           maxWidth: 340,
           opacity: isVisible ? 1 : 0,
           transition: 'opacity 0.5s 0.35s',
@@ -251,10 +251,10 @@ export default function IndirPage() {
       {/* Animated banners */}
       <div
         style={{
-          marginTop: 24,
+          marginTop: 16,
           width: '100%',
           maxWidth: 360,
-          height: 90,
+          height: 80,
           position: 'relative',
           opacity: isVisible ? 1 : 0,
           transition: 'opacity 0.5s 0.4s',
@@ -317,7 +317,7 @@ export default function IndirPage() {
       {/* Download buttons */}
       <div
         style={{
-          marginTop: 40,
+          marginTop: 28,
           display: 'flex',
           flexDirection: 'column',
           gap: 12,
@@ -389,7 +389,7 @@ export default function IndirPage() {
       {/* Rating + info */}
       <div
         style={{
-          marginTop: 28,
+          marginTop: 18,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -412,8 +412,8 @@ export default function IndirPage() {
       <div
         style={{
           marginTop: 'auto',
-          paddingTop: 32,
-          paddingBottom: 24,
+          paddingTop: 16,
+          paddingBottom: 16,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
