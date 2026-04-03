@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import { api, formatDate, type IPO, type IPODetail, type IPOCeilingTrack, type IPOBroker, type IPOAllocation } from '@/lib/api';
+import { api, formatDate, type IPO, type IPODetail, type IPOCeilingTrack, type IPOBroker, type IPOAllocation, type SPKApplication } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
 
@@ -617,6 +617,126 @@ function IPOCard({ ipo }: { ipo: IPO }) {
   );
 }
 
+// ─── SPK Başvurular Embedded Section ─────────────────────────────────────────
+
+function SPKBasvurularSection() {
+  const [apps, setApps] = useState<SPKApplication[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [expanded, setExpanded] = useState(false);
+
+  useEffect(() => {
+    api.getSPKApplications()
+      .then(setApps)
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  const count = apps.length;
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      {/* Banner Card — always visible */}
+      <div
+        className="card cursor-pointer overflow-hidden"
+        onClick={() => setExpanded(!expanded)}
+        style={{
+          background: 'linear-gradient(135deg, rgba(255,152,0,0.12), rgba(255,152,0,0.04))',
+          border: '1px solid rgba(255,152,0,0.25)',
+          transition: 'transform 0.15s, box-shadow 0.15s',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.01)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(255,152,0,0.15)'; }}
+        onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = 'none'; }}
+      >
+        <div className="flex items-center justify-between p-5">
+          <div className="flex items-center gap-3">
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center"
+              style={{ background: 'rgba(255,152,0,0.15)', border: '1px solid rgba(255,152,0,0.3)' }}
+            >
+              <span style={{ fontSize: 20 }}>&#x231B;</span>
+            </div>
+            <div>
+              <h3 className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>
+                SPK Onayı Beklenen Halka Arzlar
+              </h3>
+              <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                {loading ? 'Yükleniyor...' : `${count} başvuru bekliyor`}
+              </p>
+            </div>
+          </div>
+          <svg
+            className="w-5 h-5 transition-transform duration-200"
+            style={{ color: 'var(--text-muted)', transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)' }}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </div>
+      </div>
+
+      {/* Expanded SPK Applications List */}
+      {expanded && !loading && apps.length > 0 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {apps.map((app, idx) => (
+            <div key={app.id}>
+              {/* Ad every 10 items */}
+              {idx > 0 && idx % 10 === 0 && (
+                <div style={{ marginBottom: 8 }}>
+                  <AdBanner slot="6884376342" format="in-feed" layoutKey="-ef+6k-30-ac+ty" />
+                </div>
+              )}
+              <div
+                className="card p-4"
+                style={{ border: '1px solid rgba(148,163,184,0.1)', borderLeft: '3px solid #FF9800' }}
+              >
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <h4 className="text-sm font-bold leading-snug" style={{ color: 'var(--text-primary)' }}>
+                    {app.company_name}
+                  </h4>
+                  <span
+                    className="shrink-0 px-2 py-0.5 rounded-md text-[11px] font-semibold"
+                    style={{ background: 'rgba(255,152,0,0.12)', color: '#FF9800' }}
+                  >
+                    Onay Bekliyor
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
+                  {app.application_date && (
+                    <div>
+                      <span style={{ color: 'var(--text-muted)' }}>Başvuru Tarihi</span>
+                      <p className="font-medium" style={{ color: 'var(--text-primary)' }}>
+                        {new Date(app.application_date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                      </p>
+                    </div>
+                  )}
+                  {app.sale_price && (
+                    <div>
+                      <span style={{ color: 'var(--text-muted)' }}>Satış Fiyatı</span>
+                      <p className="font-medium" style={{ color: 'var(--text-primary)' }}>
+                        {parseFloat(app.sale_price).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺
+                      </p>
+                    </div>
+                  )}
+                </div>
+                {app.notes && (
+                  <p className="mt-2 text-[11px] leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                    {app.notes}
+                  </p>
+                )}
+              </div>
+            </div>
+          ))}
+          {/* Bottom ad after SPK list */}
+          <AdBanner slot="6884376342" format="rectangle" />
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Section Component ───────────────────────────────────────────────────────
 
 function IPOSection({ section, items, adCounter }: { section: StatusSection; items: IPO[]; adCounter: { current: number } }) {
@@ -749,6 +869,9 @@ export default function HalkaArzPage() {
           {Array.from({ length: 5 }).map((_, i) => <CardSkeleton key={i} />)}
         </div>
       )}
+
+      {/* ── SPK Onay Bekleyenler (embedded) ── */}
+      {!loading && !error && <SPKBasvurularSection />}
 
       {/* ── Grouped Sections ── */}
       {!loading && !error && (
