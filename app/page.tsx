@@ -155,7 +155,7 @@ export default function HomePage() {
     ]).then(([iposRes, statsRes, newsRes]) => {
       if (iposRes.status === 'fulfilled') setIpos(iposRes.value);
       if (statsRes.status === 'fulfilled') setStats(statsRes.value);
-      if (newsRes.status === 'fulfilled') setNews(newsRes.value.filter(n => n.source === 'bot_proxy'));
+      if (newsRes.status === 'fulfilled') setNews(newsRes.value);
       setLoading(false);
     });
   }, []);
