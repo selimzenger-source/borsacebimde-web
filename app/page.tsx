@@ -98,8 +98,8 @@ const features = [
   },
   {
     href: '/spk-basvurular',
-    title: 'SPK Ba\u015fvurular',
-    desc: 'SPK onay\u0131 bekleyen halka arz ba\u015fvurular\u0131n\u0131 g\u00f6r\u00fcnt\u00fcleyin.',
+    title: 'SPK Başvurular',
+    desc: 'SPK onayı bekleyen halka arz başvurularını görüntüleyin.',
     color: '#94A3B8',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="w-6 h-6">

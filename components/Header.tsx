@@ -15,8 +15,8 @@ const navLinks = [
   { href: '/piyasa-haberleri', label: 'Haberler' },
   { href: '/tavan-taban', label: 'Tavan Taban' },
   { href: '/viop', label: 'VİOP' },
-  { href: '/spk-bulten', label: 'SPK B\u00fclten' },
-  { href: '/spk-basvurular', label: 'SPK Ba\u015fvurular' },
+  { href: '/spk-bulten', label: 'SPK Bülten' },
+  { href: '/spk-basvurular', label: 'SPK Başvurular' },
 ];
 
 export default function Header() {

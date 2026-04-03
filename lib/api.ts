@@ -230,6 +230,8 @@ export function sourceLabel(source: string): string {
     bloomberg: 'Bloomberg',
     uzmanpara: 'Uzmanpara',
     bigpara: 'BigPara',
+    news_scanner: 'Haber',
+    tweet_bist30_news: 'Haber',
   };
   return map[source] ?? source;
 }
@@ -247,6 +249,8 @@ export function sourceBadgeStyle(source: string): React.CSSProperties {
     evening_market_report: { background: 'rgba(41,121,255,0.1)', color: '#2979FF', border: '1px solid rgba(41,121,255,0.25)' },
     market_close_tavan: { background: 'rgba(76,175,80,0.1)', color: '#4CAF50', border: '1px solid rgba(76,175,80,0.25)' },
     market_close_taban: { background: 'rgba(255,82,82,0.1)', color: '#FF5252', border: '1px solid rgba(255,82,82,0.25)' },
+    news_scanner: { background: 'rgba(38,198,218,0.1)', color: '#26C6DA', border: '1px solid rgba(38,198,218,0.25)' },
+    tweet_bist30_news: { background: 'rgba(38,198,218,0.1)', color: '#26C6DA', border: '1px solid rgba(38,198,218,0.25)' },
   };
   return map[source] ?? { background: 'var(--bg-surface)', color: 'var(--text-secondary)', border: '1px solid var(--border-primary)' };
 }

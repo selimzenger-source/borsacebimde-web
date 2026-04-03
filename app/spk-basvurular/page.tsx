@@ -15,9 +15,9 @@ function formatMoney(val: string | null): string {
   if (!val) return '\u2014';
   const num = parseFloat(val);
   if (isNaN(num)) return val;
-  if (num >= 1e9) return (num / 1e9).toLocaleString('tr-TR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' Milyar \u20BA';
-  if (num >= 1e6) return (num / 1e6).toLocaleString('tr-TR', { maximumFractionDigits: 1 }) + ' Milyon \u20BA';
-  return num.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' \u20BA';
+  if (num >= 1e9) return (num / 1e9).toLocaleString('tr-TR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' Milyar ₺';
+  if (num >= 1e6) return (num / 1e6).toLocaleString('tr-TR', { maximumFractionDigits: 1 }) + ' Milyon ₺';
+  return num.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ₺';
 }
 
 function CardSkeleton() {
@@ -52,14 +52,14 @@ export default function SPKBasvurularPage() {
             </svg>
           </div>
           <div>
-            <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>SPK Onay Bekleyen Ba\u015fvurular</h1>
-            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Sermaye Piyasas\u0131 Kurulu&apos;na yap\u0131lan halka arz ba\u015fvurular\u0131</p>
+            <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>SPK Onay Bekleyen Başvurular</h1>
+            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Sermaye Piyasası Kurulu&apos;na yapılan halka arz başvuruları</p>
           </div>
         </div>
         {!loading && (
           <div className="mt-3 flex items-center gap-2">
             <span className="px-3 py-1 rounded-full text-xs font-semibold" style={{ background: 'rgba(148,163,184,0.15)', color: '#94A3B8' }}>
-              {apps.length} Ba\u015fvuru
+              {apps.length} Başvuru
             </span>
           </div>
         )}
@@ -75,7 +75,7 @@ export default function SPKBasvurularPage() {
       {/* Empty */}
       {!loading && apps.length === 0 && (
         <div className="card p-8 text-center">
-          <p style={{ color: 'var(--text-muted)' }}>SPK onay\u0131 bekleyen ba\u015fvuru bulunmuyor.</p>
+          <p style={{ color: 'var(--text-muted)' }}>SPK onayı bekleyen başvuru bulunmuyor.</p>
         </div>
       )}
 
@@ -110,13 +110,13 @@ export default function SPKBasvurularPage() {
             <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
               {app.application_date && (
                 <div>
-                  <span style={{ color: 'var(--text-muted)' }}>Ba\u015fvuru Tarihi</span>
+                  <span style={{ color: 'var(--text-muted)' }}>Başvuru Tarihi</span>
                   <p className="font-medium" style={{ color: 'var(--text-primary)' }}>{formatDate(app.application_date)}</p>
                 </div>
               )}
               {app.sale_price && (
                 <div>
-                  <span style={{ color: 'var(--text-muted)' }}>Sat\u0131\u015f Fiyat\u0131</span>
+                  <span style={{ color: 'var(--text-muted)' }}>Satış Fiyatı</span>
                   <p className="font-medium" style={{ color: 'var(--text-primary)' }}>{formatMoney(app.sale_price)}</p>
                 </div>
               )}
@@ -134,19 +134,19 @@ export default function SPKBasvurularPage() {
               )}
               {app.capital_increase_paid && (
                 <div>
-                  <span style={{ color: 'var(--text-muted)' }}>Bedelli Art\u0131r\u0131m</span>
+                  <span style={{ color: 'var(--text-muted)' }}>Bedelli Artırım</span>
                   <p className="font-medium" style={{ color: 'var(--text-primary)' }}>{formatMoney(app.capital_increase_paid)}</p>
                 </div>
               )}
               {app.capital_increase_free && (
                 <div>
-                  <span style={{ color: 'var(--text-muted)' }}>Bedelsiz Art\u0131r\u0131m</span>
+                  <span style={{ color: 'var(--text-muted)' }}>Bedelsiz Artırım</span>
                   <p className="font-medium" style={{ color: 'var(--text-primary)' }}>{formatMoney(app.capital_increase_free)}</p>
                 </div>
               )}
               {app.existing_share_sale && (
                 <div>
-                  <span style={{ color: 'var(--text-muted)' }}>Mevcut Pay Sat\u0131\u015f\u0131</span>
+                  <span style={{ color: 'var(--text-muted)' }}>Mevcut Pay Satışı</span>
                   <p className="font-medium" style={{ color: 'var(--text-primary)' }}>{formatMoney(app.existing_share_sale)}</p>
                 </div>
               )}

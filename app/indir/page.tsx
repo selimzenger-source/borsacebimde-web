@@ -9,38 +9,38 @@ const STORE_LINKS = {
 };
 
 const FEATURES = [
-  { emoji: '\u{1F514}', text: 'Anl\u0131k KAP Bildirimleri' },
-  { emoji: '\u{1F4CA}', text: 'Halka Arz Takibi' },
-  { emoji: '\u{1F916}', text: 'AI Haber Analizi' },
-  { emoji: '\u{1F4C8}', text: 'Tavan / Taban' },
-  { text: 'Tamamen \u00DCcretsiz' },
+  { emoji: '🔔', text: 'Anlık KAP Bildirimleri' },
+  { emoji: '📊', text: 'Halka Arz Takibi' },
+  { emoji: '🤖', text: 'AI Haber Analizi' },
+  { emoji: '📈', text: 'Tavan / Taban' },
+  { text: 'Tamamen Ücretsiz' },
 ];
 
 const BANNERS = [
   {
     title: 'AI Destekli KAP Haberleri',
-    desc: 'Yapay zek\u00e2 ile analiz edilmi\u015f KAP bildirimleri an\u0131nda cebinizde',
+    desc: 'Yapay zekâ ile analiz edilmiş KAP bildirimleri anında cebinizde',
     color: 'rgba(16,185,129,0.12)',
     border: 'rgba(16,185,129,0.25)',
     icon: '\u{1F916}',
   },
   {
     title: 'Halka Arz Takvimi',
-    desc: 'T\u00fcm halka arzlar\u0131 takip edin, bildirim al\u0131n, f\u0131rsat ka\u00e7\u0131rmay\u0131n',
+    desc: 'Tüm halka arzları takip edin, bildirim alın, fırsat kaçırmayın',
     color: 'rgba(59,130,246,0.12)',
     border: 'rgba(59,130,246,0.25)',
     icon: '\u{1F4CA}',
   },
   {
     title: 'Tavan & Taban Hisseleri',
-    desc: 'G\u00fcn\u00fcn tavan ve taban hisseleri ve sebepleri',
+    desc: 'Günün tavan ve taban hisseleri ve sebepleri',
     color: 'rgba(245,158,11,0.12)',
     border: 'rgba(245,158,11,0.25)',
     icon: '\u{1F680}',
   },
   {
     title: 'Piyasa Haberleri',
-    desc: 'G\u00fcncel ekonomi ve borsa haberleri, SPK b\u00fclten analizleri',
+    desc: 'Güncel ekonomi ve borsa haberleri, SPK bülten analizleri',
     color: 'rgba(168,85,247,0.12)',
     border: 'rgba(168,85,247,0.25)',
     icon: '\u{1F4F0}',
@@ -55,7 +55,7 @@ export default function IndirPage() {
     setIsVisible(true);
   }, []);
 
-  // Banner otomatik ge\u00e7i\u015f
+  // Banner otomatik geçiş
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveBanner((prev) => (prev + 1) % BANNERS.length);
@@ -356,7 +356,7 @@ export default function IndirPage() {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M17.523 2.237a.625.625 0 00-.855.216L15.2 4.88C14.207 4.414 13.124 4.15 12 4.15c-1.124 0-2.207.264-3.2.73L7.332 2.453a.625.625 0 10-1.071.645L7.67 5.392A7.95 7.95 0 004 12h16a7.95 7.95 0 00-3.67-6.608l1.409-2.294a.625.625 0 00-.216-.861zM9 9.5a1 1 0 110-2 1 1 0 010 2zm6 0a1 1 0 110-2 1 1 0 010 2zM4 13v7a2 2 0 002 2h12a2 2 0 002-2v-7H4z" />
             </svg>
-            Google Play&apos;den {'\u0130'}ndir
+            Google Play&apos;den İndir
           </a>
 
           {/* iOS */}
@@ -384,7 +384,7 @@ export default function IndirPage() {
             <svg width="18" height="20" viewBox="0 0 384 512" fill="currentColor">
               <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z" />
             </svg>
-            App Store&apos;dan {'\u0130'}ndir
+            App Store&apos;dan İndir
           </a>
         </div>
 
@@ -407,7 +407,7 @@ export default function IndirPage() {
               </svg>
             ))}
           </div>
-          <span style={{ fontSize: 11, color: '#64748B' }}>{'\u00DC'}cretsiz & Reklams\u0131z Deneyim</span>
+          <span style={{ fontSize: 11, color: '#64748B' }}>Ücretsiz & Reklamsız Deneyim</span>
         </div>
       </div>
 
@@ -428,7 +428,7 @@ export default function IndirPage() {
           Borsa Cebimde &copy; {new Date().getFullYear()}
         </span>
         <span style={{ fontSize: 9, color: '#334155', textAlign: 'center', maxWidth: 260, lineHeight: 1.4 }}>
-          Bu uygulama yat{'\u0131'}r{'\u0131'}m tavsiyesi i{'\u00e7'}ermez. Yat{'\u0131'}r{'\u0131'}m kararlar{'\u0131'} tamamen kullan{'\u0131'}c{'\u0131'}n{'\u0131'}n sorumlulu{'\u011f'}undad{'\u0131'}r.
+          Bu uygulama yatırım tavsiyesi içermez. Yatırım kararları tamamen kullanıcının sorumluluğundadır.
         </span>
       </div>
 
