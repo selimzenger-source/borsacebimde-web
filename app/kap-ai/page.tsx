@@ -59,6 +59,7 @@ function parseNewsItem(item: NewsFeedItem): ParsedNews {
     /^Anlık Haber/i, /^İlişkili Kelime/i, /^AI Puan/i,
     /^KAP\s*:/i, /^Her \d+ haber/i, /^YT değildir/i,
     /^Haber Bildirimi/i, /^—\s*Haber/i,
+    /T[üu]m bildirim/i, /uygulamamız[ıi] indirin/i,
   ];
   const contentLines = allLines.filter(l => !metaPatterns.some(p => p.test(l.trim())));
 

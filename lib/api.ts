@@ -204,6 +204,8 @@ export function cleanText(text: string): string {
     .replace(/📲?\s*(Detaylar\s*görselde|Android|szalgo)[^\n]*/gi, '')
     .replace(/🍏?\s*iOS:?[^\n]*/gi, '')
     .replace(/szalgo\.net\.tr/gi, '')
+    .replace(/T[üu]m bildirim[^\n]*/gi, '')
+    .replace(/uygulamamız[ıi][^\n]*/gi, '')
     .replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE00}-\u{FE0F}\u{1F000}-\u{1F02F}\u{1F0A0}-\u{1F0FF}\u{200D}\u{20E3}\u{FE0F}]/gu, '')
     .replace(/\n{3,}/g, '\n\n')
     .replace(/[ \t]+/g, ' ')
