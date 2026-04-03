@@ -50,11 +50,10 @@ function parseNewsItem(item: NewsFeedItem): ParsedNews {
     else if (score <= 4) sentiment = 'olumsuz';
   }
 
-  // Split title and analysis — skip metadata lines
+  // Clean text and remove metadata lines
   const cleaned = cleanText(text);
   const allLines = cleaned.split('\n').filter(l => l.trim());
 
-  // Skip metadata lines (Anlık Haber, İlişkili Kelime, AI Puanı, KAP:, Her X haberden, YT değildir)
   const metaPatterns = [
     /^Anlık Haber/i, /^İlişkili Kelime/i, /^AI Puan/i,
     /^KAP\s*:/i, /^Her \d+ haber/i, /^YT değildir/i,
@@ -63,24 +62,15 @@ function parseNewsItem(item: NewsFeedItem): ParsedNews {
   ];
   const contentLines = allLines.filter(l => !metaPatterns.some(p => p.test(l.trim())));
 
-  let title = contentLines[0] || allLines[0] || cleaned.slice(0, 120);
-  let analysis = contentLines.slice(1).join('\n').trim();
+  // Single combined text — no title/analysis split
+  let fullText = contentLines.join('\n').trim() || cleaned.slice(0, 500);
 
-  // If title is very long, try to find a natural break
-  if (title.length > 150 && !analysis) {
-    const dotIdx = title.indexOf('. ', 40);
-    if (dotIdx > 0 && dotIdx < 160) {
-      analysis = title.slice(dotIdx + 2).trim();
-      title = title.slice(0, dotIdx + 1);
-    }
+  // Remove ticker from start if present
+  if (ticker && fullText.startsWith(ticker)) {
+    fullText = fullText.slice(ticker.length).replace(/^[\s\-:]+/, '').trim();
   }
 
-  // Remove ticker from title start if present
-  if (ticker && title.startsWith(ticker)) {
-    title = title.slice(ticker.length).replace(/^[\s\-:]+/, '').trim();
-  }
-
-  return { item, ticker, title, analysis, sentiment, score };
+  return { item, ticker, title: '', analysis: fullText, sentiment, score };
 }
 
 function groupByDate(items: ParsedNews[]): [string, ParsedNews[]][] {
@@ -344,58 +334,18 @@ function NewsCard({ parsed }: { parsed: ParsedNews }) {
         )}
       </div>
 
-      {/* Title */}
-      <h3
-        style={{
-          fontSize: 14,
-          fontWeight: 600,
-          color: 'var(--text-primary)',
-          lineHeight: 1.5,
-          marginBottom: analysis ? 8 : 0,
-        }}
-      >
-        {title}
-      </h3>
-
-      {/* Analysis section */}
+      {/* Content — plain text, no AI Analiz box */}
       {analysis && (
-        <div
+        <p
           style={{
-            marginTop: 4,
-            padding: '10px 12px',
-            borderRadius: 8,
-            background: 'var(--bg-surface)',
-            border: '1px solid var(--border-primary)',
+            fontSize: 13,
+            color: 'var(--text-primary)',
+            lineHeight: 1.65,
+            whiteSpace: 'pre-line',
           }}
         >
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 4,
-              marginBottom: 6,
-              padding: '1px 6px',
-              borderRadius: 4,
-              background: 'rgba(41,121,255,0.10)',
-              border: '1px solid rgba(41,121,255,0.20)',
-            }}
-          >
-            <SparkIcon className="w-3 h-3" />
-            <span style={{ fontSize: 10, fontWeight: 700, color: '#2979FF', letterSpacing: '0.3px' }}>
-              AI Analiz
-            </span>
-          </div>
-          <p
-            style={{
-              fontSize: 13,
-              color: 'var(--text-secondary)',
-              lineHeight: 1.6,
-              whiteSpace: 'pre-line',
-            }}
-          >
-            {analysis}
-          </p>
-        </div>
+          {analysis}
+        </p>
       )}
 
       {/* Source label */}
