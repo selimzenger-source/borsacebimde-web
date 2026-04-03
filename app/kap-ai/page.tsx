@@ -1,36 +1,91 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { api, KapDisclosure, formatTime } from '@/lib/api';
+import { api, cleanText, formatTime, NewsFeedItem } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-interface ParsedDisclosure {
-  item: KapDisclosure;
+function isKapPositive(source: string): boolean {
+  return source.includes('kap_news') || source.includes('bist30');
+}
+
+interface ParsedNews {
+  item: NewsFeedItem;
+  ticker: string | null;
+  title: string;
+  analysis: string;
   sentiment: 'olumlu' | 'notr' | 'olumsuz';
+  score: number | null;
 }
 
-function parseDisclosure(item: KapDisclosure): ParsedDisclosure {
+function parseNewsItem(item: NewsFeedItem): ParsedNews {
+  const text = item.text || '';
+
+  // Extract ticker - look for patterns like "TCELL," "ONCSM'nin" after metadata lines
+  const tickerMatch = text.match(/^([A-Z]{3,5})\b/)
+    || text.match(/\n([A-Z]{3,5})[,'\s]/)
+    || text.match(/\[([A-Z]{3,5})\]/)
+    || text.match(/\b([A-Z]{3,5})\s*[-:]/)
+    || text.match(/(?:AI Puanı[^\n]*\n)([A-Z]{3,5})[,'\s]/);
+  const ticker = tickerMatch ? tickerMatch[1] : null;
+
+  // Extract AI score - patterns like "7.3/10", "Skor: 8/10", "Puan: 6.5"
+  const scoreMatch = text.match(/(?:skor|puan|score)[:\s]*(\d+(?:[.,]\d+)?)\s*(?:\/\s*10)?/i)
+    || text.match(/(\d+(?:[.,]\d+)?)\s*\/\s*10/);
+  const score = scoreMatch ? parseFloat(scoreMatch[1].replace(',', '.')) : null;
+
+  // Determine sentiment
   let sentiment: 'olumlu' | 'notr' | 'olumsuz' = 'notr';
-  if (item.ai_sentiment) {
-    const s = item.ai_sentiment.toLowerCase();
-    if (s === 'olumlu' || s === 'pozitif' || s === 'positive') sentiment = 'olumlu';
-    else if (s === 'olumsuz' || s === 'negatif' || s === 'negative') sentiment = 'olumsuz';
+  const lowerText = text.toLowerCase();
+  if (lowerText.includes('olumlu') || lowerText.includes('pozitif') || lowerText.includes('positive')) {
+    sentiment = 'olumlu';
+  } else if (lowerText.includes('olumsuz') || lowerText.includes('negatif') || lowerText.includes('negative')) {
+    sentiment = 'olumsuz';
   }
-  // Infer from score if sentiment is still notr
-  if (sentiment === 'notr' && item.ai_impact_score !== null) {
-    if (item.ai_impact_score >= 6) sentiment = 'olumlu';
-    else if (item.ai_impact_score <= 4) sentiment = 'olumsuz';
+  // Also infer from score
+  if (score !== null && sentiment === 'notr') {
+    if (score >= 6) sentiment = 'olumlu';
+    else if (score <= 4) sentiment = 'olumsuz';
   }
-  return { item, sentiment };
+
+  // Split title and analysis — skip metadata lines
+  const cleaned = cleanText(text);
+  const allLines = cleaned.split('\n').filter(l => l.trim());
+
+  // Skip metadata lines (Anlık Haber, İlişkili Kelime, AI Puanı, KAP:, Her X haberden, YT değildir)
+  const metaPatterns = [
+    /^Anlık Haber/i, /^İlişkili Kelime/i, /^AI Puan/i,
+    /^KAP\s*:/i, /^Her \d+ haber/i, /^YT değildir/i,
+    /^Haber Bildirimi/i, /^—\s*Haber/i,
+  ];
+  const contentLines = allLines.filter(l => !metaPatterns.some(p => p.test(l.trim())));
+
+  let title = contentLines[0] || allLines[0] || cleaned.slice(0, 120);
+  let analysis = contentLines.slice(1).join('\n').trim();
+
+  // If title is very long, try to find a natural break
+  if (title.length > 150 && !analysis) {
+    const dotIdx = title.indexOf('. ', 40);
+    if (dotIdx > 0 && dotIdx < 160) {
+      analysis = title.slice(dotIdx + 2).trim();
+      title = title.slice(0, dotIdx + 1);
+    }
+  }
+
+  // Remove ticker from title start if present
+  if (ticker && title.startsWith(ticker)) {
+    title = title.slice(ticker.length).replace(/^[\s\-:]+/, '').trim();
+  }
+
+  return { item, ticker, title, analysis, sentiment, score };
 }
 
-function groupByDate(items: ParsedDisclosure[]): [string, ParsedDisclosure[]][] {
-  const map = new Map<string, ParsedDisclosure[]>();
+function groupByDate(items: ParsedNews[]): [string, ParsedNews[]][] {
+  const map = new Map<string, ParsedNews[]>();
   for (const parsed of items) {
-    const dateKey = (parsed.item.published_at ?? parsed.item.created_at ?? '').split('T')[0];
+    const dateKey = (parsed.item.sent_at ?? parsed.item.created_at ?? '').split('T')[0];
     if (!dateKey) continue;
     if (!map.has(dateKey)) map.set(dateKey, []);
     map.get(dateKey)!.push(parsed);
@@ -56,7 +111,7 @@ function formatDayLabel(dateKey: string): string {
 function sentimentLabel(s: 'olumlu' | 'notr' | 'olumsuz'): string {
   if (s === 'olumlu') return 'Olumlu';
   if (s === 'olumsuz') return 'Olumsuz';
-  return 'Nötr';
+  return 'Notr';
 }
 
 function sentimentColor(s: 'olumlu' | 'notr' | 'olumsuz'): string {
@@ -141,14 +196,6 @@ function ChartIcon({ className }: { className?: string }) {
   );
 }
 
-function KapLinkIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m9.86-2.005a4.5 4.5 0 00-1.242-7.244l4.5-4.5a4.5 4.5 0 016.364 6.364l-1.757 1.757" />
-    </svg>
-  );
-}
-
 // ─── Skeleton ─────────────────────────────────────────────────────────────────
 
 function SkeletonCard() {
@@ -182,11 +229,11 @@ function SkeletonGroup() {
   );
 }
 
-// ─── Disclosure Card ─────────────────────────────────────────────────────────
+// ─── News Card ────────────────────────────────────────────────────────────────
 
-function DisclosureCard({ parsed }: { parsed: ParsedDisclosure }) {
-  const { item, sentiment } = parsed;
-  const timeStr = item.published_at ? formatTime(item.published_at) : (item.created_at ? formatTime(item.created_at) : '');
+function NewsCard({ parsed }: { parsed: ParsedNews }) {
+  const { item, ticker, title, analysis, sentiment, score } = parsed;
+  const timeStr = item.sent_at ? formatTime(item.sent_at) : (item.created_at ? formatTime(item.created_at) : '');
 
   return (
     <article
@@ -197,10 +244,10 @@ function DisclosureCard({ parsed }: { parsed: ParsedDisclosure }) {
         transition: 'box-shadow 0.2s ease, border-color 0.2s ease',
       }}
     >
-      {/* Top row: ticker + time + sentiment + score + KAP link */}
+      {/* Top row: ticker + time + sentiment + score */}
       <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8, marginBottom: 10 }}>
         {/* Ticker badge */}
-        {item.company_code && (
+        {ticker && (
           <span
             style={{
               display: 'inline-flex',
@@ -210,12 +257,12 @@ function DisclosureCard({ parsed }: { parsed: ParsedDisclosure }) {
               background: 'rgba(41,121,255,0.12)',
               border: '1px solid rgba(41,121,255,0.25)',
               color: '#2979FF',
-              fontSize: 13,
+              fontSize: 12,
               fontWeight: 700,
-              letterSpacing: '0.5px',
+              letterSpacing: '0.3px',
             }}
           >
-            {item.company_code}
+            {ticker}
           </span>
         )}
 
@@ -274,7 +321,7 @@ function DisclosureCard({ parsed }: { parsed: ParsedDisclosure }) {
         </span>
 
         {/* AI Score */}
-        {item.ai_impact_score !== null && item.ai_impact_score !== undefined && (
+        {score !== null && (
           <span
             style={{
               display: 'inline-flex',
@@ -286,42 +333,13 @@ function DisclosureCard({ parsed }: { parsed: ParsedDisclosure }) {
               border: '1px solid var(--border-primary)',
               fontSize: 11,
               fontWeight: 700,
-              color: scoreColor(item.ai_impact_score),
+              color: scoreColor(score),
               fontVariantNumeric: 'tabular-nums',
             }}
           >
             <ChartIcon className="w-3 h-3" />
-            {item.ai_impact_score.toFixed(1)}/10
+            {score.toFixed(1)}/10
           </span>
-        )}
-
-        {/* KAP Link */}
-        {item.kap_url && (
-          <a
-            href={item.kap_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 4,
-              padding: '2px 8px',
-              borderRadius: 6,
-              background: 'rgba(255,215,0,0.10)',
-              border: '1px solid rgba(255,215,0,0.25)',
-              color: '#FFD700',
-              fontSize: 11,
-              fontWeight: 600,
-              textDecoration: 'none',
-              marginLeft: 'auto',
-              transition: 'background 0.15s ease',
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,215,0,0.20)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,215,0,0.10)'; }}
-          >
-            KAP
-            <ExternalLinkIcon className="w-3 h-3" />
-          </a>
         )}
       </div>
 
@@ -332,14 +350,14 @@ function DisclosureCard({ parsed }: { parsed: ParsedDisclosure }) {
           fontWeight: 600,
           color: 'var(--text-primary)',
           lineHeight: 1.5,
-          marginBottom: item.ai_summary ? 8 : 0,
+          marginBottom: analysis ? 8 : 0,
         }}
       >
-        {item.title}
+        {title}
       </h3>
 
-      {/* AI Analysis section */}
-      {item.ai_summary && (
+      {/* Analysis section */}
+      {analysis && (
         <div
           style={{
             marginTop: 4,
@@ -374,20 +392,15 @@ function DisclosureCard({ parsed }: { parsed: ParsedDisclosure }) {
               whiteSpace: 'pre-line',
             }}
           >
-            {item.ai_summary}
+            {analysis}
           </p>
         </div>
       )}
 
-      {/* Bottom: source + category */}
-      <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        {item.category && (
-          <span style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 500 }}>
-            {item.category}
-          </span>
-        )}
-        <span style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 500, marginLeft: 'auto' }}>
-          KAP Bildirim
+      {/* Source label */}
+      <div style={{ marginTop: 8, display: 'flex', justifyContent: 'flex-end' }}>
+        <span style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 500 }}>
+          {item.source === 'kap_news' ? 'KAP Bildirim' : item.source === 'bist30' ? 'BIST 30' : 'KAP'}
         </span>
       </div>
     </article>
@@ -397,17 +410,16 @@ function DisclosureCard({ parsed }: { parsed: ParsedDisclosure }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function KapAiPage() {
-  const [groups, setGroups] = useState<[string, ParsedDisclosure[]][]>([]);
+  const [groups, setGroups] = useState<[string, ParsedNews[]][]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
-    api.getKapDisclosures({ hours: 720, limit: 200 })
+    api.getNewsFeed(30, 200)
       .then((items) => {
-        // Only show items that have AI analysis
-        const withAi = items.filter((it) => it.ai_summary || it.ai_impact_score !== null);
-        const parsed = withAi.map(parseDisclosure);
+        const filtered = items.filter((it) => isKapPositive(it.source));
+        const parsed = filtered.map(parseNewsItem);
         setTotalCount(parsed.length);
         setGroups(groupByDate(parsed));
       })
@@ -462,7 +474,7 @@ export default function KapAiPage() {
             >
               <SparkIcon className="w-3.5 h-3.5" />
               <span style={{ color: '#2979FF', fontSize: 12, fontWeight: 700, letterSpacing: '0.3px' }}>
-                AI Analiz
+                AI Filtre
               </span>
             </div>
 
@@ -474,10 +486,10 @@ export default function KapAiPage() {
                 marginBottom: 6,
               }}
             >
-              KAP AI Haberler
+              KAP Pozitif Haber
             </h1>
             <p style={{ color: 'var(--text-secondary)', fontSize: 14, lineHeight: 1.5 }}>
-              Yapay zeka ile analiz edilmiş KAP bildirimleri
+              Yapay zeka ile filtrelenmiş pozitif KAP bildirimleri
             </p>
           </div>
 
@@ -534,10 +546,10 @@ export default function KapAiPage() {
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <p style={{ color: 'var(--text-primary)', fontSize: 14, fontWeight: 600, marginBottom: 4 }}>
-            Anlık bildirimler ve detaylı analiz
+            BIST 50 hisseleri ücretsiz!
           </p>
           <p style={{ color: 'var(--text-secondary)', fontSize: 13, lineHeight: 1.5 }}>
-            KAP bildirimlerini anlık push bildirim olarak almak ve tüm BIST hisselerini takip etmek için uygulamayı indirin.
+            Tüm BIST hisselerinin AI haberlerini almak ve anlık bildirimler için uygulamayı indirin.
           </p>
           <a
             href="https://play.google.com/store/apps/details?id=com.bistfinans.app"
@@ -584,7 +596,7 @@ export default function KapAiPage() {
         </div>
       )}
 
-      {/* ── Disclosures grouped by date ── */}
+      {/* ── News feed grouped by date ── */}
       {!loading && !error && groups.map(([dateKey, dayItems]) => (
         <section key={dateKey} style={{ marginBottom: 32 }}>
           {/* Day header */}
@@ -624,7 +636,7 @@ export default function KapAiPage() {
                       <AdBanner slot="3567518609" format="in-feed" layoutKey="-ef+6k-30-ac+ty" />
                     </div>
                   )}
-                  <DisclosureCard parsed={parsed} />
+                  <NewsCard parsed={parsed} />
                 </div>
               );
             })}
@@ -651,7 +663,7 @@ export default function KapAiPage() {
             <DocumentIcon className="w-6 h-6" />
           </div>
           <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>
-            AI analizi bulunan KAP haberi bulunamadı.
+            Son 30 günde pozitif KAP haberi bulunamadı.
           </p>
         </div>
       )}
