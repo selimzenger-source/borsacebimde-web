@@ -47,6 +47,22 @@ export interface IPO {
   created_at: string | null;
 }
 
+export interface SPKApplication {
+  id: number;
+  company_name: string;
+  existing_capital: string | null;
+  new_capital: string | null;
+  capital_increase_paid: string | null;
+  capital_increase_free: string | null;
+  existing_share_sale: string | null;
+  additional_share_sale: string | null;
+  sale_price: string | null;
+  application_date: string | null;
+  notes: string | null;
+  status: string;
+  created_at: string | null;
+}
+
 export interface DailyMarketStat {
   id: number;
   ticker: string;
@@ -174,6 +190,9 @@ export const api = {
 
   getIPODetail: (id: number) =>
     fetchAPI<IPODetail>(`/api/v1/ipos/${id}`),
+
+  getSPKApplications: () =>
+    fetchAPI<SPKApplication[]>('/api/v1/ipos/spk-applications'),
 };
 
 /** Tweet text temizle */
