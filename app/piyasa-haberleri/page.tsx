@@ -178,8 +178,8 @@ export default function HaberlerPage() {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   useEffect(() => {
-    api.getNewsFeed(30, 200)
-      .then((items) => setAllItems(items.filter((it) => ['bot_proxy', 'news_scanner'].includes(it.source))))
+    api.getNewsFeed(30, 200, 'news_scanner')
+      .then((items) => setAllItems(items))
       .catch(() => setError('Haberler yüklenirken bir sorun oluştu. Lütfen sayfayı yenileyin.'))
       .finally(() => setLoading(false));
   }, []);

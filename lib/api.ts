@@ -170,8 +170,8 @@ export interface IPODetail extends IPO {
 }
 
 export const api = {
-  getNewsFeed: (days = 30, limit = 100) =>
-    fetchAPI<NewsFeedItem[]>('/api/v1/public/news-feed', { days, limit }),
+  getNewsFeed: (days = 30, limit = 100, source?: string) =>
+    fetchAPI<NewsFeedItem[]>('/api/v1/public/news-feed', { days, limit, ...(source ? { source } : {}) }),
 
   getIPOs: () =>
     fetchAPI<IPO[]>('/api/v1/ipos/'),
