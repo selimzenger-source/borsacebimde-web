@@ -224,9 +224,9 @@ export function cleanText(text: string): string {
 /** Kaynak etiketleri */
 export function sourceLabel(source: string): string {
   const map: Record<string, string> = {
-    kap_news: 'KAP Bildirim',
-    bist30: 'BIST 30',
-    tweet_kap_news: 'KAP Bildirim',
+    kap_news: 'KAP Pozitif Haber',
+    bist30: 'KAP Pozitif Haber',
+    tweet_kap_news: 'KAP Pozitif Haber',
     tweet_daily_tracking: 'Günlük Takip',
     tweet_market_snapshot: 'Piyasa Özeti',
     bot_proxy: 'Haber',
@@ -250,9 +250,9 @@ export function sourceLabel(source: string): string {
 /** Kaynak badge stili */
 export function sourceBadgeStyle(source: string): React.CSSProperties {
   const map: Record<string, React.CSSProperties> = {
-    kap_news: { background: 'rgba(255,215,0,0.1)', color: '#FFD700', border: '1px solid rgba(255,215,0,0.25)' },
-    bist30: { background: 'rgba(255,215,0,0.1)', color: '#FFD700', border: '1px solid rgba(255,215,0,0.25)' },
-    tweet_kap_news: { background: 'rgba(255,215,0,0.1)', color: '#FFD700', border: '1px solid rgba(255,215,0,0.25)' },
+    kap_news: { background: 'rgba(76,175,80,0.12)', color: '#4CAF50', border: '1px solid rgba(76,175,80,0.25)' },
+    bist30: { background: 'rgba(76,175,80,0.12)', color: '#4CAF50', border: '1px solid rgba(76,175,80,0.25)' },
+    tweet_kap_news: { background: 'rgba(76,175,80,0.12)', color: '#4CAF50', border: '1px solid rgba(76,175,80,0.25)' },
     tweet_daily_tracking: { background: 'rgba(76,175,80,0.1)', color: '#4CAF50', border: '1px solid rgba(76,175,80,0.25)' },
     tweet_market_snapshot: { background: 'rgba(38,198,218,0.1)', color: '#26C6DA', border: '1px solid rgba(38,198,218,0.25)' },
     bot_proxy: { background: 'rgba(38,198,218,0.1)', color: '#26C6DA', border: '1px solid rgba(38,198,218,0.25)' },

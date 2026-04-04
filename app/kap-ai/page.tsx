@@ -344,7 +344,7 @@ function NewsCard({ parsed }: { parsed: ParsedNews }) {
       {/* Source label */}
       <div style={{ marginTop: 8, display: 'flex', justifyContent: 'flex-end' }}>
         <span style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 500 }}>
-          {item.source === 'kap_news' ? 'KAP Bildirim' : item.source === 'bist30' ? 'BIST 30' : 'KAP'}
+          KAP Pozitif Haber
         </span>
       </div>
     </article>
