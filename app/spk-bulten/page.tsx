@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { api, SpkBulletinAnalysis, cleanText, formatDate } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
+import InlineAppBanner from '@/components/InlineAppBanner';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -204,6 +205,11 @@ export default function SpkBultenPage() {
         </div>
       </header>
 
+      <InlineAppBanner
+        title="SPK Bülten Bildirimleri!"
+        message="SPK bülten yayınladığında AI analizi ile en hızlı bildirimleri alın."
+      />
+
       {/* ─── Info Box ─── */}
       <div
         className="flex gap-3 p-4 rounded-xl"
@@ -268,7 +274,7 @@ export default function SpkBultenPage() {
       )}
 
       {/* ─── AppStore Banner ─── */}
-      <AppStoreBanner />
+      <AppStoreBanner message="AI analizi ile en hızlı bildirimleri alın!" />
     </div>
   );
 }

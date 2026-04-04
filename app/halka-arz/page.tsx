@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { api, formatDate, type IPO, type IPODetail, type IPOCeilingTrack, type IPOBroker, type IPOAllocation, type SPKApplication } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
+import InlineAppBanner from '@/components/InlineAppBanner';
 
 // ─── Turkish Label Maps ──────────────────────────────────────────────────────
 
@@ -788,6 +789,11 @@ export default function HalkaArzPage() {
         </div>
       </header>
 
+      <InlineAppBanner
+        title="Halka Arz Bildirimlerini Kaçırmayın!"
+        message="Dağıtım günleri, son saatler ve işleme başlangıcında anlık bildirim alın."
+      />
+
       {/* ── Error ── */}
       {error && (
         <div className="card p-8 flex flex-col items-center gap-3 text-center">
@@ -834,7 +840,7 @@ export default function HalkaArzPage() {
       </div>
 
       <AdBanner slot="1897984416" format="multiplex" />
-      <AppStoreBanner />
+      <AppStoreBanner message="Yeni halka arzları, dağıtım günleri ve işlem başlangıcını kaçırmayın!" />
     </div>
   );
 }

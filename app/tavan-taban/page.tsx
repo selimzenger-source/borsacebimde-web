@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { api, DailyMarketStat, formatDate } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
+import InlineAppBanner from '@/components/InlineAppBanner';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -379,6 +380,11 @@ export default function TavanTabanPage() {
         </div>
       </header>
 
+      <InlineAppBanner
+        title="Tavan & Taban Bildirimleri!"
+        message="Günün tavan taban hisselerini her akşam seans kapandıktan sonra bildirim olarak alın."
+      />
+
       {/* ─── Error ─── */}
       {error && (
         <div
@@ -461,7 +467,7 @@ export default function TavanTabanPage() {
       )}
 
       {/* ─── AppStore Banner ─── */}
-      <AppStoreBanner />
+      <AppStoreBanner message="Her akşam seans kapandıktan sonra bildirim alın!" />
     </div>
   );
 }

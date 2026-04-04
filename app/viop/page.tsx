@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { api, ViopTweet, cleanText, formatDate, formatTime } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
+import InlineAppBanner from '@/components/InlineAppBanner';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -307,6 +308,11 @@ export default function ViopPage() {
         </div>
       </header>
 
+      <InlineAppBanner
+        title="VİOP Seanslarını Anlık Takip Edin!"
+        message="Akşam ve gündüz seanslarını anlık takip edin, önemli gelişmelerde bildirim alın."
+      />
+
       {/* ─── Info Box ─── */}
       <div
         className="flex gap-3 p-4 rounded-xl"
@@ -368,7 +374,7 @@ export default function ViopPage() {
       )}
 
       {/* ─── AppStore Banner ─── */}
-      <AppStoreBanner />
+      <AppStoreBanner message="Akşam ve gündüz seanslarını anlık takip edin!" />
     </div>
   );
 }

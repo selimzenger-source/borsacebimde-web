@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo, useCallback } from 'react';
 import { api, formatDate, type KapDisclosure } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
+import InlineAppBanner from '@/components/InlineAppBanner';
 
 // ─── Types & Config ──────────────────────────────────────────────────────────
 
@@ -487,6 +488,11 @@ export default function KapTumHaberlerPage() {
         </div>
       </header>
 
+      <InlineAppBanner
+        title="KAP Haberlerini AI ile Takip Edin!"
+        message="Tüm şirketlerin KAP haberlerini AI yorumuyla takip edin, favori listenize bildirim alın."
+      />
+
       {/* ── Ticker Search ── */}
       <div
         className="card"
@@ -732,69 +738,14 @@ export default function KapTumHaberlerPage() {
         </div>
       )}
 
-      {/* ── Info Box ── */}
-      <div
-        className="card"
-        style={{
-          marginTop: 8,
-          padding: 16,
-          background: 'linear-gradient(135deg, rgba(41,121,255,0.06), var(--bg-card))',
-          display: 'flex',
-          alignItems: 'flex-start',
-          gap: 12,
-        }}
-      >
-        <div
-          style={{
-            flexShrink: 0,
-            width: 32,
-            height: 32,
-            borderRadius: '50%',
-            background: 'rgba(41,121,255,0.12)',
-            border: '1px solid rgba(41,121,255,0.25)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: 2,
-          }}
-        >
-          <svg className="w-4 h-4" style={{ color: '#2979FF' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-          </svg>
-        </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <p style={{ color: 'var(--text-primary)', fontSize: 14, fontWeight: 600, marginBottom: 4 }}>
-            Tüm hisseler için bildirim almak ister misiniz?
-          </p>
-          <p style={{ color: 'var(--text-secondary)', fontSize: 13, lineHeight: 1.5 }}>
-            Anlık KAP bildirimleri ve favori hisse takibi için uygulamayı indirin.
-          </p>
-          <a
-            href="https://play.google.com/store/apps/details?id=com.bistfinans.app"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-              marginTop: 8,
-              color: '#2979FF',
-              fontSize: 13,
-              fontWeight: 600,
-              textDecoration: 'none',
-            }}
-          >
-            Uygulamayı İndir
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-            </svg>
-          </a>
-        </div>
-      </div>
+      <InlineAppBanner
+        title="Tüm Hisseler İçin Bildirim Alın!"
+        message="Anlık KAP bildirimleri ve favori hisse takibi için uygulamayı indirin."
+      />
 
       {/* ── AppStore Banner ── */}
       <div style={{ marginTop: 24 }}>
-        <AppStoreBanner />
+        <AppStoreBanner message="AI yorumuyla takip edin, favori listenize bildirim alın!" />
       </div>
     </div>
   );

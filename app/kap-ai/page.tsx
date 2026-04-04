@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { api, cleanText, formatTime, NewsFeedItem } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
+import InlineAppBanner from '@/components/InlineAppBanner';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -467,61 +468,10 @@ export default function KapAiPage() {
         </div>
       </header>
 
-      {/* ── Free Tier Info Card ── */}
-      <div
-        className="card"
-        style={{
-          marginBottom: 20,
-          padding: 16,
-          background: 'linear-gradient(135deg, rgba(41,121,255,0.06), var(--bg-card))',
-          display: 'flex',
-          alignItems: 'flex-start',
-          gap: 12,
-        }}
-      >
-        <div
-          style={{
-            flexShrink: 0,
-            width: 32,
-            height: 32,
-            borderRadius: '50%',
-            background: 'rgba(41,121,255,0.12)',
-            border: '1px solid rgba(41,121,255,0.25)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: 2,
-          }}
-        >
-          <InfoIcon className="w-4 h-4" />
-        </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <p style={{ color: 'var(--text-primary)', fontSize: 14, fontWeight: 600, marginBottom: 4 }}>
-            BIST 50 hisseleri ücretsiz!
-          </p>
-          <p style={{ color: 'var(--text-secondary)', fontSize: 13, lineHeight: 1.5 }}>
-            Tüm BIST hisselerinin AI haberlerini almak ve anlık bildirimler için uygulamayı indirin.
-          </p>
-          <a
-            href="https://play.google.com/store/apps/details?id=com.bistfinans.app"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-              marginTop: 8,
-              color: '#2979FF',
-              fontSize: 13,
-              fontWeight: 600,
-              textDecoration: 'none',
-            }}
-          >
-            Uygulamayı İndir
-            <ExternalLinkIcon className="w-3.5 h-3.5" />
-          </a>
-        </div>
-      </div>
+      <InlineAppBanner
+        title="Anlık KAP Bildirimleri Alın!"
+        message="Haber düşer düşmez tüm BIST senetlerinden anında bildirim alın."
+      />
 
       {/* ── Error ── */}
       {error && (
@@ -621,7 +571,7 @@ export default function KapAiPage() {
 
       {/* ── App Store Banner ── */}
       <div style={{ marginTop: 40 }}>
-        <AppStoreBanner />
+        <AppStoreBanner message="Haber düşer düşmez tüm BIST senetlerinden anlık bildirim alın!" />
       </div>
     </div>
   );

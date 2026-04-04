@@ -16,7 +16,11 @@ const AppleIcon = () => (
   </svg>
 );
 
-export default function AppStoreBanner() {
+interface AppStoreBannerProps {
+  message?: string;
+}
+
+export default function AppStoreBanner({ message }: AppStoreBannerProps) {
   const [isIOS, setIsIOS] = useState(false);
   useEffect(() => { setIsIOS(getStoreInfo().isIOS); }, []);
 
@@ -56,7 +60,7 @@ export default function AppStoreBanner() {
             Daha fazlası için uygulamayı indirin
           </h3>
           <p className="text-sm mb-5 leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-            Anlık bildirimler, VIP içerikler ve hisse takibi - hepsi cebinizde.
+            {message || 'Anlık bildirimler, VIP içerikler ve hisse takibi - hepsi cebinizde.'}
           </p>
 
           <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
