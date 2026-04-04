@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { api, cleanText, formatTime, sourceLabel, sourceBadgeStyle, type NewsFeedItem, type DailyMarketStat, type ViopTweet, type SpkBulletinAnalysis, type KapDisclosure } from '@/lib/api';
+import { api, cleanText, formatTime, sourceLabel, sourceBadgeStyle, type NewsFeedItem, type IPO, type DailyMarketStat } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
 import { getStoreInfo } from '@/lib/platform';
@@ -111,6 +111,15 @@ const features = [
 
 // ─── Skeleton Components ──────────────────────────────────────────────────────
 
+function StatSkeleton() {
+  return (
+    <div className="card px-6 py-4 flex flex-col gap-2 min-w-[160px]">
+      <div className="skeleton h-3 w-24 rounded" />
+      <div className="skeleton h-7 w-16 rounded" />
+    </div>
+  );
+}
+
 function NewsSkeleton() {
   return (
     <div className="card overflow-hidden">
@@ -127,99 +136,39 @@ function NewsSkeleton() {
   );
 }
 
-// ─── Feed Section Component ─────────────────────────────────────────────────
-
-function FeedSection<T>({
-  title, href, color, icon, items, renderItem,
-}: {
-  title: string;
-  href: string;
-  color: string;
-  icon: React.ReactNode;
-  items: T[];
-  renderItem: (item: T) => React.ReactNode;
-}) {
-  if (items.length === 0) return null;
-
-  return (
-    <div>
-      <Link
-        href={href}
-        className="flex items-center gap-2.5 mb-3 group"
-        style={{ textDecoration: 'none' }}
-      >
-        <div
-          className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-          style={{ background: `${color}15`, border: `1px solid ${color}25`, color }}
-        >
-          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
-            {icon}
-          </svg>
-        </div>
-        <h2 className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>{title}</h2>
-        <svg
-          className="w-4 h-4 opacity-50 group-hover:translate-x-0.5 transition-transform"
-          style={{ color }}
-          viewBox="0 0 16 16"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M3 8h10m-4-4 4 4-4 4" />
-        </svg>
-      </Link>
-      <div className="flex flex-col gap-2">
-        {items.map((item, idx) => (
-          <Link
-            key={idx}
-            href={href}
-            className="card p-3 transition-all duration-150 hover:scale-[1.005]"
-            style={{ textDecoration: 'none', borderLeft: `3px solid ${color}` }}
-          >
-            {renderItem(item)}
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function HomePage() {
+  const [ipos, setIpos] = useState<IPO[]>([]);
+  const [stats, setStats] = useState<DailyMarketStat[]>([]);
+  const [news, setNews] = useState<NewsFeedItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [expandedNews, setExpandedNews] = useState<Set<number>>(new Set());
   const [store, setStore] = useState(getStoreInfo());
   useEffect(() => { setStore(getStoreInfo()); }, []);
 
-  // Section data
-  const [viopTweets, setViopTweets] = useState<ViopTweet[]>([]);
-  const [spkBulletins, setSpkBulletins] = useState<SpkBulletinAnalysis[]>([]);
-  const [tavanTaban, setTavanTaban] = useState<DailyMarketStat[]>([]);
-  const [piyasaNews, setPiyasaNews] = useState<NewsFeedItem[]>([]);
-  const [kapAiNews, setKapAiNews] = useState<NewsFeedItem[]>([]);
-  const [kapDisclosures, setKapDisclosures] = useState<KapDisclosure[]>([]);
-
   useEffect(() => {
     Promise.allSettled([
-      api.getViopTweets(3),
-      api.getSpkBulletins(20),
-      api.getDailyMarketStats(3),
-      api.getNewsFeed(7, 20, 'news_scanner'),
+      api.getIPOs(),
+      api.getDailyMarketStats(1),
       api.getNewsFeed(7, 50),
-      api.getKapDisclosures({ hours: 72, limit: 20 }),
-    ]).then(([viopRes, spkRes, ttRes, piyasaRes, allNewsRes, kapRes]) => {
-      if (viopRes.status === 'fulfilled') setViopTweets(viopRes.value.slice(0, 20));
-      if (spkRes.status === 'fulfilled') setSpkBulletins(spkRes.value.slice(0, 20));
-      if (ttRes.status === 'fulfilled') setTavanTaban(ttRes.value.slice(0, 20));
-      if (piyasaRes.status === 'fulfilled') setPiyasaNews(piyasaRes.value.slice(0, 20));
-      if (allNewsRes.status === 'fulfilled') {
-        const kapItems = allNewsRes.value.filter(n => ['kap_news', 'bist30', 'tweet_kap_news'].includes(n.source));
-        setKapAiNews(kapItems.slice(0, 20));
-      }
-      if (kapRes.status === 'fulfilled') setKapDisclosures(kapRes.value.slice(0, 20));
+    ]).then(([iposRes, statsRes, newsRes]) => {
+      if (iposRes.status === 'fulfilled') setIpos(iposRes.value);
+      if (statsRes.status === 'fulfilled') setStats(statsRes.value);
+      if (newsRes.status === 'fulfilled') setNews(newsRes.value);
       setLoading(false);
     });
   }, []);
+
+  // Compute quick stats
+  const todaysStats = stats.filter((s) => {
+    const today = new Date().toISOString().slice(0, 10);
+    return s.date?.slice(0, 10) === today;
+  });
+  const ceilingCount = todaysStats.filter((s) => s.is_ceiling).length;
+  const floorCount = todaysStats.filter((s) => s.is_floor).length;
+  const activeIpos = ipos.filter((i) => i.status !== 'awaiting_approval').length;
+  const latestNews = news.slice(0, 8);
 
   return (
     <div className="flex flex-col gap-0">
@@ -366,163 +315,142 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Son Güncellemeler — Bölüm Bölüm ────────────────────────────── */}
-      {!loading && (
-        <section className="mb-8 flex flex-col gap-8">
+      {/* ── Son Güncellemeler ──────────────────────────────────────────────── */}
+      <section className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>Son Güncellemeler</h2>
+            {!loading && (
+              <span
+                className="badge"
+                style={{ background: 'rgba(41,121,255,0.1)', color: '#2979FF', border: '1px solid rgba(41,121,255,0.2)' }}
+              >
+                <span className="pulse-dot" style={{ background: '#2979FF' }} />
+                Canlı
+              </span>
+            )}
+          </div>
+          <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
+            {!loading && `${latestNews.length} güncelleme`}
+          </span>
+        </div>
 
-          {/* Piyasa Haberleri */}
-          <FeedSection
-            title="Piyasa Haberleri"
-            href="/piyasa-haberleri"
-            color="#26C6DA"
-            icon={<path strokeLinecap="round" strokeLinejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z" />}
-            items={piyasaNews}
-            renderItem={(item) => {
+        <div className="flex flex-col gap-3">
+          {loading ? (
+            Array.from({ length: 3 }).map((_, i) => <NewsSkeleton key={i} />)
+          ) : latestNews.length === 0 ? (
+            <div className="card p-8 flex flex-col items-center gap-3 text-center">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.4} className="w-10 h-10" style={{ color: 'var(--text-muted)', opacity: 0.5 }}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z" />
+              </svg>
+              <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Şu an haber bulunamadı.</p>
+            </div>
+          ) : (
+            latestNews.map((item, idx) => {
+              const timeStr = item.sent_at ?? item.created_at;
               const cleaned = cleanText(item.text);
-              const title = cleaned.split(/\n\n+/)[0] || '';
-              return (
-                <div className="flex items-start gap-3">
-                  {item.image_url && (
-                    <div className="shrink-0 w-16 h-12 rounded-lg overflow-hidden" style={{ background: 'var(--bg-surface)' }}>
-                      <img src={getImageUrl(item.image_url)!} alt="" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              const paragraphs = cleaned.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
+              const title = paragraphs[0] || '';
+              const body = paragraphs.slice(1).join('\n\n').trim();
+              const imageUrl = getImageUrl(item.image_url);
+              const items = [];
+
+              const isExpanded = expandedNews.has(item.id);
+              const toggleExpand = () => {
+                setExpandedNews((prev) => {
+                  const next = new Set(prev);
+                  if (next.has(item.id)) next.delete(item.id);
+                  else next.add(item.id);
+                  return next;
+                });
+              };
+
+              items.push(
+                <div
+                  key={item.id}
+                  className="card overflow-hidden transition-all duration-150 cursor-pointer hover:scale-[1.005]"
+                  onClick={toggleExpand}
+                >
+                  {imageUrl && (
+                    <div style={{ width: '100%', height: 160, background: 'var(--bg-surface)', overflow: 'hidden' }}>
+                      <img src={imageUrl} alt="" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                   )}
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium leading-snug line-clamp-2" style={{ color: 'var(--text-primary)' }}>{title}</p>
-                    <span className="text-[11px]" style={{ color: 'var(--text-muted)' }}>{formatTime(item.sent_at ?? item.created_at ?? '')}</span>
-                  </div>
-                </div>
-              );
-            }}
-          />
-
-          {/* KAP AI Pozitif Haberler */}
-          <FeedSection
-            title="KAP Pozitif Haberler"
-            href="/kap-ai"
-            color="#FFD700"
-            icon={<path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" />}
-            items={kapAiNews}
-            renderItem={(item) => {
-              const cleaned = cleanText(item.text);
-              const title = cleaned.split(/\n\n+/)[0] || '';
-              return (
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2 mb-0.5">
-                    <span className="badge" style={sourceBadgeStyle(item.source)}>{sourceLabel(item.source)}</span>
-                    <span className="text-[11px]" style={{ color: 'var(--text-muted)' }}>{formatTime(item.sent_at ?? item.created_at ?? '')}</span>
-                  </div>
-                  <p className="text-sm font-medium leading-snug line-clamp-2" style={{ color: 'var(--text-primary)' }}>{title}</p>
-                </div>
-              );
-            }}
-          />
-
-          <AdBanner slot="1823621352" format="horizontal" />
-
-          {/* Tüm KAP Haber Merkezi */}
-          <FeedSection
-            title="Tüm KAP Bildirimler"
-            href="/kap-tum-haberler"
-            color="#FFD700"
-            icon={<path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />}
-            items={kapDisclosures}
-            renderItem={(item) => {
-              const sentimentColor = item.ai_sentiment === 'Olumlu' ? '#4CAF50' : item.ai_sentiment === 'Olumsuz' ? '#FF5252' : 'var(--text-muted)';
-              return (
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2 mb-0.5">
-                    <span className="text-xs font-bold" style={{ color: '#FFD700' }}>{item.company_code}</span>
-                    {item.ai_impact_score != null && (
-                      <span className="text-[11px] font-semibold" style={{ color: item.ai_impact_score >= 7 ? '#4CAF50' : item.ai_impact_score >= 5 ? '#FFD700' : '#FF5252' }}>
-                        {item.ai_impact_score.toFixed(1)}/10
+                  <div className="p-4 flex flex-col gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="badge" style={sourceBadgeStyle(item.source)}>
+                        {sourceLabel(item.source)}
                       </span>
+                      {timeStr && (
+                        <span style={{ color: 'var(--text-muted)', fontSize: 11 }}>
+                          {formatTime(timeStr)}
+                        </span>
+                      )}
+                    </div>
+                    {title && (
+                      <h3 className="text-sm font-bold leading-snug" style={{ color: 'var(--text-primary)' }}>
+                        {title}
+                      </h3>
                     )}
-                    {item.ai_sentiment && (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded font-semibold" style={{ background: `${sentimentColor}18`, color: sentimentColor }}>
-                        {item.ai_sentiment}
-                      </span>
+                    {body && (
+                      <p
+                        className={`text-sm leading-relaxed ${isExpanded ? '' : 'line-clamp-2'}`}
+                        style={{ color: 'var(--text-secondary)', whiteSpace: isExpanded ? 'pre-line' : undefined }}
+                      >
+                        {isExpanded ? body : body.replace(/\n\n/g, ' ').slice(0, 150)}
+                        {!isExpanded && body.length > 150 && <span style={{ color: 'var(--text-muted)' }}>...</span>}
+                      </p>
                     )}
+                    <div className="flex items-center gap-1 mt-1" style={{ color: '#2979FF', fontSize: 12, fontWeight: 500 }}>
+                      {isExpanded ? 'Küçült' : 'Devamını Oku'}
+                      <svg
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        className="w-3 h-3 transition-transform"
+                        style={{ transform: isExpanded ? 'rotate(180deg)' : 'none' }}
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 6l4 4 4-4" />
+                      </svg>
+                    </div>
                   </div>
-                  <p className="text-sm leading-snug line-clamp-2" style={{ color: 'var(--text-primary)' }}>{item.title}</p>
-                  <span className="text-[11px]" style={{ color: 'var(--text-muted)' }}>{formatTime(item.published_at ?? item.created_at ?? '')}</span>
                 </div>
               );
-            }}
-          />
 
-          {/* Tavan Taban */}
-          <FeedSection
-            title="Tavan Taban"
-            href="/tavan-taban"
-            color="#4CAF50"
-            icon={<path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />}
-            items={tavanTaban}
-            renderItem={(item) => (
-              <div className="flex items-center justify-between w-full">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>{item.ticker}</span>
-                  {item.is_ceiling && <span className="text-[10px] px-1.5 py-0.5 rounded font-bold" style={{ background: 'rgba(76,175,80,0.15)', color: '#4CAF50' }}>TAVAN</span>}
-                  {item.is_floor && <span className="text-[10px] px-1.5 py-0.5 rounded font-bold" style={{ background: 'rgba(255,82,82,0.15)', color: '#FF5252' }}>TABAN</span>}
-                </div>
-                <div className="text-right">
-                  <span className="text-sm font-medium" style={{ color: item.percent_change >= 0 ? '#4CAF50' : '#FF5252' }}>
-                    {item.percent_change > 0 ? '+' : ''}{item.percent_change.toFixed(2)}%
-                  </span>
-                </div>
-              </div>
-            )}
-          />
-
-          {/* VİOP Gece Seansı */}
-          <FeedSection
-            title="VİOP Gece Seansı"
-            href="/viop"
-            color="#B388FF"
-            icon={<path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />}
-            items={viopTweets}
-            renderItem={(item) => {
-              const cleaned = cleanText(item.text);
-              const title = cleaned.split(/\n\n+/)[0] || '';
-              return (
-                <div className="min-w-0">
-                  <p className="text-sm leading-snug line-clamp-2" style={{ color: 'var(--text-primary)' }}>{title}</p>
-                  <span className="text-[11px]" style={{ color: 'var(--text-muted)' }}>{formatTime(item.sent_at ?? '')}</span>
-                </div>
-              );
-            }}
-          />
-
-          {/* SPK Bülten */}
-          <FeedSection
-            title="SPK Bülten Analizleri"
-            href="/spk-bulten"
-            color="#FF9800"
-            icon={<path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />}
-            items={spkBulletins}
-            renderItem={(item) => {
-              const cleaned = cleanText(item.text);
-              const title = cleaned.split(/\n\n+/)[0] || '';
-              return (
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2 mb-0.5">
-                    <span className="text-[11px] font-semibold" style={{ color: '#FF9800' }}>Bülten #{item.bulletin_no}</span>
-                    <span className="text-[11px]" style={{ color: 'var(--text-muted)' }}>{formatTime(item.sent_at ?? '')}</span>
+              // Banner ad after 6th news item
+              if (idx === 5) {
+                items.push(
+                  <div key={`ad-${idx}`}>
+                    <AdBanner slot="1823621352" format="horizontal" />
                   </div>
-                  <p className="text-sm leading-snug line-clamp-2" style={{ color: 'var(--text-primary)' }}>{title}</p>
-                </div>
-              );
-            }}
-          />
+                );
+              }
 
-        </section>
-      )}
+              return items;
+            })
+          )}
+        </div>
 
-      {loading && (
-        <section className="mb-8 flex flex-col gap-3">
-          {Array.from({ length: 4 }).map((_, i) => <NewsSkeleton key={i} />)}
-        </section>
-      )}
+        {!loading && latestNews.length > 0 && (
+          <div className="mt-4 flex justify-center">
+            <Link
+              href="/piyasa-haberleri"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 hover:scale-[1.01]"
+              style={{
+                background: 'rgba(41,121,255,0.08)',
+                border: '1px solid rgba(41,121,255,0.2)',
+                color: '#2979FF',
+              }}
+            >
+              Tüm Haberleri Gör
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={2} className="w-3.5 h-3.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 8h10m-4-4 4 4-4 4" />
+              </svg>
+            </Link>
+          </div>
+        )}
+      </section>
 
       {/* ── Uygulama Banner ───────────────────────────────────────────────── */}
       <AppStoreBanner />
