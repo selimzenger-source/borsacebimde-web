@@ -359,7 +359,7 @@ export default function HomePage() {
               // KAP haberlerinde "— Haber Bildirimi" yerine şirket adını göster
               if (title.includes('Haber Bildirimi') || title.startsWith('—')) {
                 const fullText = (title + ' ' + body).replace(/\n/g, ' ');
-                const companyMatch = fullText.match(/\d+\/10\s+(.+?)(?:,|\.|\s(?:halka|bugün|daha|tarafından|için|ile|nin|nın|den|dan|ye|ya|de|da))/i);
+                const companyMatch = fullText.match(/\d+(?:[.,]\d+)?\/10\s+(.+?)(?:,|\.|\s(?:halka|bugün|daha|tarafından|için|ile|nin|nın|den|dan|ye|ya|de|da))/i);
                 if (companyMatch) {
                   title = companyMatch[1].trim();
                 }
