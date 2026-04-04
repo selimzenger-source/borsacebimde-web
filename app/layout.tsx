@@ -185,44 +185,6 @@ const appJsonLd = {
   inLanguage: 'tr',
 };
 
-const faqJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: 'Halka arz nedir ve nasıl takip edilir?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Halka arz, şirketlerin hisse senetlerini ilk kez halka satışa sunmasıdır. Borsa Cebimde uygulaması ile SPK onaylı halka arzları, dağıtım tarihlerini ve işlem başlangıçlarını anlık bildirimlerle takip edebilirsiniz.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'KAP haberleri nedir ve nasıl takip edilir?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'KAP (Kamuyu Aydınlatma Platformu) haberleri, Borsa İstanbul\'da işlem gören şirketlerin zorunlu bildirimlerini içerir. Borsa Cebimde ile tüm BIST senetlerinin KAP haberlerini yapay zeka analizi ile takip edebilir, favori hisselerinize bildirim alabilirsiniz.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Borsa Cebimde uygulaması ücretsiz mi?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Evet, Borsa Cebimde uygulaması ücretsiz olarak Google Play ve App Store\'dan indirilebilir. BIST 50 hisselerinin KAP haberleri ücretsiz sunulmaktadır. VIP abonelik ile tüm BIST hisselerine erişim sağlanır.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Tavan taban hisseleri nasıl takip edilir?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Her akşam seans kapandıktan sonra günün tavan ve taban yapan hisselerini Borsa Cebimde uygulaması üzerinden bildirim olarak alabilirsiniz.',
-      },
-    },
-  ],
-};
 
 export default function RootLayout({
   children,
@@ -265,10 +227,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(appJsonLd) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
       </head>
       <body

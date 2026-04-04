@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Script from 'next/script';
 
 export interface FAQItem {
   question: string;
@@ -101,8 +100,7 @@ export default function FAQ({ items, title, description }: { items: FAQItem[]; t
   return (
     <section className="mt-10 mb-6">
       {/* JSON-LD */}
-      <Script
-        id={`faq-jsonld-${title?.slice(0, 10) || 'main'}`}
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
