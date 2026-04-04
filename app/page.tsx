@@ -348,33 +348,10 @@ export default function HomePage() {
           ) : (
             latestNews.map((item, idx) => {
               const timeStr = item.sent_at ?? item.created_at;
-              const rawText = item.text || '';
-              const isKap = item.source?.includes('kap') || item.source?.includes('bist30');
-
-              const cleaned = cleanText(rawText);
-              // Remove metadata lines for KAP news
-              const allLines = cleaned.split('\n').filter(l => l.trim());
-              const metaPatterns = [
-                /^—?\s*Haber Bildirimi/i, /^Anlık Haber/i, /^İlişkili Kelime/i,
-                /^AI Puan/i, /^KAP\s*:/i, /^Her \d+ haber/i, /^YT değildir/i,
-                /^kap\.org/i,
-              ];
-              const contentLines = isKap
-                ? allLines.filter(l => !metaPatterns.some(p => p.test(l.trim())))
-                : allLines;
-              const fullContent = contentLines.join('\n').trim();
-              const paragraphs = fullContent.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
-              let title = paragraphs[0] || '';
+              const cleaned = cleanText(item.text);
+              const paragraphs = cleaned.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
+              const title = paragraphs[0] || '';
               const body = paragraphs.slice(1).join('\n\n').trim();
-
-              // For KAP news: extract company name as title (first sentence/phrase)
-              if (isKap && title) {
-                // Title is now the actual content — take first sentence as title
-                const sentenceEnd = title.match(/^(.{20,80}?)[.,;]/) || title.match(/^(.{20,100}?)\s/);
-                if (sentenceEnd && title.length > 100) {
-                  // Don't split, just keep it as is
-                }
-              }
               const imageUrl = getImageUrl(item.image_url);
               const items = [];
 
@@ -424,20 +401,18 @@ export default function HomePage() {
                         {!isExpanded && body.length > 150 && <span style={{ color: 'var(--text-muted)' }}>...</span>}
                       </p>
                     )}
-                    <div className="flex items-center justify-between mt-1">
-                      <div className="flex items-center gap-1" style={{ color: '#2979FF', fontSize: 12, fontWeight: 500 }}>
-                        {isExpanded ? 'Küçült' : 'Devamını Oku'}
-                        <svg
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                          className="w-3 h-3 transition-transform"
-                          style={{ transform: isExpanded ? 'rotate(180deg)' : 'none' }}
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M4 6l4 4 4-4" />
-                        </svg>
-                      </div>
+                    <div className="flex items-center gap-1 mt-1" style={{ color: '#2979FF', fontSize: 12, fontWeight: 500 }}>
+                      {isExpanded ? 'Küçült' : 'Devamını Oku'}
+                      <svg
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        className="w-3 h-3 transition-transform"
+                        style={{ transform: isExpanded ? 'rotate(180deg)' : 'none' }}
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 6l4 4 4-4" />
+                      </svg>
                     </div>
                   </div>
                 </div>
