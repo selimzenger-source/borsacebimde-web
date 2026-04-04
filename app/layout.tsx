@@ -135,7 +135,9 @@ const orgJsonLd = {
   url: 'https://borsacebimde.app',
   logo: 'https://borsacebimde.app/images/icon-512.png',
   sameAs: [
-    'https://play.google.com/store/apps/details?id=com.borsacebimde.app',
+    'https://play.google.com/store/apps/details?id=com.bistfinans.app',
+    'https://apps.apple.com/tr/app/borsa-cebimde-haber-arz/id6760570446',
+    'https://x.com/BorsaCebimde',
   ],
   contactPoint: {
     '@type': 'ContactPoint',
@@ -143,6 +145,83 @@ const orgJsonLd = {
     contactType: 'customer service',
     availableLanguage: 'Turkish',
   },
+};
+
+const appJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MobileApplication',
+  name: 'Borsa Cebimde - Haber & Halka Arz',
+  operatingSystem: 'Android, iOS',
+  applicationCategory: 'FinanceApplication',
+  description: 'Halka arz takvimi, yapay zeka destekli KAP haberleri, tavan taban hisseleri, VİOP gece seansı, SPK bülten analizleri ve borsa takibi. BIST senetlerinden anlık bildirim alın.',
+  url: 'https://borsacebimde.app/indir',
+  image: 'https://borsacebimde.app/images/icon-512.png',
+  author: {
+    '@type': 'Organization',
+    name: 'Borsa Cebimde',
+  },
+  offers: [
+    {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'TRY',
+      availability: 'https://schema.org/InStock',
+    },
+  ],
+  installUrl: 'https://play.google.com/store/apps/details?id=com.bistfinans.app',
+  downloadUrl: [
+    'https://play.google.com/store/apps/details?id=com.bistfinans.app',
+    'https://apps.apple.com/tr/app/borsa-cebimde-haber-arz/id6760570446',
+  ],
+  featureList: [
+    'Halka arz takvimi ve bildirimler',
+    'KAP haberleri yapay zeka analizi',
+    'Tavan taban hisseleri günlük takip',
+    'VİOP gece ve akşam seansı',
+    'SPK bülten AI analizi',
+    'Favori hisse listesi ve bildirimler',
+    'BIST 50 hisseleri ücretsiz',
+  ],
+  inLanguage: 'tr',
+};
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Halka arz nedir ve nasıl takip edilir?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Halka arz, şirketlerin hisse senetlerini ilk kez halka satışa sunmasıdır. Borsa Cebimde uygulaması ile SPK onaylı halka arzları, dağıtım tarihlerini ve işlem başlangıçlarını anlık bildirimlerle takip edebilirsiniz.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'KAP haberleri nedir ve nasıl takip edilir?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'KAP (Kamuyu Aydınlatma Platformu) haberleri, Borsa İstanbul\'da işlem gören şirketlerin zorunlu bildirimlerini içerir. Borsa Cebimde ile tüm BIST senetlerinin KAP haberlerini yapay zeka analizi ile takip edebilir, favori hisselerinize bildirim alabilirsiniz.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Borsa Cebimde uygulaması ücretsiz mi?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Evet, Borsa Cebimde uygulaması ücretsiz olarak Google Play ve App Store\'dan indirilebilir. BIST 50 hisselerinin KAP haberleri ücretsiz sunulmaktadır. VIP abonelik ile tüm BIST hisselerine erişim sağlanır.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Tavan taban hisseleri nasıl takip edilir?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Her akşam seans kapandıktan sonra günün tavan ve taban yapan hisselerini Borsa Cebimde uygulaması üzerinden bildirim olarak alabilirsiniz.',
+      },
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -182,6 +261,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(appJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
       </head>
       <body

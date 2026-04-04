@@ -4,6 +4,7 @@ export const metadata: Metadata = {
   title: 'KAP Pozitif Haberler - AI Destekli KAP Haber Analizi',
   description:
     'Yapay zeka destekli KAP haber analizi. Kamuyu Aydınlatma Platformu bildirimlerinin otomatik özetleri, pozitif ve negatif sınıflandırma.',
+  keywords: ['KAP haberleri', 'KAP bildirimleri', 'KAP pozitif haberler', 'yapay zeka KAP analizi', 'BIST KAP', 'hisse senedi haber', 'borsa haberleri', 'aselsan KAP', 'thyao KAP', 'KAP AI analiz', 'kamuyu aydınlatma platformu'],
   alternates: { canonical: 'https://borsacebimde.app/kap-ai' },
   openGraph: {
     title: 'KAP Pozitif Haberler - AI Analiz | Borsa Cebimde',

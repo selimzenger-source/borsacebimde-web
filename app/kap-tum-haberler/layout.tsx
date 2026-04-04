@@ -4,6 +4,7 @@ export const metadata: Metadata = {
   title: 'Tüm KAP Haberleri - Kamuyu Aydınlatma Platformu Bildirimleri',
   description:
     'KAP bildirimlerinin tam listesi. Tüm hisse senetleri için KAP haberleri, özel durum açıklamaları ve finansal raporlar.',
+  keywords: ['KAP haberleri', 'tüm KAP bildirimleri', 'özel durum açıklaması', 'KAP finansal rapor', 'BIST hisse haberleri', 'KAP bildirimi', 'şirket haberleri', 'borsa bildirimleri', 'kamuyu aydınlatma'],
   alternates: { canonical: 'https://borsacebimde.app/kap-tum-haberler' },
   openGraph: {
     title: 'Tüm KAP Haberleri | Borsa Cebimde',

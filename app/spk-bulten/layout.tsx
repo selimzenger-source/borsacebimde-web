@@ -4,6 +4,7 @@ export const metadata: Metadata = {
   title: 'SPK Bülten Analizleri - Haftalık Bülten Özetleri',
   description:
     'SPK haftalık bültenlerinin yapay zeka destekli analizleri ve özetleri. Halka arz kararları ve düzenleyici gelişmeler.',
+  keywords: ['SPK bülten', 'SPK haftalık bülten', 'SPK analizi', 'sermaye piyasası kurulu', 'SPK kararları', 'halka arz SPK', 'SPK yaptırımlar', 'SPK düzenleme'],
   alternates: { canonical: 'https://borsacebimde.app/spk-bulten' },
   openGraph: {
     title: 'SPK Bülten Analizleri | Borsa Cebimde',

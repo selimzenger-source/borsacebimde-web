@@ -4,6 +4,7 @@ export const metadata: Metadata = {
   title: 'Tavan Taban Hisseleri - Günlük Tavan ve Taban Yapan Hisseler',
   description:
     'Bugün tavan ve taban yapan BIST hisseleri. Günlük tavan taban listesi, fiyat değişimleri ve hacim bilgileri.',
+  keywords: ['tavan taban hisseleri', 'bugün tavan yapan hisseler', 'bugün taban yapan hisseler', 'BIST tavan taban', 'borsa tavan', 'borsa taban', 'günlük tavan taban listesi', 'hisse fiyat değişim'],
   alternates: { canonical: 'https://borsacebimde.app/tavan-taban' },
   openGraph: {
     title: 'Tavan Taban Hisseleri | Borsa Cebimde',

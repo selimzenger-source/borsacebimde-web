@@ -199,7 +199,7 @@ export const api = {
 export function cleanText(text: string): string {
   return text
     // KAP linkleri hariç URL'leri sil
-    .replace(/https?:\/\/(?!www\.kap\.org\.tr)\S+/g, '')
+    .replace(/https?:\/\/(?!(?:www\.)?kap\.org\.tr)\S+/g, '')
     // # işaretini kaldır ama ticker kodunu koru (#THYAO → THYAO)
     .replace(/#(\w+)/g, '$1')
     .replace(/@\w+/g, '')
