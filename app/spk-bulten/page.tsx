@@ -142,6 +142,8 @@ export default function SpkBultenPage() {
         const map = new Map<string, BulletinGroup>();
 
         for (const item of data) {
+          // SPK başvuru tweet'lerini filtrele (bulletin_no null)
+          if (!item.bulletin_no) continue;
           const key = item.bulletin_no;
           if (!map.has(key)) {
             map.set(key, {
