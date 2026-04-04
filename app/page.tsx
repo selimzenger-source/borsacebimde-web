@@ -330,16 +330,9 @@ export default function HomePage() {
               </span>
             )}
           </div>
-          <Link
-            href="/piyasa-haberleri"
-            className="flex items-center gap-1 text-sm font-medium transition-colors"
-            style={{ color: '#2979FF' }}
-          >
-            Tümünü Gör
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={2} className="w-3.5 h-3.5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3 8h10m-4-4 4 4-4 4" />
-            </svg>
-          </Link>
+          <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
+            {!loading && `${latestNews.length} güncelleme`}
+          </span>
         </div>
 
         <div className="flex flex-col gap-3">
@@ -356,9 +349,9 @@ export default function HomePage() {
             latestNews.map((item, idx) => {
               const timeStr = item.sent_at ?? item.created_at;
               const cleaned = cleanText(item.text);
-              const lines = cleaned.split('\n').filter(l => l.trim());
-              const title = lines[0] || '';
-              const body = lines.slice(1).join(' ').trim();
+              const paragraphs = cleaned.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
+              const title = paragraphs[0] || '';
+              const body = paragraphs.slice(1).join('\n\n').trim();
               const imageUrl = getImageUrl(item.image_url);
               const items = [];
 
@@ -402,9 +395,9 @@ export default function HomePage() {
                     {body && (
                       <p
                         className={`text-sm leading-relaxed ${isExpanded ? '' : 'line-clamp-2'}`}
-                        style={{ color: 'var(--text-secondary)' }}
+                        style={{ color: 'var(--text-secondary)', whiteSpace: isExpanded ? 'pre-line' : undefined }}
                       >
-                        {isExpanded ? body : body.slice(0, 150)}
+                        {isExpanded ? body : body.replace(/\n\n/g, ' ').slice(0, 150)}
                         {!isExpanded && body.length > 150 && <span style={{ color: 'var(--text-muted)' }}>...</span>}
                       </p>
                     )}
