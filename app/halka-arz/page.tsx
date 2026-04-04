@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
+import Link from 'next/link';
 import { api, formatDate, type IPO, type IPODetail, type IPOCeilingTrack, type IPOBroker, type IPOAllocation, type SPKApplication } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
@@ -617,28 +618,21 @@ function IPOCard({ ipo }: { ipo: IPO }) {
   );
 }
 
-// ─── SPK Başvurular Embedded Section ─────────────────────────────────────────
+// ─── SPK Başvurular Link Card ────────────────────────────────────────────────
 
 function SPKBasvurularSection() {
-  const [apps, setApps] = useState<SPKApplication[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [expanded, setExpanded] = useState(false);
+  const [count, setCount] = useState<number | null>(null);
 
   useEffect(() => {
     api.getSPKApplications()
-      .then(setApps)
-      .catch(() => {})
-      .finally(() => setLoading(false));
+      .then(apps => setCount(apps.length))
+      .catch(() => {});
   }, []);
 
-  const count = apps.length;
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      {/* Banner Card — always visible */}
+    <Link href="/spk-basvurular" style={{ textDecoration: 'none' }}>
       <div
         className="card cursor-pointer overflow-hidden"
-        onClick={() => setExpanded(!expanded)}
         style={{
           background: 'linear-gradient(135deg, rgba(255,152,0,0.12), rgba(255,152,0,0.04))',
           border: '1px solid rgba(255,152,0,0.25)',
@@ -653,20 +647,22 @@ function SPKBasvurularSection() {
               className="w-10 h-10 rounded-xl flex items-center justify-center"
               style={{ background: 'rgba(255,152,0,0.15)', border: '1px solid rgba(255,152,0,0.3)' }}
             >
-              <span style={{ fontSize: 20 }}>&#x231B;</span>
+              <svg className="w-5 h-5" style={{ color: '#FF9800' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
             </div>
             <div>
               <h3 className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>
                 SPK Onayı Beklenen Halka Arzlar
               </h3>
               <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-                {loading ? 'Yükleniyor...' : `${count} başvuru bekliyor`}
+                {count == null ? 'Yükleniyor...' : `${count} başvuru bekliyor`}
               </p>
             </div>
           </div>
           <svg
-            className="w-5 h-5 transition-transform duration-200"
-            style={{ color: 'var(--text-muted)', transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)' }}
+            className="w-5 h-5"
+            style={{ color: 'var(--text-muted)' }}
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -676,64 +672,7 @@ function SPKBasvurularSection() {
           </svg>
         </div>
       </div>
-
-      {/* Expanded SPK Applications List */}
-      {expanded && !loading && apps.length > 0 && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {apps.map((app, idx) => (
-            <div key={app.id}>
-              {/* Ad every 10 items */}
-              {idx > 0 && idx % 10 === 0 && (
-                <div style={{ marginBottom: 8 }}>
-                  <AdBanner slot="6884376342" format="in-feed" layoutKey="-ef+6k-30-ac+ty" />
-                </div>
-              )}
-              <div
-                className="card p-4"
-                style={{ border: '1px solid rgba(148,163,184,0.1)', borderLeft: '3px solid #FF9800' }}
-              >
-                <div className="flex items-start justify-between gap-3 mb-2">
-                  <h4 className="text-sm font-bold leading-snug" style={{ color: 'var(--text-primary)' }}>
-                    {app.company_name}
-                  </h4>
-                  <span
-                    className="shrink-0 px-2 py-0.5 rounded-md text-[11px] font-semibold"
-                    style={{ background: 'rgba(255,152,0,0.12)', color: '#FF9800' }}
-                  >
-                    Onay Bekliyor
-                  </span>
-                </div>
-                <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
-                  {app.application_date && (
-                    <div>
-                      <span style={{ color: 'var(--text-muted)' }}>Başvuru Tarihi</span>
-                      <p className="font-medium" style={{ color: 'var(--text-primary)' }}>
-                        {new Date(app.application_date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}
-                      </p>
-                    </div>
-                  )}
-                  {app.sale_price && (
-                    <div>
-                      <span style={{ color: 'var(--text-muted)' }}>Satış Fiyatı</span>
-                      <p className="font-medium" style={{ color: 'var(--text-primary)' }}>
-                        {parseFloat(app.sale_price).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺
-                      </p>
-                    </div>
-                  )}
-                </div>
-                {app.notes && (
-                  <p className="mt-2 text-[11px] leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                    {app.notes}
-                  </p>
-                )}
-              </div>
-            </div>
-          ))}
-          {/* Bottom ad after SPK list */}
-          <AdBanner slot="6884376342" format="rectangle" />
-        </div>
-      )}
-    </div>
+    </Link>
   );
 }
 
@@ -840,7 +779,7 @@ export default function HalkaArzPage() {
         <div className="relative">
           <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full" style={{ background: 'rgba(41,121,255,0.1)', border: '1px solid rgba(41,121,255,0.2)' }}>
             <svg className="w-3.5 h-3.5" style={{ color: '#2979FF' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2 20h20M4 20V10m4 10V4m4 16v-8m4 8V8m4 12v-6" />
             </svg>
             <span className="text-xs font-semibold" style={{ color: '#2979FF' }}>Halka Arz Merkezi</span>
           </div>
