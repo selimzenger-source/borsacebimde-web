@@ -315,11 +315,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Son Haberler ──────────────────────────────────────────────── */}
+      {/* ── Son Güncellemeler ──────────────────────────────────────────────── */}
       <section className="mb-8">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <h2 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>Son Haberler</h2>
+            <h2 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>Son Güncellemeler</h2>
             {!loading && (
               <span
                 className="badge"
