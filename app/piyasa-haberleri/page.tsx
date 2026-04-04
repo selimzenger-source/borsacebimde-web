@@ -66,10 +66,10 @@ function NewsCard({ item }: { item: NewsFeedItem }) {
   const imageUrl = getImageUrl(item.image_url);
   const [imgError, setImgError] = useState(false);
 
-  // Extract title (first line or first sentence)
-  const lines = cleaned.split('\n').filter(l => l.trim());
-  let title = lines[0] || '';
-  let body = lines.slice(1).join('\n').trim();
+  // Extract title (first paragraph) and body (rest with paragraph breaks preserved)
+  const paragraphs = cleaned.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
+  let title = paragraphs[0] || '';
+  let body = paragraphs.slice(1).join('\n\n').trim();
 
   // If title is too long, split at first period
   if (title.length > 120 && !body) {
