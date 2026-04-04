@@ -348,16 +348,30 @@ export default function HomePage() {
           ) : (
             latestNews.map((item, idx) => {
               const timeStr = item.sent_at ?? item.created_at;
-              const cleaned = cleanText(item.text);
+              const rawText = item.text || '';
+              const isKap = item.source?.includes('kap') || item.source?.includes('bist30');
+              const cleaned = cleanText(rawText);
               const paragraphs = cleaned.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
               let title = paragraphs[0] || '';
               const body = paragraphs.slice(1).join('\n\n').trim();
+
+              // KAP haberleri için AI puanı ve sentiment çıkar
+              let aiScore: number | null = null;
+              let sentiment: 'olumlu' | 'notr' | 'olumsuz' = 'notr';
+              if (isKap) {
+                const scoreMatch = rawText.match(/(\d+(?:[.,]\d+)?)\s*\/\s*10/);
+                aiScore = scoreMatch ? parseFloat(scoreMatch[1].replace(',', '.')) : null;
+                const lower = rawText.toLowerCase();
+                if (lower.includes('olumlu') || lower.includes('pozitif')) sentiment = 'olumlu';
+                else if (lower.includes('olumsuz') || lower.includes('negatif')) sentiment = 'olumsuz';
+                else if (aiScore !== null) sentiment = aiScore >= 6 ? 'olumlu' : aiScore <= 4 ? 'olumsuz' : 'notr';
+              }
 
               // "PIYASA" → "Piyasa Haberi"
               if (title.trim() === 'PIYASA') title = 'Piyasa Haberi';
 
               // KAP haberlerinde "— Haber Bildirimi" yerine şirket adını göster
-              if (title.includes('Haber Bildirimi') || title.startsWith('—')) {
+              if (isKap && (title.includes('Haber Bildirimi') || title.startsWith('—'))) {
                 const fullText = (title + ' ' + body).replace(/\n/g, ' ');
                 const companyMatch = fullText.match(/\d+(?:[.,]\d+)?\/10\s+(.+?)(?:,|\.|\s(?:halka|bugün|daha|tarafından|için|ile|nin|nın|den|dan|ye|ya|de|da))/i);
                 if (companyMatch) {
@@ -396,6 +410,32 @@ export default function HomePage() {
                       {timeStr && (
                         <span style={{ color: 'var(--text-muted)', fontSize: 11 }}>
                           {formatTime(timeStr)}
+                        </span>
+                      )}
+                      {isKap && sentiment !== 'notr' && (
+                        <span style={{
+                          padding: '1px 8px',
+                          borderRadius: 5,
+                          background: sentiment === 'olumlu' ? 'rgba(76,175,80,0.12)' : 'rgba(255,82,82,0.12)',
+                          border: `1px solid ${sentiment === 'olumlu' ? 'rgba(76,175,80,0.25)' : 'rgba(255,82,82,0.25)'}`,
+                          color: sentiment === 'olumlu' ? '#4CAF50' : '#FF5252',
+                          fontSize: 10,
+                          fontWeight: 600,
+                        }}>
+                          {sentiment === 'olumlu' ? '↑ Olumlu' : '↓ Olumsuz'}
+                        </span>
+                      )}
+                      {isKap && aiScore !== null && (
+                        <span style={{
+                          padding: '1px 8px',
+                          borderRadius: 5,
+                          background: 'var(--bg-surface)',
+                          border: '1px solid var(--border-primary)',
+                          color: aiScore >= 7 ? '#4CAF50' : aiScore >= 5 ? '#FFD700' : '#FF5252',
+                          fontSize: 10,
+                          fontWeight: 700,
+                        }}>
+                          {aiScore.toFixed(1)}/10
                         </span>
                       )}
                     </div>
