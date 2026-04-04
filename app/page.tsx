@@ -353,6 +353,9 @@ export default function HomePage() {
               let title = paragraphs[0] || '';
               const body = paragraphs.slice(1).join('\n\n').trim();
 
+              // "PIYASA" → "Piyasa Haberi"
+              if (title.trim() === 'PIYASA') title = 'Piyasa Haberi';
+
               // KAP haberlerinde "— Haber Bildirimi" yerine şirket adını göster
               if (title.includes('Haber Bildirimi') || title.startsWith('—')) {
                 const fullText = (title + ' ' + body).replace(/\n/g, ' ');
