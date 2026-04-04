@@ -350,8 +350,17 @@ export default function HomePage() {
               const timeStr = item.sent_at ?? item.created_at;
               const cleaned = cleanText(item.text);
               const paragraphs = cleaned.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
-              const title = paragraphs[0] || '';
+              let title = paragraphs[0] || '';
               const body = paragraphs.slice(1).join('\n\n').trim();
+
+              // KAP haberlerinde "— Haber Bildirimi" yerine şirket adını göster
+              if (title.includes('Haber Bildirimi') || title.startsWith('—')) {
+                const fullText = (title + ' ' + body).replace(/\n/g, ' ');
+                const companyMatch = fullText.match(/\d+\/10\s+(.+?)(?:,|\.|\s(?:halka|bugün|daha|tarafından|için|ile|nin|nın|den|dan|ye|ya|de|da))/i);
+                if (companyMatch) {
+                  title = companyMatch[1].trim();
+                }
+              }
               const imageUrl = getImageUrl(item.image_url);
               const items = [];
 
