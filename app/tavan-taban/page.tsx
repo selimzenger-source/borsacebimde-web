@@ -5,6 +5,8 @@ import { api, DailyMarketStat, formatDate } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
 import InlineAppBanner from '@/components/InlineAppBanner';
+import FAQ from '@/components/FAQ';
+import { tavanTabanFAQ } from '@/lib/faq-data';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -465,6 +467,8 @@ export default function TavanTabanPage() {
           )}
         </>
       )}
+
+      <FAQ items={tavanTabanFAQ} title="Tavan Taban Hakkında Sıkça Sorulan Sorular" />
 
       {/* ─── AppStore Banner ─── */}
       <AppStoreBanner message="Her akşam seans kapandıktan sonra bildirim alın!" />

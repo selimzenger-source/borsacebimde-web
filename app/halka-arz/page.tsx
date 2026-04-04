@@ -6,6 +6,8 @@ import { api, formatDate, type IPO, type IPODetail, type IPOCeilingTrack, type I
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
 import InlineAppBanner from '@/components/InlineAppBanner';
+import FAQ from '@/components/FAQ';
+import { halkaArzFAQ } from '@/lib/faq-data';
 
 // ─── Turkish Label Maps ──────────────────────────────────────────────────────
 
@@ -839,6 +841,7 @@ export default function HalkaArzPage() {
         </p>
       </div>
 
+      <FAQ items={halkaArzFAQ} title="Halka Arz Hakkında Sıkça Sorulan Sorular" />
       <AdBanner slot="1897984416" format="multiplex" />
       <AppStoreBanner message="Yeni halka arzları, dağıtım günleri ve işlem başlangıcını kaçırmayın!" />
     </div>

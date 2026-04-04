@@ -5,6 +5,8 @@ import { api, cleanText, formatTime, NewsFeedItem } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
 import InlineAppBanner from '@/components/InlineAppBanner';
+import FAQ from '@/components/FAQ';
+import { kapFAQ } from '@/lib/faq-data';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -558,6 +560,8 @@ export default function KapAiPage() {
           </p>
         </div>
       )}
+
+      <FAQ items={kapFAQ} title="KAP Haberleri Hakkında Sıkça Sorulan Sorular" />
 
       {/* ── App Store Banner ── */}
       <div style={{ marginTop: 40 }}>

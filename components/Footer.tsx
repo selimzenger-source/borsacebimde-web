@@ -93,6 +93,15 @@ export default function Footer() {
             <ul className="flex flex-col gap-2 mb-3">
               <li>
                 <Link
+                  href="/sss"
+                  className="text-xs transition-colors hover:text-brand"
+                  style={{ color: 'var(--text-muted)' }}
+                >
+                  Sıkça Sorulan Sorular
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/hakkimizda"
                   className="text-xs transition-colors hover:text-brand"
                   style={{ color: 'var(--text-muted)' }}

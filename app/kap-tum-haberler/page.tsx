@@ -5,6 +5,8 @@ import { api, formatDate, type KapDisclosure } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
 import InlineAppBanner from '@/components/InlineAppBanner';
+import FAQ from '@/components/FAQ';
+import { kapFAQ } from '@/lib/faq-data';
 
 // ─── Types & Config ──────────────────────────────────────────────────────────
 
@@ -742,6 +744,8 @@ export default function KapTumHaberlerPage() {
         title="Tüm Hisseler İçin Bildirim Alın!"
         message="Anlık KAP bildirimleri ve favori hisse takibi için uygulamayı indirin."
       />
+
+      <FAQ items={kapFAQ} title="KAP Haberleri Hakkında Sıkça Sorulan Sorular" />
 
       {/* ── AppStore Banner ── */}
       <div style={{ marginTop: 24 }}>

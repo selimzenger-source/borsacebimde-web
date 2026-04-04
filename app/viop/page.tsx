@@ -5,6 +5,8 @@ import { api, ViopTweet, cleanText, formatDate, formatTime } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
 import InlineAppBanner from '@/components/InlineAppBanner';
+import FAQ from '@/components/FAQ';
+import { viopFAQ } from '@/lib/faq-data';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -372,6 +374,8 @@ export default function ViopPage() {
       {!loading && (
         <AdBanner slot="3567518609" format="in-feed" layoutKey="-ef+6k-30-ac+ty" />
       )}
+
+      <FAQ items={viopFAQ} title="VİOP Hakkında Sıkça Sorulan Sorular" />
 
       {/* ─── AppStore Banner ─── */}
       <AppStoreBanner message="Akşam ve gündüz seanslarını anlık takip edin!" />

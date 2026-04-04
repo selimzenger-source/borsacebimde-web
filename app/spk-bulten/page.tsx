@@ -5,6 +5,8 @@ import { api, SpkBulletinAnalysis, cleanText, formatDate } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
 import InlineAppBanner from '@/components/InlineAppBanner';
+import FAQ from '@/components/FAQ';
+import { spkBultenFAQ } from '@/lib/faq-data';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -272,6 +274,8 @@ export default function SpkBultenPage() {
           ))}
         </div>
       )}
+
+      <FAQ items={spkBultenFAQ} title="SPK Bülten Hakkında Sıkça Sorulan Sorular" />
 
       {/* ─── AppStore Banner ─── */}
       <AppStoreBanner message="AI analizi ile en hızlı bildirimleri alın!" />
