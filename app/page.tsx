@@ -373,9 +373,31 @@ export default function HomePage() {
               // KAP haberlerinde "— Haber Bildirimi" yerine şirket adını göster
               if (isKap && (title.includes('Haber Bildirimi') || title.startsWith('—'))) {
                 const fullText = (title + ' ' + body).replace(/\n/g, ' ');
-                const companyMatch = fullText.match(/\d+(?:[.,]\d+)?\/10\s+(.+?)(?:,|\.|\s(?:halka|bugün|daha|tarafından|için|ile|nin|nın|den|dan|ye|ya|de|da))/i);
-                if (companyMatch) {
-                  title = companyMatch[1].trim();
+                // Skor sonrası ilk cümle parçası: büyük harfle başlayan kelimeleri al, küçük harfle başlayan kelimede dur
+                const afterScore = fullText.match(/\d+(?:[.,]\d+)?\/10\s+(.*)/);
+                if (afterScore) {
+                  const words = afterScore[1].split(/\s+/);
+                  const nameWords: string[] = [];
+                  for (const w of words) {
+                    // Virgül veya nokta ile biten kelimede dur (şirket adı sonu)
+                    if (/[,.]$/.test(w)) {
+                      nameWords.push(w.replace(/[,.']+$/, ''));
+                      break;
+                    }
+                    // Küçük harfle başlayan kelime = şirket adı bitti (ek hariç: 'nin, 'nin)
+                    if (nameWords.length > 0 && /^[a-zçğıöşü%0-9]/.test(w) && !w.startsWith("'")) {
+                      break;
+                    }
+                    nameWords.push(w);
+                    if (nameWords.length >= 5) break;
+                  }
+                  if (nameWords.length > 0) {
+                    title = nameWords.join(' ')
+                      .replace(/[,.']+$/, '')
+                      .replace(/'[nN][iıİ][nN]$/,'')
+                      .replace(/'[nN][ıiİ][nN]$/,'')
+                      .trim();
+                  }
                 }
               }
               const imageUrl = getImageUrl(item.image_url);
