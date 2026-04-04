@@ -484,24 +484,6 @@ export default function HomePage() {
           )}
         </div>
 
-        {!loading && latestNews.length > 0 && (
-          <div className="mt-4 flex justify-center">
-            <Link
-              href="/piyasa-haberleri"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 hover:scale-[1.01]"
-              style={{
-                background: 'rgba(41,121,255,0.08)',
-                border: '1px solid rgba(41,121,255,0.2)',
-                color: '#2979FF',
-              }}
-            >
-              Daha Fazla Yükle
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={2} className="w-3.5 h-3.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 8h10m-4-4 4 4-4 4" />
-              </svg>
-            </Link>
-          </div>
-        )}
       </section>
 
       {/* ── Uygulama Banner ───────────────────────────────────────────────── */}
