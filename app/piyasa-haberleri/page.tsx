@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { api, cleanText, formatDate, formatTime, NewsFeedItem } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
+import InlineAppBanner from '@/components/InlineAppBanner';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -238,6 +239,11 @@ export default function HaberlerPage() {
           )}
         </div>
       </header>
+
+      <InlineAppBanner
+        title="Piyasa Haberlerini Anında Takip Edin!"
+        message="Güncel finans haberlerini ve piyasa analizlerini bildirim olarak alın."
+      />
 
       {/* ── Hata ── */}
       {error && (

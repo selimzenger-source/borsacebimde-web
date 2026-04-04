@@ -19,18 +19,25 @@ interface ParsedNews {
   analysis: string;
   sentiment: 'olumlu' | 'notr' | 'olumsuz';
   score: number | null;
+  kapUrl: string | null;
 }
 
 function parseNewsItem(item: NewsFeedItem): ParsedNews {
   const text = item.text || '';
 
-  // Extract ticker - look for patterns like "TCELL," "ONCSM'nin" after metadata lines
-  const tickerMatch = text.match(/^([A-Z]{3,5})\b/)
-    || text.match(/\n([A-Z]{3,5})[,'\s]/)
-    || text.match(/\[([A-Z]{3,5})\]/)
-    || text.match(/\b([A-Z]{3,5})\s*[-:]/)
-    || text.match(/(?:AI Puanı[^\n]*\n)([A-Z]{3,5})[,'\s]/);
+  // Extract ticker - support #CVKMD, CVKMD, [CVKMD] etc.
+  const tickerMatch = text.match(/^#([A-Z]{3,6})\b/)
+    || text.match(/^([A-Z]{3,6})\b/)
+    || text.match(/\n#([A-Z]{3,6})\b/)
+    || text.match(/\n([A-Z]{3,6})[,'\s]/)
+    || text.match(/\[([A-Z]{3,6})\]/)
+    || text.match(/\b([A-Z]{3,6})\s*[-:]/)
+    || text.match(/(?:AI Puanı[^\n]*\n)#?([A-Z]{3,6})[,'\s]/);
   const ticker = tickerMatch ? tickerMatch[1] : null;
+
+  // Extract KAP URL
+  const kapMatch = text.match(/https?:\/\/(?:www\.)?kap\.org\.tr\/\S+/);
+  const kapUrl = kapMatch ? kapMatch[0].replace(/[.,;)}\]]+$/, '') : null;
 
   // Extract AI score - patterns like "7.3/10", "Skor: 8/10", "Puan: 6.5"
   const scoreMatch = text.match(/(?:skor|puan|score)[:\s]*(\d+(?:[.,]\d+)?)\s*(?:\/\s*10)?/i)
@@ -60,6 +67,7 @@ function parseNewsItem(item: NewsFeedItem): ParsedNews {
     /^KAP\s*:/i, /^Her \d+ haber/i, /^YT değildir/i,
     /^Haber Bildirimi/i, /^—\s*Haber/i,
     /T[üu]m bildirim/i, /uygulamamız[ıi] indirin/i,
+    /^kap\.org\.tr/i,
   ];
   const contentLines = allLines.filter(l => !metaPatterns.some(p => p.test(l.trim())));
 
@@ -68,10 +76,10 @@ function parseNewsItem(item: NewsFeedItem): ParsedNews {
 
   // Remove ticker from start if present
   if (ticker && fullText.startsWith(ticker)) {
-    fullText = fullText.slice(ticker.length).replace(/^[\s\-:]+/, '').trim();
+    fullText = fullText.slice(ticker.length).replace(/^[\s\-:,]+/, '').trim();
   }
 
-  return { item, ticker, title: '', analysis: fullText, sentiment, score };
+  return { item, ticker, title: '', analysis: fullText, sentiment, score, kapUrl };
 }
 
 function groupByDate(items: ParsedNews[]): [string, ParsedNews[]][] {
@@ -224,7 +232,7 @@ function SkeletonGroup() {
 // ─── News Card ────────────────────────────────────────────────────────────────
 
 function NewsCard({ parsed }: { parsed: ParsedNews }) {
-  const { item, ticker, title, analysis, sentiment, score } = parsed;
+  const { item, ticker, title, analysis, sentiment, score, kapUrl } = parsed;
   const timeStr = item.sent_at ? formatTime(item.sent_at) : (item.created_at ? formatTime(item.created_at) : '');
 
   return (
@@ -349,8 +357,19 @@ function NewsCard({ parsed }: { parsed: ParsedNews }) {
         </p>
       )}
 
-      {/* Source label */}
-      <div style={{ marginTop: 8, display: 'flex', justifyContent: 'flex-end' }}>
+      {/* Source label + KAP link */}
+      <div style={{ marginTop: 8, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 8 }}>
+        {kapUrl && (
+          <a
+            href={kapUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ fontSize: 11, color: '#2979FF', fontWeight: 500, textDecoration: 'none' }}
+            className="hover:underline"
+          >
+            KAP
+          </a>
+        )}
         <span style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 500 }}>
           {item.source === 'kap_news' ? 'KAP Bildirim' : item.source === 'bist30' ? 'BIST 30' : 'KAP'}
         </span>
