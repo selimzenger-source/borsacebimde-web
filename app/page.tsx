@@ -349,12 +349,17 @@ export default function HomePage() {
             latestNews.map((item, idx) => {
               const timeStr = item.sent_at ?? item.created_at;
               const rawText = item.text || '';
-              // Extract ticker from raw text (#CVKMD or CVKMD at start/after newline)
-              const tickerMatch = rawText.match(/^#([A-Z]{3,6})\b/) || rawText.match(/^([A-Z]{3,6})\b/) || rawText.match(/\n#([A-Z]{3,6})\b/) || rawText.match(/(?:AI Puanı[^\n]*\n)#?([A-Z]{3,6})[,'\s]/);
+              // Extract ticker from raw text - handle emojis at start (#CVKMD, 🟢 #CVKMD etc.)
+              const tickerMatch = rawText.match(/#([A-Z]{3,6})\b/)
+                || rawText.match(/(?:^|\n)([A-Z]{3,6})[,'\s—\-]/)
+                || rawText.match(/(?:AI Puanı[^\n]*\n)#?([A-Z]{3,6})[,'\s]/);
               const ticker = tickerMatch ? tickerMatch[1] : null;
-              // Extract KAP URL
-              const kapMatch = rawText.match(/https?:\/\/(?:www\.)?kap\.org\.tr\/\S+/);
-              const kapUrl = kapMatch ? kapMatch[0].replace(/[.,;)}\]]+$/, '') : null;
+              // Extract KAP URL - with or without https:// prefix
+              const kapMatch = rawText.match(/https?:\/\/(?:www\.)?kap\.org\.tr\/\S+/)
+                || rawText.match(/(?:^|\s)((?:www\.)?kap\.org\.tr\/\S+)/m);
+              const kapUrl = kapMatch
+                ? (kapMatch[0].startsWith('http') ? kapMatch[0] : 'https://' + (kapMatch[1] || kapMatch[0]).trim()).replace(/[.,;)}\]]+$/, '')
+                : null;
               const isKap = item.source?.includes('kap') || item.source?.includes('bist30');
 
               const cleaned = cleanText(rawText);

@@ -25,19 +25,19 @@ interface ParsedNews {
 function parseNewsItem(item: NewsFeedItem): ParsedNews {
   const text = item.text || '';
 
-  // Extract ticker - support #CVKMD, CVKMD, [CVKMD] etc.
-  const tickerMatch = text.match(/^#([A-Z]{3,6})\b/)
-    || text.match(/^([A-Z]{3,6})\b/)
-    || text.match(/\n#([A-Z]{3,6})\b/)
-    || text.match(/\n([A-Z]{3,6})[,'\s]/)
+  // Extract ticker - handle emojis at start (#CVKMD, 🟢 #CVKMD etc.)
+  const tickerMatch = text.match(/#([A-Z]{3,6})\b/)
+    || text.match(/(?:^|\n)([A-Z]{3,6})[,'\s—\-]/)
     || text.match(/\[([A-Z]{3,6})\]/)
-    || text.match(/\b([A-Z]{3,6})\s*[-:]/)
     || text.match(/(?:AI Puanı[^\n]*\n)#?([A-Z]{3,6})[,'\s]/);
   const ticker = tickerMatch ? tickerMatch[1] : null;
 
-  // Extract KAP URL
-  const kapMatch = text.match(/https?:\/\/(?:www\.)?kap\.org\.tr\/\S+/);
-  const kapUrl = kapMatch ? kapMatch[0].replace(/[.,;)}\]]+$/, '') : null;
+  // Extract KAP URL - with or without https:// prefix
+  const kapMatch = text.match(/https?:\/\/(?:www\.)?kap\.org\.tr\/\S+/)
+    || text.match(/(?:^|\s)((?:www\.)?kap\.org\.tr\/\S+)/m);
+  const kapUrl = kapMatch
+    ? (kapMatch[0].startsWith('http') ? kapMatch[0] : 'https://' + (kapMatch[1] || kapMatch[0]).trim()).replace(/[.,;)}\]]+$/, '')
+    : null;
 
   // Extract AI score - patterns like "7.3/10", "Skor: 8/10", "Puan: 6.5"
   const scoreMatch = text.match(/(?:skor|puan|score)[:\s]*(\d+(?:[.,]\d+)?)\s*(?:\/\s*10)?/i)
