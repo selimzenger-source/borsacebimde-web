@@ -349,29 +349,31 @@ export default function HomePage() {
             latestNews.map((item, idx) => {
               const timeStr = item.sent_at ?? item.created_at;
               const rawText = item.text || '';
-              // Extract ticker from raw text - handle emojis at start (#CVKMD, 🟢 #CVKMD etc.)
-              const tickerMatch = rawText.match(/#([A-Z]{3,6})\b/)
-                || rawText.match(/(?:^|\n)([A-Z]{3,6})[,'\s—\-]/)
-                || rawText.match(/(?:AI Puanı[^\n]*\n)#?([A-Z]{3,6})[,'\s]/);
-              const ticker = tickerMatch ? tickerMatch[1] : null;
-              // Extract KAP URL - with or without https:// prefix
-              const kapMatch = rawText.match(/https?:\/\/(?:www\.)?kap\.org\.tr\/\S+/)
-                || rawText.match(/(?:^|\s)((?:www\.)?kap\.org\.tr\/\S+)/m);
-              const kapUrl = kapMatch
-                ? (kapMatch[0].startsWith('http') ? kapMatch[0] : 'https://' + (kapMatch[1] || kapMatch[0]).trim()).replace(/[.,;)}\]]+$/, '')
-                : null;
               const isKap = item.source?.includes('kap') || item.source?.includes('bist30');
 
               const cleaned = cleanText(rawText);
-              const paragraphs = cleaned.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
+              // Remove metadata lines for KAP news
+              const allLines = cleaned.split('\n').filter(l => l.trim());
+              const metaPatterns = [
+                /^—?\s*Haber Bildirimi/i, /^Anlık Haber/i, /^İlişkili Kelime/i,
+                /^AI Puan/i, /^KAP\s*:/i, /^Her \d+ haber/i, /^YT değildir/i,
+                /^kap\.org/i,
+              ];
+              const contentLines = isKap
+                ? allLines.filter(l => !metaPatterns.some(p => p.test(l.trim())))
+                : allLines;
+              const fullContent = contentLines.join('\n').trim();
+              const paragraphs = fullContent.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
               let title = paragraphs[0] || '';
               const body = paragraphs.slice(1).join('\n\n').trim();
 
-              // For KAP news, replace generic "— Haber Bildirimi" title with ticker
-              if (isKap && ticker && (title.includes('Haber Bildirimi') || title.startsWith('—'))) {
-                title = ticker;
-              } else if (isKap && ticker && !title.startsWith(ticker)) {
-                title = `${ticker} — ${title}`;
+              // For KAP news: extract company name as title (first sentence/phrase)
+              if (isKap && title) {
+                // Title is now the actual content — take first sentence as title
+                const sentenceEnd = title.match(/^(.{20,80}?)[.,;]/) || title.match(/^(.{20,100}?)\s/);
+                if (sentenceEnd && title.length > 100) {
+                  // Don't split, just keep it as is
+                }
               }
               const imageUrl = getImageUrl(item.image_url);
               const items = [];
@@ -402,20 +404,6 @@ export default function HomePage() {
                       <span className="badge" style={sourceBadgeStyle(item.source)}>
                         {sourceLabel(item.source)}
                       </span>
-                      {isKap && ticker && (
-                        <span style={{
-                          padding: '1px 8px',
-                          borderRadius: 5,
-                          background: 'rgba(41,121,255,0.12)',
-                          border: '1px solid rgba(41,121,255,0.25)',
-                          color: '#2979FF',
-                          fontSize: 11,
-                          fontWeight: 700,
-                          letterSpacing: '0.3px',
-                        }}>
-                          {ticker}
-                        </span>
-                      )}
                       {timeStr && (
                         <span style={{ color: 'var(--text-muted)', fontSize: 11 }}>
                           {formatTime(timeStr)}
@@ -450,18 +438,6 @@ export default function HomePage() {
                           <path strokeLinecap="round" strokeLinejoin="round" d="M4 6l4 4 4-4" />
                         </svg>
                       </div>
-                      {kapUrl && (
-                        <a
-                          href={kapUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          style={{ color: 'var(--text-muted)', fontSize: 11, fontWeight: 500, textDecoration: 'none' }}
-                          className="hover:underline"
-                        >
-                          KAP
-                        </a>
-                      )}
                     </div>
                   </div>
                 </div>

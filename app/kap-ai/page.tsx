@@ -19,25 +19,12 @@ interface ParsedNews {
   analysis: string;
   sentiment: 'olumlu' | 'notr' | 'olumsuz';
   score: number | null;
-  kapUrl: string | null;
 }
 
 function parseNewsItem(item: NewsFeedItem): ParsedNews {
   const text = item.text || '';
 
-  // Extract ticker - handle emojis at start (#CVKMD, 🟢 #CVKMD etc.)
-  const tickerMatch = text.match(/#([A-Z]{3,6})\b/)
-    || text.match(/(?:^|\n)([A-Z]{3,6})[,'\s—\-]/)
-    || text.match(/\[([A-Z]{3,6})\]/)
-    || text.match(/(?:AI Puanı[^\n]*\n)#?([A-Z]{3,6})[,'\s]/);
-  const ticker = tickerMatch ? tickerMatch[1] : null;
-
-  // Extract KAP URL - with or without https:// prefix
-  const kapMatch = text.match(/https?:\/\/(?:www\.)?kap\.org\.tr\/\S+/)
-    || text.match(/(?:^|\s)((?:www\.)?kap\.org\.tr\/\S+)/m);
-  const kapUrl = kapMatch
-    ? (kapMatch[0].startsWith('http') ? kapMatch[0] : 'https://' + (kapMatch[1] || kapMatch[0]).trim()).replace(/[.,;)}\]]+$/, '')
-    : null;
+  // API news feed'de ticker ve KAP URL bulunmuyor
 
   // Extract AI score - patterns like "7.3/10", "Skor: 8/10", "Puan: 6.5"
   const scoreMatch = text.match(/(?:skor|puan|score)[:\s]*(\d+(?:[.,]\d+)?)\s*(?:\/\s*10)?/i)
@@ -63,23 +50,18 @@ function parseNewsItem(item: NewsFeedItem): ParsedNews {
   const allLines = cleaned.split('\n').filter(l => l.trim());
 
   const metaPatterns = [
-    /^Anlık Haber/i, /^İlişkili Kelime/i, /^AI Puan/i,
+    /^—?\s*Haber Bildirimi/i, /^Anlık Haber/i, /^İlişkili Kelime/i, /^AI Puan/i,
     /^KAP\s*:/i, /^Her \d+ haber/i, /^YT değildir/i,
-    /^Haber Bildirimi/i, /^—\s*Haber/i,
+    /^Haber Bildirimi/i, /^—\s/,
     /T[üu]m bildirim/i, /uygulamamız[ıi] indirin/i,
     /^kap\.org\.tr/i,
   ];
   const contentLines = allLines.filter(l => !metaPatterns.some(p => p.test(l.trim())));
 
   // Single combined text — no title/analysis split
-  let fullText = contentLines.join('\n').trim() || cleaned.slice(0, 500);
+  const fullText = contentLines.join('\n').trim() || cleaned.slice(0, 500);
 
-  // Remove ticker from start if present
-  if (ticker && fullText.startsWith(ticker)) {
-    fullText = fullText.slice(ticker.length).replace(/^[\s\-:,]+/, '').trim();
-  }
-
-  return { item, ticker, title: '', analysis: fullText, sentiment, score, kapUrl };
+  return { item, ticker: null, title: '', analysis: fullText, sentiment, score };
 }
 
 function groupByDate(items: ParsedNews[]): [string, ParsedNews[]][] {
@@ -232,7 +214,7 @@ function SkeletonGroup() {
 // ─── News Card ────────────────────────────────────────────────────────────────
 
 function NewsCard({ parsed }: { parsed: ParsedNews }) {
-  const { item, ticker, title, analysis, sentiment, score, kapUrl } = parsed;
+  const { item, ticker, title, analysis, sentiment, score } = parsed;
   const timeStr = item.sent_at ? formatTime(item.sent_at) : (item.created_at ? formatTime(item.created_at) : '');
 
   return (
@@ -357,19 +339,8 @@ function NewsCard({ parsed }: { parsed: ParsedNews }) {
         </p>
       )}
 
-      {/* Source label + KAP link */}
-      <div style={{ marginTop: 8, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 8 }}>
-        {kapUrl && (
-          <a
-            href={kapUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ fontSize: 11, color: '#2979FF', fontWeight: 500, textDecoration: 'none' }}
-            className="hover:underline"
-          >
-            KAP
-          </a>
-        )}
+      {/* Source label */}
+      <div style={{ marginTop: 8, display: 'flex', justifyContent: 'flex-end' }}>
         <span style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 500 }}>
           {item.source === 'kap_news' ? 'KAP Bildirim' : item.source === 'bist30' ? 'BIST 30' : 'KAP'}
         </span>
