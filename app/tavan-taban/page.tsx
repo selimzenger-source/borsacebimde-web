@@ -379,22 +379,6 @@ export default function TavanTabanPage() {
         </div>
       </header>
 
-      {/* ─── Info Box ─── */}
-      <div
-        className="flex gap-3 p-4 rounded-xl"
-        style={{ background: 'rgba(41,121,255,0.06)', border: '1px solid rgba(41,121,255,0.2)' }}
-      >
-        <svg className="w-5 h-5 shrink-0 mt-0.5" style={{ color: '#2979FF' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-          <circle cx="12" cy="12" r="10" />
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 16v-4m0-4h.01" />
-        </svg>
-        <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-          Gün sonunda <span className="font-semibold" style={{ color: '#4CAF50' }}>%9,75 ve üzeri</span> kapatan
-          hisseler tavan, <span className="font-semibold" style={{ color: '#FF5252' }}>%-9,75 ve altı</span> kapatan
-          hisseler taban olarak listelenir. Durum sütununda alıcı/satıcı bilgisi gösterilir.
-        </p>
-      </div>
-
       {/* ─── Error ─── */}
       {error && (
         <div
