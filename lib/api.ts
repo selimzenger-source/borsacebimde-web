@@ -243,6 +243,8 @@ export function sourceLabel(source: string): string {
     bigpara: 'BigPara',
     news_scanner: 'Haber',
     tweet_bist30_news: 'Haber',
+    tweet_spk_application: 'SPK Başvuru',
+    tweet_spk_bulletin: 'SPK Bülten',
   };
   return map[source] ?? source;
 }
@@ -262,6 +264,8 @@ export function sourceBadgeStyle(source: string): React.CSSProperties {
     market_close_taban: { background: 'rgba(255,82,82,0.1)', color: '#FF5252', border: '1px solid rgba(255,82,82,0.25)' },
     news_scanner: { background: 'rgba(38,198,218,0.1)', color: '#26C6DA', border: '1px solid rgba(38,198,218,0.25)' },
     tweet_bist30_news: { background: 'rgba(38,198,218,0.1)', color: '#26C6DA', border: '1px solid rgba(38,198,218,0.25)' },
+    tweet_spk_application: { background: 'rgba(255,152,0,0.12)', color: '#FF9800', border: '1px solid rgba(255,152,0,0.25)' },
+    tweet_spk_bulletin: { background: 'rgba(156,39,176,0.12)', color: '#AB47BC', border: '1px solid rgba(156,39,176,0.25)' },
   };
   return map[source] ?? { background: 'var(--bg-surface)', color: 'var(--text-secondary)', border: '1px solid var(--border-primary)' };
 }
