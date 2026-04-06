@@ -36,7 +36,7 @@ const BANNERS = [
     desc: 'G\u00fcn\u00fcn tavan ve taban hisseleri ve sebepleri',
     color: 'rgba(245,158,11,0.12)',
     border: 'rgba(245,158,11,0.25)',
-    icon: '\u{1F680}',
+    icon: '\u{1F4C9}\u{1F4C8}',
   },
   {
     title: 'Piyasa Haberleri',

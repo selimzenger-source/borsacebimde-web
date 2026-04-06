@@ -16,7 +16,7 @@ const FEATURES = [
 const BANNERS = [
   { title: 'AI Destekli KAP Haberleri', desc: 'Yapay zek\u00e2 ile analiz edilmi\u015f KAP bildirimleri an\u0131nda cebinizde', color: 'rgba(16,185,129,0.12)', border: 'rgba(16,185,129,0.25)', icon: '\u{1F916}' },
   { title: 'Halka Arz Takvimi', desc: 'T\u00fcm halka arzlar\u0131 takip edin, bildirim al\u0131n, f\u0131rsat ka\u00e7\u0131rmay\u0131n', color: 'rgba(59,130,246,0.12)', border: 'rgba(59,130,246,0.25)', icon: '\u{1F4CA}' },
-  { title: 'Tavan & Taban Hisseleri', desc: 'G\u00fcn\u00fcn tavan ve taban hisseleri ve sebepleri', color: 'rgba(245,158,11,0.12)', border: 'rgba(245,158,11,0.25)', icon: '\u{1F680}' },
+  { title: 'Tavan & Taban Hisseleri', desc: 'G\u00fcn\u00fcn tavan ve taban hisseleri ve sebepleri', color: 'rgba(245,158,11,0.12)', border: 'rgba(245,158,11,0.25)', icon: '\u{1F4C9}\u{1F4C8}' },
   { title: 'Piyasa Haberleri', desc: 'G\u00fcncel ekonomi ve borsa haberleri, SPK b\u00fclten analizleri', color: 'rgba(168,85,247,0.12)', border: 'rgba(168,85,247,0.25)', icon: '\u{1F4F0}' },
 ];
 
