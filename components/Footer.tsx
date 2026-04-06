@@ -111,6 +111,15 @@ export default function Footer() {
               </li>
               <li>
                 <Link
+                  href="/kullanim-kosullari"
+                  className="text-xs transition-colors hover:text-brand"
+                  style={{ color: 'var(--text-muted)' }}
+                >
+                  Kullanım Koşulları
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/gizlilik-politikasi"
                   className="text-xs transition-colors hover:text-brand"
                   style={{ color: 'var(--text-muted)' }}
