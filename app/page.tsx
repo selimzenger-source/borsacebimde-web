@@ -16,6 +16,82 @@ function getImageUrl(url: string | null): string | null {
   return API_BASE + url;
 }
 
+// ─── Download Card ──────────────────────────────────────────────────────────
+
+function DownloadCard() {
+  const [store, setStore] = useState<{ url: string; label: string; isIOS: boolean } | null>(null);
+
+  useEffect(() => {
+    setStore(getStoreInfo());
+  }, []);
+
+  if (!store) return null;
+
+  return (
+    <section className="mb-6">
+      <a
+        href={store.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="card relative overflow-hidden flex items-center gap-4 p-4 sm:p-5 transition-all duration-200 hover:scale-[1.01]"
+        style={{
+          textDecoration: 'none',
+          background: store.isIOS
+            ? 'linear-gradient(135deg, rgba(59,130,246,0.08), rgba(167,139,250,0.05))'
+            : 'linear-gradient(135deg, rgba(34,197,94,0.08), rgba(34,211,238,0.05))',
+          borderColor: store.isIOS ? 'rgba(59,130,246,0.2)' : 'rgba(34,197,94,0.2)',
+        }}
+      >
+        <Image
+          src="/images/icon-192.png"
+          alt="Borsa Cebimde"
+          width={52}
+          height={52}
+          className="rounded-xl shrink-0"
+          style={{
+            boxShadow: store.isIOS
+              ? '0 4px 16px rgba(59,130,246,0.15)'
+              : '0 4px 16px rgba(34,197,94,0.15)',
+          }}
+        />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-0.5">
+            <span className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>
+              Borsa Cebimde
+            </span>
+            <span
+              className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
+              style={{
+                background: store.isIOS ? 'rgba(59,130,246,0.12)' : 'rgba(34,197,94,0.12)',
+                color: store.isIOS ? '#60a5fa' : '#4ade80',
+              }}
+            >
+              {'\u00dc'}cretsiz
+            </span>
+          </div>
+          <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+            Halka Arz, KAP AI, Tavan Taban ve daha fazlas{'\u0131'}
+          </p>
+        </div>
+        <div
+          className="shrink-0 px-4 py-2 rounded-xl text-xs font-bold"
+          style={{
+            background: store.isIOS
+              ? 'linear-gradient(135deg, #2563eb, #3b82f6)'
+              : 'linear-gradient(135deg, #16a34a, #22c55e)',
+            color: '#fff',
+            boxShadow: store.isIOS
+              ? '0 2px 10px rgba(59,130,246,0.3)'
+              : '0 2px 10px rgba(34,197,94,0.3)',
+          }}
+        >
+          {store.isIOS ? 'App Store' : 'Google Play'}&apos;den {'\u0130'}ndir
+        </div>
+      </a>
+    </section>
+  );
+}
+
 // ─── Feature Grid Data ───────────────────────────────────────────────────────
 
 const features = [
@@ -269,6 +345,9 @@ export default function HomePage() {
       </section>
 
       {/* Stats bar removed - user requested */}
+
+      {/* ── Ücretsiz İndir Kartı ─────────────────────────────────────── */}
+      <DownloadCard />
 
       {/* ── Özellikler ─────────────────────────────────────────────────── */}
       <section className="mb-8">
