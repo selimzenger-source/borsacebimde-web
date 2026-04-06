@@ -16,79 +16,62 @@ function getImageUrl(url: string | null): string | null {
   return API_BASE + url;
 }
 
-// ─── Download Card ──────────────────────────────────────────────────────────
+// ─── Download Feature Card (grid icinde, diger kartlarla ayni stil) ──────────
 
-function DownloadCard() {
+function DownloadFeatureCard() {
   const [store, setStore] = useState<{ url: string; label: string; isIOS: boolean } | null>(null);
 
   useEffect(() => {
     setStore(getStoreInfo());
   }, []);
 
-  if (!store) return null;
+  const color = store?.isIOS ? '#3b82f6' : '#22c55e';
 
   return (
-    <section className="mb-6">
-      <a
-        href={store.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="card relative overflow-hidden flex items-center gap-4 p-4 sm:p-5 transition-all duration-200 hover:scale-[1.01]"
+    <a
+      href={store?.url || '#'}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="card p-4 flex flex-col gap-3 transition-all duration-200 hover:scale-[1.02] group"
+      style={{ textDecoration: 'none' }}
+    >
+      <div
+        className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-200 group-hover:scale-110"
         style={{
-          textDecoration: 'none',
-          background: store.isIOS
-            ? 'linear-gradient(135deg, rgba(59,130,246,0.08), rgba(167,139,250,0.05))'
-            : 'linear-gradient(135deg, rgba(34,197,94,0.08), rgba(34,211,238,0.05))',
-          borderColor: store.isIOS ? 'rgba(59,130,246,0.2)' : 'rgba(34,197,94,0.2)',
+          background: `${color}18`,
+          border: `1px solid ${color}30`,
+          color: color,
         }}
       >
-        <Image
-          src="/images/icon-192.png"
-          alt="Borsa Cebimde"
-          width={52}
-          height={52}
-          className="rounded-xl shrink-0"
-          style={{
-            boxShadow: store.isIOS
-              ? '0 4px 16px rgba(59,130,246,0.15)'
-              : '0 4px 16px rgba(34,197,94,0.15)',
-          }}
-        />
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-0.5">
-            <span className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>
-              Borsa Cebimde
-            </span>
-            <span
-              className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
-              style={{
-                background: store.isIOS ? 'rgba(59,130,246,0.12)' : 'rgba(34,197,94,0.12)',
-                color: store.isIOS ? '#60a5fa' : '#4ade80',
-              }}
-            >
-              {'\u00dc'}cretsiz
-            </span>
-          </div>
-          <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-            Halka Arz, KAP AI, Tavan Taban ve daha fazlas{'\u0131'}
-          </p>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="w-6 h-6">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+        </svg>
+      </div>
+
+      <div className="flex flex-col gap-1 min-w-0">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-semibold leading-snug" style={{ color }}>
+            {'\u00dc'}cretsiz {'\u0130'}ndir
+          </span>
+          <span
+            className="text-[9px] font-bold px-1.5 py-0.5 rounded-full"
+            style={{ background: `${color}15`, color, border: `1px solid ${color}30` }}
+          >
+            {store?.isIOS ? 'iOS' : 'Android'}
+          </span>
         </div>
-        <div
-          className="shrink-0 px-4 py-2 rounded-xl text-xs font-bold"
-          style={{
-            background: store.isIOS
-              ? 'linear-gradient(135deg, #2563eb, #3b82f6)'
-              : 'linear-gradient(135deg, #16a34a, #22c55e)',
-            color: '#fff',
-            boxShadow: store.isIOS
-              ? '0 2px 10px rgba(59,130,246,0.3)'
-              : '0 2px 10px rgba(34,197,94,0.3)',
-          }}
-        >
-          {store.isIOS ? 'App Store' : 'Google Play'}&apos;den {'\u0130'}ndir
-        </div>
-      </a>
-    </section>
+        <span className="text-xs leading-relaxed line-clamp-2" style={{ color: 'var(--text-muted)' }}>
+          {store?.isIOS ? "App Store'dan" : "Google Play'den"} hemen indirin.
+        </span>
+      </div>
+
+      <div className="mt-auto flex items-center gap-1" style={{ color }}>
+        <span style={{ fontSize: 11, fontWeight: 500, opacity: 0.7 }}>{'\u0130'}ndir</span>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.8} className="w-3 h-3 opacity-70 group-hover:translate-x-0.5 transition-transform">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3 8h10m-4-4 4 4-4 4" />
+        </svg>
+      </div>
+    </a>
   );
 }
 
@@ -346,9 +329,6 @@ export default function HomePage() {
 
       {/* Stats bar removed - user requested */}
 
-      {/* ── Ücretsiz İndir Kartı ─────────────────────────────────────── */}
-      <DownloadCard />
-
       {/* ── Özellikler ─────────────────────────────────────────────────── */}
       <section className="mb-8">
         <h2 className="text-lg font-bold mb-4" style={{ color: 'var(--text-primary)' }}>Özellikler</h2>
@@ -388,10 +368,8 @@ export default function HomePage() {
               </div>
             </Link>
           ))}
-          {/* Ad card - fills empty spot next to SPK Bülten */}
-          <div className="card p-4 flex items-center justify-center" style={{ minHeight: 120 }}>
-            <AdBanner slot="3455837962" format="rectangle" />
-          </div>
+          {/* İndir kartı - boş grid alanını doldurur */}
+          <DownloadFeatureCard />
         </div>
       </section>
 
