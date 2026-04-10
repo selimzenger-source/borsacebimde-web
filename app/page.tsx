@@ -223,7 +223,8 @@ export default function HomePage() {
         const viopAsNews: NewsFeedItem[] = viopRes.value.map((v) => ({
           ...v,
           created_at: v.sent_at,
-          source: '_viop_',  // VİOP badge için özel işaretçi
+          source: '_viop_',
+          image_url: null,  // VIOP tweetlerinde resim yok
         }));
         allNews = [...allNews, ...viopAsNews];
       }
