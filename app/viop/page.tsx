@@ -35,9 +35,9 @@ const BADGE_CONFIG: Record<TweetBadgeType, { label: string; color: string; bg: s
   },
   kapanis: {
     label: 'Kapanış',
-    color: '#FF5252',
-    bg: 'rgba(255,82,82,0.12)',
-    border: 'rgba(255,82,82,0.3)',
+    color: '#FFB74D',
+    bg: 'rgba(255,183,77,0.12)',
+    border: 'rgba(255,183,77,0.3)',
   },
   seyir: {
     label: 'Seyir',
@@ -229,7 +229,7 @@ export default function ViopPage() {
 
   useEffect(() => {
     api
-      .getViopTweets(5)
+      .getViopTweets(10)
       .then((data) => {
         const map = new Map<string, DayGroup>();
         for (const tweet of data) {
@@ -289,7 +289,7 @@ export default function ViopPage() {
               VIOP Gece Seansı
             </h1>
             <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-              Son 5 günün gece seansı verileri
+              Son 10 günün gece seansı verileri
             </p>
           </div>
 
@@ -357,7 +357,7 @@ export default function ViopPage() {
       {/* ─── Empty ─── */}
       {!loading && !error && groups.length === 0 && (
         <div className="card p-8 text-center text-sm" style={{ color: 'var(--text-muted)' }}>
-          Son 5 gün içinde VIOP verisi bulunamadı.
+          Son 10 gün içinde VIOP verisi bulunamadı.
         </div>
       )}
 

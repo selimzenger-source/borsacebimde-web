@@ -211,10 +211,29 @@ export default function HomePage() {
       api.getIPOs(),
       api.getDailyMarketStats(1),
       api.getNewsFeed(7, 50),
-    ]).then(([iposRes, statsRes, newsRes]) => {
+      api.getViopTweets(3),
+    ]).then(([iposRes, statsRes, newsRes, viopRes]) => {
       if (iposRes.status === 'fulfilled') setIpos(iposRes.value);
       if (statsRes.status === 'fulfilled') setStats(statsRes.value);
-      if (newsRes.status === 'fulfilled') setNews(newsRes.value);
+
+      // Haber + VİOP birleştir, tarihe göre sırala
+      let allNews: NewsFeedItem[] = [];
+      if (newsRes.status === 'fulfilled') allNews = [...newsRes.value];
+      if (viopRes.status === 'fulfilled') {
+        const viopAsNews: NewsFeedItem[] = viopRes.value.map((v) => ({
+          ...v,
+          created_at: v.sent_at,
+          source: '_viop_',  // VİOP badge için özel işaretçi
+        }));
+        allNews = [...allNews, ...viopAsNews];
+      }
+      // Tarihe göre sırala (en yeni başta)
+      allNews.sort((a, b) => {
+        const ta = new Date(a.sent_at || a.created_at || '').getTime();
+        const tb = new Date(b.sent_at || b.created_at || '').getTime();
+        return tb - ta;
+      });
+      setNews(allNews);
       setLoading(false);
     });
   }, []);
