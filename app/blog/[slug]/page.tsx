@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { fetchAllBlogs, fetchBlogBySlug, blogPosts } from '@/lib/blog-data';
+import { fetchBlogBySlug, blogPosts } from '@/lib/blog-data';
 
 const API_BASE = 'https://sz-bist-finans-api.onrender.com';
 
