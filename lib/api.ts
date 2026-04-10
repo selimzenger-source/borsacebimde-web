@@ -170,6 +170,19 @@ export interface IPODetail extends IPO {
   allocations: IPOAllocation[];
 }
 
+export interface BlogPost {
+  id: number;
+  slug: string;
+  title: string;
+  content: string;
+  meta_description: string | null;
+  cover_image_url: string | null;
+  category: string;
+  author_name: string;
+  published_at: string | null;
+  created_at: string | null;
+}
+
 export const api = {
   getNewsFeed: (days = 30, limit = 100, source?: string) =>
     fetchAPI<NewsFeedItem[]>('/api/v1/public/news-feed', { days, limit, ...(source ? { source } : {}) }),
@@ -194,6 +207,12 @@ export const api = {
 
   getSPKApplications: () =>
     fetchAPI<SPKApplication[]>('/api/v1/ipos/spk-applications'),
+
+  getBlogs: () =>
+    fetchAPI<BlogPost[]>('/api/v1/public/blogs'),
+
+  getBlogBySlug: (slug: string) =>
+    fetchAPI<BlogPost>(`/api/v1/public/blogs/${slug}`),
 };
 
 /** Tweet text temizle */

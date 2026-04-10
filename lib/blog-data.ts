@@ -1,4 +1,4 @@
-export interface BlogPost {
+export interface StaticBlogPost {
   slug: string;
   title: string;
   excerpt: string;
@@ -6,7 +6,20 @@ export interface BlogPost {
   category: string;
 }
 
-export const blogPosts: BlogPost[] = [
+export interface ApiBlogPost {
+  id: number;
+  slug: string;
+  title: string;
+  content: string;
+  meta_description: string | null;
+  cover_image_url: string | null;
+  category: string;
+  author_name: string;
+  published_at: string | null;
+  created_at: string | null;
+}
+
+export const blogPosts: StaticBlogPost[] = [
   {
     slug: 'halka-arz-nedir',
     title: 'Halka Arz Nedir? Başlangıç Rehberi',
@@ -72,3 +85,25 @@ export const blogPosts: BlogPost[] = [
     category: 'Borsa Rehberi',
   },
 ];
+
+const API_BASE = 'https://sz-bist-finans-api.onrender.com';
+
+export async function fetchAllBlogs(): Promise<ApiBlogPost[]> {
+  try {
+    const res = await fetch(`${API_BASE}/api/v1/public/blogs`, { cache: 'force-cache' });
+    if (res.ok) return await res.json();
+  } catch {
+    // API unreachable, return empty
+  }
+  return [];
+}
+
+export async function fetchBlogBySlug(slug: string): Promise<ApiBlogPost | null> {
+  try {
+    const res = await fetch(`${API_BASE}/api/v1/public/blogs/${slug}`, { cache: 'force-cache' });
+    if (res.ok) return await res.json();
+  } catch {
+    // API unreachable
+  }
+  return null;
+}
