@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     'Borsa Cebimde iOS uygulamasini App Store\'dan ucretsiz indirin. Halka arz takibi, AI destekli KAP haberleri, tavan taban bildirimleri.',
   keywords: ['borsa uygulamasi ios', 'borsa uygulamasi iphone', 'halka arz uygulamasi iphone', 'borsa cebimde app store', 'ucretsiz borsa uygulamasi ios', 'BIST uygulama iphone'],
   alternates: {
-    canonical: 'https://borsacebimde.app/appstoreindir',
+    canonical: 'https://borsacebimde.app/indir',
   },
   openGraph: {
     title: 'Borsa Cebimde - iPhone Uygulama | Ucretsiz',

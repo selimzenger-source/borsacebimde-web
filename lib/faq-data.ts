@@ -25,6 +25,18 @@ export const halkaArzFAQ: FAQItem[] = [
     question: 'Halka arzda para kaybedilir mi?',
     answer: 'Halka arz yatırımı da diğer borsa yatırımları gibi risk içerir. Hisse fiyatı işlem başladıktan sonra düşebilir. Yatırım kararı vermeden önce şirketin finansal durumunu ve sektörünü araştırmanız önemlidir. Bu bilgiler yatırım tavsiyesi değildir.',
   },
+  {
+    question: 'Halka arzda tavan takibi ne demek?',
+    answer: 'Halka arz sonrası işlem görmeye başlayan hisse senedinin günlük fiyat limitine (tavan) ulaşıp ulaşmadığını takip etmek anlamına gelir. Birçok halka arzda hisse ilk günlerde ardışık tavan yapabilir. Borsa Cebimde, her halka arzın tavan takibini otomatik olarak yapar ve kaç gün tavan yaptığını, kümülatif getiriyi ve tavan kırılma tarihini gösterir.',
+  },
+  {
+    question: 'SPK onayı ne kadar sürer?',
+    answer: 'SPK halka arz başvuru inceleme süresi genellikle 4 ila 12 hafta arasında değişmektedir. Bu süre şirketin büyüklüğüne, başvuru dosyasının eksiksizliğine ve SPK\'nın iş yoğunluğuna göre farklılık gösterebilir. Borsa Cebimde, SPK başvuru durumlarını takip ederek onay geldiğinde anlık bildirim göndermektedir.',
+  },
+  {
+    question: 'Halka arzda katılım endeksi nedir?',
+    answer: 'Katılım endeksi, hissenin faizsiz finans ilkelerine uygunluğunu gösteren bir sınıflandırmadır. "Uygun" olarak işaretlenen halka arzlar, katılım bankacılığı kurallarına göre yatırım yapılabilir niteliktedir. Bu bilgi, katılım bankacılığı tercih eden yatırımcılar için önemli bir referanstır.',
+  },
 ];
 
 export const kapFAQ: FAQItem[] = [
@@ -127,5 +139,25 @@ export const genelFAQ: FAQItem[] = [
   {
     question: 'Bildirimler nasıl çalışır?',
     answer: 'Favori hisselerinize bildirim ayarlayarak KAP haberi düştüğünde, halka arz dağıtımı yaklaştığında veya tavan/taban oluştuğunda anlık push bildirim alabilirsiniz. Bildirim ayarlarını uygulama içinden özelleştirebilirsiniz.',
+  },
+  {
+    question: 'Web sitesi ile mobil uygulama arasındaki fark nedir?',
+    answer: 'Web sitemiz (borsacebimde.app) tüm temel özellikleri sunmaktadır: halka arz takvimi, KAP haberleri, tavan taban hisseleri, VİOP gece seansı ve SPK bülten analizleri. Mobil uygulama ise bunlara ek olarak anlık push bildirimler, favori hisse listesi, kişiselleştirilmiş bildirim ayarları ve çevrimdışı erişim gibi özellikler sunmaktadır.',
+  },
+  {
+    question: 'Veriler ne sıklıkla güncelleniyor?',
+    answer: 'KAP haberleri ve piyasa verileri gerçek zamanlı olarak güncellenmektedir. Tavan taban verileri seans kapanışında, halka arz takvimi yeni gelişmeler oldukça, SPK bültenleri ise haftalık olarak güncellenmektedir. Yapay zeka analizleri her yeni KAP bildirimi geldiğinde otomatik olarak üretilmektedir.',
+  },
+  {
+    question: 'Borsa Cebimde hangi veri kaynaklarını kullanıyor?',
+    answer: 'Platformumuz Kamuyu Aydınlatma Platformu (KAP), Sermaye Piyasası Kurulu (SPK), Bloomberg HT, BigPara ve Uzmanpara gibi Türkiye\'nin en güvenilir finans veri kaynaklarından bilgi derlemektedir. Tüm veriler resmi ve güvenilir kaynaklardan alınmaktadır.',
+  },
+  {
+    question: 'Yapay zeka analizleri ne kadar güvenilir?',
+    answer: 'Yapay zeka analizlerimiz KAP bildirimlerini otomatik olarak değerlendirerek olumlu/olumsuz/nötr sınıflandırma yapar ve 1-10 arası etki puanı verir. Ancak AI analizleri bilgilendirme amaçlıdır, kesin doğruluk garantisi vermez ve yatırım tavsiyesi niteliği taşımaz. Yatırım kararlarınızı vermeden önce kendi araştırmanızı yapmanız önerilir.',
+  },
+  {
+    question: 'Borsa Cebimde ile iletişime nasıl geçebilirim?',
+    answer: 'E-posta adresimiz borsacebimde@gmail.com üzerinden bize ulaşabilirsiniz. Ayrıca X (Twitter) hesabımız @BorsaCebimde üzerinden de iletişime geçebilirsiniz. Önerileriniz ve geri bildirimleriniz bizim için çok değerlidir.',
   },
 ];

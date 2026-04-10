@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     'Borsa Cebimde Android uygulamasini Google Play\'den ucretsiz indirin. Halka arz takibi, AI destekli KAP haberleri, tavan taban bildirimleri.',
   keywords: ['borsa uygulamasi android', 'borsa takip uygulamasi', 'halka arz uygulamasi android', 'borsa cebimde google play', 'ucretsiz borsa uygulamasi android', 'BIST uygulama android'],
   alternates: {
-    canonical: 'https://borsacebimde.app/androidindir',
+    canonical: 'https://borsacebimde.app/indir',
   },
   openGraph: {
     title: 'Borsa Cebimde - Android Uygulama | Ucretsiz',

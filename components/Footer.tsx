@@ -9,6 +9,8 @@ const quickLinks = [
   { href: '/tavan-taban', label: 'Tavan Taban' },
   { href: '/viop', label: 'VİOP' },
   { href: '/spk-bulten', label: 'SPK Bülten' },
+  { href: '/spk-basvurular', label: 'SPK Başvurular' },
+  { href: '/blog', label: 'Borsa Rehberi' },
 ];
 
 export default function Footer() {

@@ -59,6 +59,7 @@ export interface SPKApplication {
   sale_price: string | null;
   application_date: string | null;
   notes: string | null;
+  company_description: string | null;
   status: string;
   created_at: string | null;
 }

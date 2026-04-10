@@ -1,135 +1,102 @@
-'use client';
+import type { Metadata } from 'next';
+import SpkBasvurularContent from './Content';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { api, type SPKApplication } from '@/lib/api';
-import AdBanner from '@/components/AdBanner';
+export const metadata: Metadata = {
+  title: 'SPK Başvuruları - Onay Bekleyen Halka Arz Başvuruları',
+  description:
+    'SPK onayı bekleyen halka arz başvurularının güncel listesi. Sermaye Piyasası Kurulu\'na yapılan halka arz başvuruları, onay süreci ve yatırımcılar için önemli bilgiler.',
+  keywords: [
+    'SPK başvuruları',
+    'halka arz başvurusu',
+    'SPK onayı bekleyen',
+    'halka arz onay süreci',
+    'SPK izahname onayı',
+    'Borsa İstanbul halka arz',
+  ],
+};
 
-export default function SPKBasvurularPage() {
-  const [apps, setApps] = useState<SPKApplication[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    api.getSPKApplications()
-      .then(setApps)
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
-
+export default function SpkBasvurularPage() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      {/* Dinamik başvuru listesi */}
+      <SpkBasvurularContent />
 
-      {/* ── Header ── */}
-      <header
-        className="card relative overflow-hidden p-6 sm:p-8"
-        style={{ background: 'linear-gradient(135deg, rgba(255,152,0,0.08), var(--bg-primary))', borderColor: 'rgba(255,152,0,0.2)' }}
+      {/* Statik SEO İçeriği */}
+      <article
+        className="card p-6 sm:p-8"
+        style={{ borderColor: 'var(--border-primary)' }}
       >
-        <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(255,152,0,0.1) 0%, transparent 70%)' }} />
-        <div className="relative">
-          <Link
-            href="/halka-arz"
-            className="inline-flex items-center gap-1.5 mb-4 text-xs font-semibold transition-colors"
-            style={{ color: '#FF9800' }}
+        <h2
+          className="text-xl font-bold mb-4"
+          style={{ color: 'var(--text-primary)' }}
+        >
+          Halka Arz Başvuru Süreci Nasıl İşler?
+        </h2>
+        <div
+          className="text-sm leading-relaxed flex flex-col gap-4"
+          style={{ color: 'var(--text-secondary)' }}
+        >
+          <p>
+            Türkiye&apos;de bir şirketin hisselerini halka arz edebilmesi için Sermaye Piyasası Kurulu&apos;na (SPK)
+            resmi bir başvuru yapması gerekmektedir. Bu süreç, şirketin mali tablolarının bağımsız denetimden
+            geçmesiyle başlar. Ardından şirket, bir aracı kurum ile anlaşarak izahname hazırlar. İzahname,
+            şirketin mali durumunu, faaliyet alanını, risk faktörlerini, halka arz edilecek pay miktarını ve
+            fiyat aralığını detaylı şekilde açıklayan kapsamlı bir belgedir.
+          </p>
+
+          <p>
+            SPK&apos;ya yapılan başvuru sonrasında Kurul, izahnameyi ve şirketin tüm belgelerini titizlikle
+            inceler. Bu inceleme süreci genellikle 4 ila 8 hafta arasında sürmektedir; ancak eksik belge
+            veya ek bilgi talebi durumunda süre uzayabilir. SPK, yatırımcıların korunması ilkesi
+            çerçevesinde izahnamedeki bilgilerin doğruluğunu, tutarlılığını ve yeterliliğini değerlendirir.
+            Gerekli görüldüğünde şirketten ek açıklama veya düzeltme talep edebilir.
+          </p>
+
+          <h3
+            className="text-lg font-semibold mt-2"
+            style={{ color: 'var(--text-primary)' }}
           >
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-            </svg>
-            Halka Arz Merkezi
-          </Link>
-          <div className="flex items-center gap-3 mb-2">
-            <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-              style={{ background: 'rgba(255,152,0,0.15)', border: '1px solid rgba(255,152,0,0.3)' }}
-            >
-              <svg className="w-5 h-5" style={{ color: '#FF9800' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <div>
-              <h1 className="text-xl sm:text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
-                SPK Onayı Beklenen Halka Arzlar
-              </h1>
-              <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-                {loading ? 'Yükleniyor...' : `${apps.length} başvuru bekliyor`}
-              </p>
-            </div>
-          </div>
-        </div>
-      </header>
+            Onay Sonrası Süreç
+          </h3>
+          <p>
+            SPK izahnameyi onayladığında, şirket belirlenen takvim dahilinde halka arz sürecini başlatır.
+            Talep toplama dönemi genellikle 2-3 iş günü sürer. Bu sürede yatırımcılar, aracı kurumlar
+            üzerinden halka arza katılım talebinde bulunabilir. Talep toplama sonrasında pay dağıtımı
+            gerçekleştirilir ve hisseler Borsa İstanbul&apos;da işlem görmeye başlar. İlk işlem günü
+            genellikle talep toplama döneminin tamamlanmasından 2-3 iş günü sonrasına denk gelir.
+          </p>
 
-      {/* ── Loading ── */}
-      {loading && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="card p-4 flex flex-col gap-3">
-              <div className="skeleton h-5 w-48 rounded" />
-              <div className="skeleton h-4 w-32 rounded" />
-            </div>
-          ))}
+          <h3
+            className="text-lg font-semibold mt-2"
+            style={{ color: 'var(--text-primary)' }}
+          >
+            Yatırımcılar Nelere Dikkat Etmeli?
+          </h3>
+          <p>
+            SPK onayı bekleyen halka arz başvurularını takip etmek, yatırımcılara önceden hazırlık yapma
+            imkanı tanır. Başvuru tarihi, şirketin sektörü, planlanan halka arz büyüklüğü ve satış fiyatı
+            gibi bilgiler, yatırım kararı öncesinde değerlendirilmesi gereken temel unsurlardır. Ancak
+            unutulmamalıdır ki SPK başvurusu yapılmış olması, halka arzın kesinleştiği anlamına gelmez.
+            Başvurular reddedilebilir veya şirket tarafından geri çekilebilir. Bu nedenle yatırım
+            kararlarını yalnızca başvuru bilgisine dayandırmamak önemlidir.
+          </p>
         </div>
-      )}
 
-      {/* ── List ── */}
-      {!loading && apps.length > 0 && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {apps.map((app, idx) => (
-            <div key={app.id}>
-              {idx > 0 && idx % 10 === 0 && (
-                <div style={{ marginBottom: 8 }}>
-                  <AdBanner slot="6884376342" format="in-feed" layoutKey="-ef+6k-30-ac+ty" />
-                </div>
-              )}
-              <div
-                className="card p-4"
-                style={{ border: '1px solid rgba(148,163,184,0.1)', borderLeft: '3px solid #FF9800' }}
-              >
-                <div className="flex items-start justify-between gap-3 mb-2">
-                  <h4 className="text-sm font-bold leading-snug" style={{ color: 'var(--text-primary)' }}>
-                    {app.company_name}
-                  </h4>
-                  <span
-                    className="shrink-0 px-2 py-0.5 rounded-md text-[11px] font-semibold"
-                    style={{ background: 'rgba(255,152,0,0.12)', color: '#FF9800' }}
-                  >
-                    Onay Bekliyor
-                  </span>
-                </div>
-                <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
-                  {app.application_date && (
-                    <div>
-                      <span style={{ color: 'var(--text-muted)' }}>Başvuru Tarihi</span>
-                      <p className="font-medium" style={{ color: 'var(--text-primary)' }}>
-                        {new Date(app.application_date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}
-                      </p>
-                    </div>
-                  )}
-                  {app.sale_price && (
-                    <div>
-                      <span style={{ color: 'var(--text-muted)' }}>Satış Fiyatı</span>
-                      <p className="font-medium" style={{ color: 'var(--text-primary)' }}>
-                        {parseFloat(app.sale_price).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺
-                      </p>
-                    </div>
-                  )}
-                </div>
-                {app.notes && (
-                  <p className="mt-2 text-[11px] leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                    {app.notes}
-                  </p>
-                )}
-              </div>
-            </div>
-          ))}
-          <AdBanner slot="6884376342" format="rectangle" />
+        {/* Yatırım Uyarısı */}
+        <div
+          className="mt-6 p-4 rounded-xl text-xs leading-relaxed"
+          style={{
+            background: 'rgba(148,163,184,0.06)',
+            border: '1px solid rgba(148,163,184,0.15)',
+            color: 'var(--text-muted)',
+          }}
+        >
+          <strong>Yatırım Uyarısı:</strong> Bu sayfadaki bilgiler yalnızca bilgilendirme amaçlıdır ve yatırım tavsiyesi
+          niteliği taşımaz. Halka arz başvuruları SPK tarafından reddedilebilir veya şirket tarafından geri çekilebilir.
+          Yatırım kararlarınızı almadan önce mutlaka izahnameyi okuyunuz ve lisanslı yatırım danışmanlarından
+          profesyonel destek alınız.
         </div>
-      )}
-
-      {/* ── Empty State ── */}
-      {!loading && apps.length === 0 && (
-        <div className="card p-8 flex flex-col items-center gap-3 text-center">
-          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Henüz bekleyen SPK başvurusu yok.</p>
-        </div>
-      )}
+      </article>
     </div>
   );
 }
