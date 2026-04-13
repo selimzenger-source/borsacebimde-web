@@ -16,6 +16,7 @@ const navLinks = [
   { href: '/tavan-taban', label: 'Tavan Taban' },
   { href: '/viop', label: 'VİOP' },
   { href: '/spk-bulten', label: 'SPK Bülten' },
+  { href: '/kurum-onerileri', label: 'Kurum Önerileri' },
   { href: '/blog', label: 'Rehber' },
 ];
 

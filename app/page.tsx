@@ -19,7 +19,7 @@ export default function HomePage() {
         {/* Borsa Cebimde Nedir */}
         <article className="card p-6 sm:p-8 flex flex-col gap-4">
           <h2 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
-            Borsa Cebimde: T&uuml;rkiye Borsas&inodot; i&ccedil;in &Uuml;cretsiz Finans Bilgi Platformu
+            Borsa Cebimde: Türkiye Borsası için Ücretsiz Finans Bilgi Platformu
           </h2>
           <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
             Borsa Cebimde, Borsa İstanbul (BIST) yatırımcıları için geliştirilmiş kapsamlı bir finans
@@ -87,7 +87,7 @@ export default function HomePage() {
         {/* Nasıl Çalışır */}
         <article className="card p-6 sm:p-8 flex flex-col gap-4">
           <h2 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
-            Borsa Cebimde Nas&inodot;l &Ccedil;al&inodot;ş&inodot;r?
+            Borsa Cebimde Nasıl Çalışır?
           </h2>
           <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
             Borsa Cebimde, birden fazla güvenilir veri kaynağından bilgi toplayarak bunları

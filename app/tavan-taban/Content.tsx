@@ -123,7 +123,7 @@ function StockTable({ stocks, type }: { stocks: DailyMarketStat[]; type: 'ceilin
               <tr style={{ borderBottom: '1px solid var(--border-primary)' }}>
                 <th className="text-left font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Hisse</th>
                 <th className="text-right font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Fiyat</th>
-                <th className="text-right font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Degisim</th>
+                <th className="text-right font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Son 30G</th>
                 <th className="text-center font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Seri</th>
               </tr>
             </thead>
@@ -150,10 +150,14 @@ function StockTable({ stocks, type }: { stocks: DailyMarketStat[]; type: 'ceilin
                       {s.close_price.toFixed(2)}
                     </td>
                     <td className="py-2 px-1.5 text-right">
-                      <span className="font-bold" style={{ color: accentColor, fontSize: 11 }}>
-                        {s.percent_change > 0 ? '+' : ''}
-                        {s.percent_change.toFixed(2)}%
-                      </span>
+                      {(() => {
+                        const mc = isCeiling ? s.monthly_ceiling_count : s.monthly_floor_count;
+                        return (
+                          <span className="font-bold" style={{ color: mc > 1 ? accentColor : 'var(--text-muted)', fontSize: 11 }}>
+                            {mc} Kez
+                          </span>
+                        );
+                      })()}
                     </td>
                     <td className="py-2 px-1.5 text-center">
                       <SeriBadge count={seriCount} type={type} />

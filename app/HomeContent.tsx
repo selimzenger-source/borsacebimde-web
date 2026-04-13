@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { api, cleanText, formatTime, sourceLabel, sourceBadgeStyle, type NewsFeedItem, type IPO, type DailyMarketStat } from '@/lib/api';
+import { api, cleanText, formatTime, sourceLabel, sourceBadgeStyle, fetchKurumOnerileri, type NewsFeedItem, type IPO, type DailyMarketStat } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
 import { getStoreInfo } from '@/lib/platform';
@@ -212,11 +212,12 @@ export default function HomePage() {
       api.getDailyMarketStats(1),
       api.getNewsFeed(7, 50),
       api.getViopTweets(3),
-    ]).then(([iposRes, statsRes, newsRes, viopRes]) => {
+      fetchKurumOnerileri('today', 20),
+    ]).then(([iposRes, statsRes, newsRes, viopRes, kurumRes]) => {
       if (iposRes.status === 'fulfilled') setIpos(iposRes.value);
       if (statsRes.status === 'fulfilled') setStats(statsRes.value);
 
-      // Haber + VİOP birleştir, tarihe göre sırala
+      // Haber + VİOP + Kurum Önerileri birleştir, tarihe göre sırala
       let allNews: NewsFeedItem[] = [];
       if (newsRes.status === 'fulfilled') allNews = [...newsRes.value];
       if (viopRes.status === 'fulfilled') {
@@ -224,9 +225,21 @@ export default function HomePage() {
           ...v,
           created_at: v.sent_at,
           source: '_viop_',
-          image_url: null,  // VIOP tweetlerinde resim yok
+          image_url: null,
         }));
         allNews = [...allNews, ...viopAsNews];
+      }
+      // Kurum önerilerini news feed'e ekle
+      if (kurumRes.status === 'fulfilled' && kurumRes.value.items) {
+        const kurumAsNews: NewsFeedItem[] = kurumRes.value.items.slice(0, 10).map((k) => ({
+          id: k.id + 900000,
+          text: `${k.ticker}${k.company_name ? ' - ' + k.company_name : ''}\n${k.institution_name}: ${k.recommendation || 'Yeni Öneri'}${k.target_price ? ' — Hedef: ' + k.target_price.toFixed(2) + ' ₺' : ''}${k.potential_return ? ' (%' + k.potential_return.toFixed(1) + ')' : ''}`,
+          image_url: null,
+          source: '_kurum_oneri_',
+          sent_at: k.created_at,
+          created_at: k.created_at,
+        }));
+        allNews = [...allNews, ...kurumAsNews];
       }
       // Tarihe göre sırala (en yeni başta)
       allNews.sort((a, b) => {

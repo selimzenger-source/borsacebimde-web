@@ -267,6 +267,8 @@ export function sourceLabel(source: string): string {
     tweet_spk_bulletin: 'SPK Bülten',
     tweet_spk_bulletin_analysis: 'SPK Bülten',
     _viop_: 'VİOP',
+    kurum_oneri: 'Kurum Önerisi',
+    _kurum_oneri_: 'Kurum Önerisi',
   };
   return map[source] ?? source;
 }
@@ -290,6 +292,8 @@ export function sourceBadgeStyle(source: string): React.CSSProperties {
     tweet_spk_bulletin: { background: 'rgba(255,152,0,0.12)', color: '#FF9800', border: '1px solid rgba(255,152,0,0.25)' },
     tweet_spk_bulletin_analysis: { background: 'rgba(255,152,0,0.12)', color: '#FF9800', border: '1px solid rgba(255,152,0,0.25)' },
     _viop_: { background: 'rgba(179,136,255,0.12)', color: '#B388FF', border: '1px solid rgba(179,136,255,0.25)' },
+    kurum_oneri: { background: 'rgba(38,166,154,0.12)', color: '#26A69A', border: '1px solid rgba(38,166,154,0.25)' },
+    _kurum_oneri_: { background: 'rgba(38,166,154,0.12)', color: '#26A69A', border: '1px solid rgba(38,166,154,0.25)' },
   };
   return map[source] ?? { background: 'var(--bg-surface)', color: 'var(--text-secondary)', border: '1px solid var(--border-primary)' };
 }
