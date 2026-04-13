@@ -294,6 +294,33 @@ export function sourceBadgeStyle(source: string): React.CSSProperties {
   return map[source] ?? { background: 'var(--bg-surface)', color: 'var(--text-secondary)', border: '1px solid var(--border-primary)' };
 }
 
+// ─── Kurum Önerileri ────────────────────────────────────────────────────────
+
+export interface KurumOneri {
+  id: number;
+  ticker: string;
+  company_name: string | null;
+  institution_name: string;
+  recommendation: string | null;
+  target_price: number | null;
+  current_price: number | null;
+  potential_return: number | null;
+  report_date: string;
+  source_url: string | null;
+  created_at: string | null;
+}
+
+export interface KurumOnerileriResponse {
+  items: KurumOneri[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+export async function fetchKurumOnerileri(period: string = 'today', limit: number = 500): Promise<KurumOnerileriResponse> {
+  return fetchAPI<KurumOnerileriResponse>('/api/v1/kurum-onerileri', { period, limit });
+}
+
 export function formatDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString('tr-TR', {
     day: 'numeric', month: 'long', year: 'numeric',
