@@ -14,9 +14,30 @@ const sections = [
   { id: 'spk', title: 'SPK Bülten', items: spkBultenFAQ, link: '/spk-bulten', linkLabel: 'SPK Bülten Analizleri' },
 ];
 
+// Tüm FAQ'ları tek bir FAQPage JSON-LD olarak birleştir
+const allFAQItems = sections.flatMap((s) => s.items);
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: allFAQItems.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+
 export default function SSSContent() {
   return (
     <>
+      {/* Tek birleşik FAQPage JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+
       {/* Quick nav */}
       <div className="flex flex-wrap gap-2">
         {sections.map((s) => (
@@ -35,10 +56,10 @@ export default function SSSContent() {
         ))}
       </div>
 
-      {/* FAQ Sections */}
+      {/* FAQ Sections — noSchema: true ile component'ten JSON-LD çıkmasını engelle */}
       {sections.map((s) => (
         <div key={s.id} id={s.id}>
-          <FAQ items={s.items} title={s.title} description={`${s.title} hakkında sıkça sorulan sorular`} />
+          <FAQ items={s.items} title={s.title} description={`${s.title} hakkında sıkça sorulan sorular`} noSchema />
           <div className="flex justify-end mt-2">
             <Link
               href={s.link}

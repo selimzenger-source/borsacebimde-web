@@ -80,10 +80,10 @@ function FAQAccordion({ item, isOpen, onToggle }: { item: FAQItem; isOpen: boole
   );
 }
 
-export default function FAQ({ items, title, description }: { items: FAQItem[]; title?: string; description?: string }) {
+export default function FAQ({ items, title, description, noSchema }: { items: FAQItem[]; title?: string; description?: string; noSchema?: boolean }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  // FAQPage JSON-LD
+  // FAQPage JSON-LD — noSchema true ise render etme (SSS sayfasında birleşik schema kullanılıyor)
   const faqJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -99,11 +99,13 @@ export default function FAQ({ items, title, description }: { items: FAQItem[]; t
 
   return (
     <section className="mt-10 mb-6">
-      {/* JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
+      {/* JSON-LD — sadece noSchema false/undefined ise render et */}
+      {!noSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
 
       {/* Header */}
       <div className="flex items-center gap-3 mb-5">
