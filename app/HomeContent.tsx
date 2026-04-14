@@ -567,6 +567,7 @@ export default function HomePage() {
                         {!isExpanded && body.length > 150 && <span style={{ color: 'var(--text-muted)' }}>...</span>}
                       </p>
                     )}
+                    {body && body.length > 80 && (
                     <div className="flex items-center gap-1 mt-1" style={{ color: '#2979FF', fontSize: 12, fontWeight: 500 }}>
                       {isExpanded ? 'Küçült' : 'Devamını Oku'}
                       <svg
@@ -580,6 +581,7 @@ export default function HomePage() {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4 6l4 4 4-4" />
                       </svg>
                     </div>
+                    )}
                   </div>
                 </div>
               );
