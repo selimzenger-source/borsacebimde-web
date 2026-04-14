@@ -8,9 +8,22 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://borsacebimde.app/blog/borsa-yatirim-temel-kavramlar' },
 };
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: 'Borsada Yatırım: Temel Kavramlar Rehberi',
+  description:
+    'Hisse senedi nedir, lot nedir, endeks nedir? Borsada yatırım yapmaya başlamadan önce bilmeniz gereken temel kavramları anlatan kapsamlı rehber.',
+  author: { '@type': 'Organization', name: 'Borsa Cebimde' },
+  publisher: { '@type': 'Organization', name: 'Borsa Cebimde' },
+  datePublished: '2026-04-10',
+  mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://borsacebimde.app/blog/borsa-yatirim-temel-kavramlar' },
+};
+
 export default function BorsaYatirimTemelKavramlarPage() {
   return (
     <article className="flex flex-col gap-6">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       {/* Breadcrumb */}
       <nav className="text-sm" style={{ color: 'var(--text-muted)' }}>
         <Link href="/" className="hover:underline" style={{ color: 'var(--text-muted)' }}>Ana Sayfa</Link>

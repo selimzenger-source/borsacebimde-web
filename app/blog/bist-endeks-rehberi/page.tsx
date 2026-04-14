@@ -8,9 +8,22 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://borsacebimde.app/blog/bist-endeks-rehberi' },
 };
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: 'BIST Endeksleri Rehberi: BIST 100, BIST 30 ve Digerleri',
+  description:
+    'Borsa Istanbul endeksleri nedir? BIST 30, BIST 50, BIST 100 farklari, sektor endeksleri, endeks revizyonu ve endeks yatirim fonlari hakkinda kapsamli rehber.',
+  author: { '@type': 'Organization', name: 'Borsa Cebimde' },
+  publisher: { '@type': 'Organization', name: 'Borsa Cebimde' },
+  datePublished: '2026-04-10',
+  mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://borsacebimde.app/blog/bist-endeks-rehberi' },
+};
+
 export default function BistEndeksRehberiPage() {
   return (
     <article className="flex flex-col gap-6">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       {/* Breadcrumb */}
       <nav className="text-sm" style={{ color: 'var(--text-muted)' }}>
         <Link href="/" className="hover:underline" style={{ color: 'var(--text-muted)' }}>Ana Sayfa</Link>

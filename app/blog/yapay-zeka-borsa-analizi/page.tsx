@@ -8,9 +8,22 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://borsacebimde.app/blog/yapay-zeka-borsa-analizi' },
 };
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: 'Yapay Zeka ile Borsa Analizi: Gelecegin Yatirim Araclari',
+  description:
+    'Yapay zekanin borsada kullanimi, haber analizi, sentiment analizi ve makine ogrenmesi ile tahmin yontemleri. AI destekli yatirim araclari hakkinda kapsamli rehber.',
+  author: { '@type': 'Organization', name: 'Borsa Cebimde' },
+  publisher: { '@type': 'Organization', name: 'Borsa Cebimde' },
+  datePublished: '2026-04-10',
+  mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://borsacebimde.app/blog/yapay-zeka-borsa-analizi' },
+};
+
 export default function YapayZekaBorsaAnaliziPage() {
   return (
     <article className="flex flex-col gap-6">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       {/* Breadcrumb */}
       <nav className="text-sm" style={{ color: 'var(--text-muted)' }}>
         <Link href="/" className="hover:underline" style={{ color: 'var(--text-muted)' }}>Ana Sayfa</Link>

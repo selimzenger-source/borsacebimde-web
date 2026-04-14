@@ -8,9 +8,22 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://borsacebimde.app/blog/spk-nedir-gorevleri' },
 };
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: 'SPK Nedir? Görevleri ve Yatırımcıya Etkisi',
+  description:
+    'SPK nedir, görevleri nelerdir? Sermaye Piyasası Kurulunun yatırımcı koruma, halka arz onay süreci, haftalık bültenler ve piyasa denetimi hakkında kapsamlı rehber.',
+  author: { '@type': 'Organization', name: 'Borsa Cebimde' },
+  publisher: { '@type': 'Organization', name: 'Borsa Cebimde' },
+  datePublished: '2026-04-10',
+  mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://borsacebimde.app/blog/spk-nedir-gorevleri' },
+};
+
 export default function SpkNedirGorevleriPage() {
   return (
     <article className="flex flex-col gap-6">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       {/* Breadcrumb */}
       <nav className="text-sm" style={{ color: 'var(--text-muted)' }}>
         <Link href="/" className="hover:underline" style={{ color: 'var(--text-muted)' }}>Ana Sayfa</Link>

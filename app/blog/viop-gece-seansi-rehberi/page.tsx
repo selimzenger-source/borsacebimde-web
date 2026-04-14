@@ -8,9 +8,22 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://borsacebimde.app/blog/viop-gece-seansi-rehberi' },
 };
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: 'VİOP Gece Seansı Rehberi',
+  description:
+    'VİOP nedir, gece seansı hangi saatlerde yapılır, hangi sözleşmeler işlem görür? Vadeli işlem piyasası hakkında kapsamlı rehber.',
+  author: { '@type': 'Organization', name: 'Borsa Cebimde' },
+  publisher: { '@type': 'Organization', name: 'Borsa Cebimde' },
+  datePublished: '2026-04-10',
+  mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://borsacebimde.app/blog/viop-gece-seansi-rehberi' },
+};
+
 export default function ViopGeceSeansPage() {
   return (
     <article className="flex flex-col gap-6">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <nav className="text-sm" style={{ color: 'var(--text-muted)' }}>
         <Link href="/" className="hover:underline" style={{ color: 'var(--text-muted)' }}>Ana Sayfa</Link>
         <span className="mx-2">/</span>

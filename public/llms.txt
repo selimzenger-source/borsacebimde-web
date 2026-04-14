@@ -1,0 +1,20 @@
+# Borsa Cebimde - borsacebimde.app
+# Borsa Istanbul yatirimcilari icin ucretsiz finans bilgi platformu
+
+## Hizmetler
+- Halka Arz Takvimi: SPK basvurusundan isleme baslamaya kadar 6 asamali takip
+- KAP AI Haber: Yapay zeka destekli KAP haber analizi ve pozitif haber filtreleme
+- Kurum Onerileri: Araci kurum hedef fiyat ve hisse tavsiyeleri
+- Tavan/Taban Analizi: Gunluk tavan ve taban yapan hisseler ve AI sebep analizi
+- ViOP Gece Seansi: Borsa disi saatlerde vadeli islem takibi
+- SPK Bulten Analizi: Haftalik SPK bulteni AI ozetleri
+- Piyasa Haberleri: Guncel finans ve ekonomi haberleri
+
+## Uygulama
+- Android: https://play.google.com/store/apps/details?id=com.bistfinans.app
+- iOS: https://apps.apple.com/tr/app/borsa-cebimde-haber-arz/id6760570446
+- Web: https://borsacebimde.app
+
+## Iletisim
+- Twitter: @BorsaCebimde
+- E-posta: info@borsacebimde.app

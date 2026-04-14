@@ -25,6 +25,26 @@ export default function KurumOnerileriPage() {
           hedef fiyat ve alım-satım tavsiyeleri yayınlar. Bu sayfada tüm aracı kurumların güncel
           önerilerini tek ekrandan takip edebilirsiniz.
         </p>
+        <h2 style={{ fontSize: 16, fontWeight: 600, color: 'var(--text-secondary)', marginTop: 12, marginBottom: 8 }}>
+          Hedef Fiyat Tavsiyeleri Nasıl Değerlendirilir?
+        </h2>
+        <p>
+          Aracı kurum hedef fiyatları, analistlerin şirketin mali tablolarını, sektör dinamiklerini
+          ve makroekonomik koşulları değerlendirerek belirlediği tahmini fiyat seviyelerini ifade eder.
+          &quot;Al&quot; tavsiyesi hissenin mevcut fiyatının hedef fiyatın altında olduğunu,
+          &quot;Sat&quot; tavsiyesi üzerinde olduğunu, &quot;Tut&quot; tavsiyesi ise makul seviyede
+          fiyatlandığını gösterir. Yatırımcılar bu tavsiyeleri tek başına değil, birden fazla
+          kurumun görüşlerini karşılaştırarak ve kendi analizleriyle birleştirerek değerlendirmelidir.
+        </p>
+        <h2 style={{ fontSize: 16, fontWeight: 600, color: 'var(--text-secondary)', marginTop: 12, marginBottom: 8 }}>
+          Saatlik Güncelleme Avantajı
+        </h2>
+        <p>
+          Borsa Cebimde, aracı kurum önerilerini saatlik periyotlarla güncelleyerek yatırımcılara
+          en taze verileri sunar. Yeni yayınlanan analist raporları ve revize edilen hedef fiyatlar
+          kısa sürede platforma yansır. Böylece yatırımcılar, piyasa koşullarına göre güncellenen
+          tavsiyeleri gecikmeden takip edebilir ve yatırım stratejilerini buna göre şekillendirebilir.
+        </p>
         <p className="mt-2">Veriler saatlik olarak güncellenir. Kaynak: hedeffiyat.com.tr</p>
         <p className="mt-2" style={{ fontSize: 11, fontStyle: 'italic' }}>
           Bu sayfa yatırım tavsiyesi niteliği taşımaz. Tüm yatırım kararlarının sorumluluğu kullanıcıya aittir.

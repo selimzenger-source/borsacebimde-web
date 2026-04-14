@@ -8,9 +8,22 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://borsacebimde.app/blog/kap-haberleri-rehberi' },
 };
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: 'KAP Haberleri Neden Önemli? Yatırımcı Rehberi',
+  description:
+    'KAP (Kamuyu Aydınlatma Platformu) nedir, hangi bildirimler önemlidir, bilanço ve temettü duyuruları nasıl yorumlanır? Yatırımcılar için KAP rehberi.',
+  author: { '@type': 'Organization', name: 'Borsa Cebimde' },
+  publisher: { '@type': 'Organization', name: 'Borsa Cebimde' },
+  datePublished: '2026-04-10',
+  mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://borsacebimde.app/blog/kap-haberleri-rehberi' },
+};
+
 export default function KapHaberleriRehberiPage() {
   return (
     <article className="flex flex-col gap-6">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <nav className="text-sm" style={{ color: 'var(--text-muted)' }}>
         <Link href="/" className="hover:underline" style={{ color: 'var(--text-muted)' }}>Ana Sayfa</Link>
         <span className="mx-2">/</span>
