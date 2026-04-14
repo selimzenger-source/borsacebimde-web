@@ -218,8 +218,9 @@ export default function HomePage() {
       if (statsRes.status === 'fulfilled') setStats(statsRes.value);
 
       // Haber + VİOP + Kurum Önerileri birleştir, tarihe göre sırala
+      const KURUM_RE = /kurum önerisi|hedef.*TL.*\(AL\)|hedef.*TL.*\(TUT\)|hedef.*TL.*\(SAT\)|Yeni Kurum Önerisi/i;
       let allNews: NewsFeedItem[] = [];
-      if (newsRes.status === 'fulfilled') allNews = [...newsRes.value];
+      if (newsRes.status === 'fulfilled') allNews = newsRes.value.filter((it: any) => !KURUM_RE.test((it.text || '') + (it.title || '')));
       if (viopRes.status === 'fulfilled') {
         const viopAsNews: NewsFeedItem[] = viopRes.value.map((v) => ({
           ...v,

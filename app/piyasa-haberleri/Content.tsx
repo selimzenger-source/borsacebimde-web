@@ -179,8 +179,9 @@ export default function PiyasaHaberleriContent() {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   useEffect(() => {
+    const KURUM_RE = /kurum önerisi|hedef.*TL.*\(AL\)|hedef.*TL.*\(TUT\)|hedef.*TL.*\(SAT\)|Yeni Kurum Önerisi/i;
     api.getNewsFeed(30, 200, 'news_scanner')
-      .then((items) => setAllItems(items))
+      .then((items) => setAllItems(items.filter((it: any) => !KURUM_RE.test((it.text || '') + (it.title || '')))))
       .catch(() => setError('Haberler yüklenirken bir sorun oluştu. Lütfen sayfayı yenileyin.'))
       .finally(() => setLoading(false));
   }, []);
