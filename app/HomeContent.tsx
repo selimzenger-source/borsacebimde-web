@@ -511,7 +511,9 @@ export default function HomePage() {
                   className="card overflow-hidden transition-all duration-150 cursor-pointer hover:scale-[1.005]"
                   onClick={toggleExpand}
                 >
-                  {imageUrl && (
+                  {/* SPK Bülten analizinin görseli uygulama içinde zaten gösterilmiyor —
+                      web'de de kapalı: yarım/kesik görünüyordu, yerine tam metin gösterilir */}
+                  {imageUrl && item.source !== 'tweet_spk_bulletin_analysis' && (
                     <div style={{ width: '100%', height: 160, background: 'var(--bg-surface)', overflow: 'hidden' }}>
                       <img src={imageUrl} alt="" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>

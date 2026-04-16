@@ -81,10 +81,13 @@ function NewsCard({ item }: { item: NewsFeedItem }) {
     }
   }
 
+  // SPK Bülten analizi görseli kesik/yarım gözükebiliyor — uygulama gibi sadece metin
+  const isSpkBulletin = item.source === 'tweet_spk_bulletin_analysis';
+
   return (
     <article className="card overflow-hidden transition-all">
       {/* Cover image */}
-      {imageUrl && !imgError && (
+      {imageUrl && !imgError && !isSpkBulletin && (
         <div
           style={{
             width: '100%',
