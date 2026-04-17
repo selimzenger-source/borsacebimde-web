@@ -71,12 +71,20 @@ export default function IPOPollWidget({ ipoId }: { ipoId: number }) {
         statsR.ok ? statsR.json() : null,
         myR.ok ? myR.json() : null,
       ]);
+      // Defansif: backend bozuk dönerse (500 vb.) EMPTY'ye düş, crash olmasın
+      const validPhase = p?.phase === 'hype' || p?.phase === 'ceiling' ? p.phase : null;
       setState({
-        phase: p?.phase ?? null,
-        hype: s?.hype ?? EMPTY.hype,
-        ceiling: s?.ceiling ?? EMPTY.ceiling,
-        myHype: m?.hype ?? null,
-        myCeiling: m?.ceiling ?? null,
+        phase: validPhase,
+        hype: { ...EMPTY.hype, ...(s?.hype || {}) },
+        ceiling: {
+          ...EMPTY.ceiling,
+          ...(s?.ceiling || {}),
+          distribution: (s?.ceiling?.distribution && typeof s.ceiling.distribution === 'object')
+            ? s.ceiling.distribution
+            : {},
+        },
+        myHype: typeof m?.hype === 'string' ? m.hype : null,
+        myCeiling: typeof m?.ceiling === 'string' ? m.ceiling : null,
         loading: false,
       });
     } catch {
@@ -125,12 +133,14 @@ export default function IPOPollWidget({ ipoId }: { ipoId: number }) {
         </div>
         {hypeHasData && (
           <>
-            <div style={{ fontSize: 10, color: 'var(--text-secondary)' }}>
-              <span style={{ color: GREEN, fontWeight: 700 }}>%{Math.round(h.participate_pct)}</span> katılacağım ·{' '}
-              <span style={{ color: RED, fontWeight: 700 }}>%{Math.round(h.skip_pct)}</span> hayır
-              <span style={{ color: 'var(--text-muted)', fontSize: 9, marginLeft: 4 }}>({h.total} oy)</span>
+            <div className="flex justify-between items-center" style={{ fontSize: 10 }}>
+              <span style={{ color: GREEN, fontWeight: 700 }}>%{Math.round(h.participate_pct)} katılacağım</span>
+              <span style={{ color: RED, fontWeight: 700 }}>%{Math.round(h.skip_pct)} hayır</span>
             </div>
             <StackedBar p={h.participate_pct} s={h.skip_pct} />
+            <div style={{ fontSize: 9, color: 'var(--text-muted)', textAlign: 'right', marginTop: -2 }}>
+              {h.total} oy
+            </div>
           </>
         )}
         {ceilingHasData && (
