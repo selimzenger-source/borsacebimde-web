@@ -101,11 +101,11 @@ function StockTable({ stocks, type }: { stocks: DailyMarketStat[]; type: 'ceilin
           className="w-1 h-5 rounded-full"
           style={{ background: accentColor }}
         />
-        <h3 className="text-sm font-bold" style={{ color: accentColor }}>
+        <h3 className="text-base font-bold" style={{ color: accentColor }}>
           {isCeiling ? 'Tavan Hisseleri' : 'Taban Hisseleri'}
         </h3>
         <span
-          className="ml-auto text-xs font-semibold px-2 py-0.5 rounded-full"
+          className="ml-auto text-sm font-semibold px-2.5 py-1 rounded-full"
           style={{ background: accentBg, color: accentColor }}
         >
           {stocks.length} hisse
@@ -118,13 +118,13 @@ function StockTable({ stocks, type }: { stocks: DailyMarketStat[]; type: 'ceilin
         </p>
       ) : (
         <div className="-mx-1">
-          <table className="w-full" style={{ fontSize: 12 }}>
+          <table className="w-full" style={{ fontSize: 14 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border-primary)' }}>
-                <th className="text-left font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Hisse</th>
-                <th className="text-right font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Fiyat</th>
-                <th className="text-right font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Son 30G</th>
-                <th className="text-center font-semibold pb-2 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 10 }}>Seri</th>
+                <th className="text-left font-semibold pb-2.5 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 12 }}>Hisse</th>
+                <th className="text-right font-semibold pb-2.5 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 12 }}>Fiyat</th>
+                <th className="text-right font-semibold pb-2.5 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 12 }}>Son 30G</th>
+                <th className="text-center font-semibold pb-2.5 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 12 }}>Seri</th>
               </tr>
             </thead>
             <tbody>
@@ -138,28 +138,28 @@ function StockTable({ stocks, type }: { stocks: DailyMarketStat[]; type: 'ceilin
                     onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-card-hover)'; }}
                     onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
                   >
-                    <td className="py-2 px-1.5">
+                    <td className="py-2.5 px-1.5">
                       <div className="flex flex-col">
-                        <span className="font-bold" style={{ color: 'var(--text-primary)', fontSize: 12 }}>{s.ticker}</span>
+                        <span className="font-bold" style={{ color: 'var(--text-primary)', fontSize: 14 }}>{s.ticker}</span>
                         {s.reason && (
-                          <span style={{ fontSize: 10, lineHeight: 1.4, color: 'var(--text-muted)', marginTop: 2 }}>{s.reason}</span>
+                          <span style={{ fontSize: 12, lineHeight: 1.45, color: 'var(--text-muted)', marginTop: 3 }}>{s.reason}</span>
                         )}
                       </div>
                     </td>
-                    <td className="py-2 px-1.5 text-right font-mono" style={{ color: 'var(--text-secondary)', fontSize: 11 }}>
+                    <td className="py-2.5 px-1.5 text-right font-mono" style={{ color: 'var(--text-secondary)', fontSize: 13 }}>
                       {s.close_price.toFixed(2)}
                     </td>
-                    <td className="py-2 px-1.5 text-right">
+                    <td className="py-2.5 px-1.5 text-right">
                       {(() => {
                         const mc = isCeiling ? s.monthly_ceiling_count : s.monthly_floor_count;
                         return (
-                          <span className="font-bold" style={{ color: mc > 1 ? accentColor : 'var(--text-muted)', fontSize: 11 }}>
+                          <span className="font-bold" style={{ color: mc > 1 ? accentColor : 'var(--text-muted)', fontSize: 13 }}>
                             {mc} Kez
                           </span>
                         );
                       })()}
                     </td>
-                    <td className="py-2 px-1.5 text-center">
+                    <td className="py-2.5 px-1.5 text-center">
                       <SeriBadge count={seriCount} type={type} />
                     </td>
                   </tr>
@@ -199,7 +199,7 @@ function DayAccordion({ group, defaultOpen }: { group: DayGroup; defaultOpen: bo
               <path strokeLinecap="round" d="M16 2v4M8 2v4M3 10h18" />
             </svg>
           </div>
-          <span className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>
+          <span className="font-semibold text-base" style={{ color: 'var(--text-primary)' }}>
             {formatDate(group.date)}
           </span>
         </div>
