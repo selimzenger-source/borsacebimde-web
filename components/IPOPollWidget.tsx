@@ -27,7 +27,6 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://sz-bist-finans-api.o
 interface HypeStats {
   total: number;
   participate: number; participate_pct: number;
-  undecided: number;   undecided_pct: number;
   skip: number;        skip_pct: number;
 }
 
@@ -48,7 +47,7 @@ interface PollState {
 
 const EMPTY: PollState = {
   phase: null,
-  hype: { total: 0, participate: 0, participate_pct: 0, undecided: 0, undecided_pct: 0, skip: 0, skip_pct: 0 },
+  hype: { total: 0, participate: 0, participate_pct: 0, skip: 0, skip_pct: 0 },
   ceiling: { total: 0, average: null, distribution: {} },
   myHype: null,
   myCeiling: null,
@@ -128,11 +127,10 @@ export default function IPOPollWidget({ ipoId }: { ipoId: number }) {
           <>
             <div style={{ fontSize: 10, color: 'var(--text-secondary)' }}>
               <span style={{ color: GREEN, fontWeight: 700 }}>%{Math.round(h.participate_pct)}</span> katılacağım ·{' '}
-              <span style={{ color: GREY, fontWeight: 700 }}>%{Math.round(h.undecided_pct)}</span> kararsız ·{' '}
               <span style={{ color: RED, fontWeight: 700 }}>%{Math.round(h.skip_pct)}</span> hayır
               <span style={{ color: 'var(--text-muted)', fontSize: 9, marginLeft: 4 }}>({h.total} oy)</span>
             </div>
-            <StackedBar p={h.participate_pct} u={h.undecided_pct} s={h.skip_pct} />
+            <StackedBar p={h.participate_pct} s={h.skip_pct} />
           </>
         )}
         {ceilingHasData && (
@@ -159,9 +157,8 @@ export default function IPOPollWidget({ ipoId }: { ipoId: number }) {
             Bu halka arza katılacak mısın?
           </div>
           <div className="flex gap-1.5">
-            <HypeBtn color={GREEN} label="Katılacağım"     onClick={() => submit('hype', 'participate')} disabled={submitting} />
-            <HypeBtn color={GREY}  label="Kararsızım"      onClick={() => submit('hype', 'undecided')}   disabled={submitting} />
-            <HypeBtn color={RED}   label="Katılmayacağım"  onClick={() => submit('hype', 'skip')}        disabled={submitting} />
+            <HypeBtn color={GREEN} label="Evet, Katılacağım"      onClick={() => submit('hype', 'participate')} disabled={submitting} />
+            <HypeBtn color={RED}   label="Hayır, Katılmayacağım"  onClick={() => submit('hype', 'skip')}        disabled={submitting} />
           </div>
         </div>
       );
@@ -176,7 +173,7 @@ export default function IPOPollWidget({ ipoId }: { ipoId: number }) {
           👥 Topluluğun <span style={{ color: GREEN, fontWeight: 700 }}>%{Math.round(h.participate_pct)}</span>
           {'\u2019'}i bu arza katılıyor · {h.total} oy
         </div>
-        <StackedBar p={h.participate_pct} u={h.undecided_pct} s={h.skip_pct} />
+        <StackedBar p={h.participate_pct} s={h.skip_pct} />
       </div>
     );
   }
@@ -275,11 +272,10 @@ function HypeBtn({ color, label, onClick, disabled }: {
   );
 }
 
-function StackedBar({ p, u, s }: { p: number; u: number; s: number }) {
+function StackedBar({ p, s }: { p: number; s: number }) {
   return (
     <div className="flex h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--bg-surface)' }}>
       <div style={{ width: `${p}%`, background: GREEN }} />
-      <div style={{ width: `${u}%`, background: GREY }} />
       <div style={{ width: `${s}%`, background: RED }} />
     </div>
   );
@@ -315,20 +311,20 @@ function CeilingResult({ c, myVote }: {
         )}
       </div>
 
-      {/* Mini histogram */}
-      <div className="flex items-end gap-px" style={{ height: 22, padding: '0 2px' }}>
+      {/* Mini histogram — daha geniş, 40px yüksek */}
+      <div className="flex items-end" style={{ height: 40, padding: '0 2px', gap: 2 }}>
         {Array.from({ length: MAX_CEILING }, (_, i) => i + 1).map(n => {
           const cnt = Number(c.distribution[String(n)] || 0);
-          const h = cnt === 0 ? 2 : Math.max(3, Math.round((cnt / maxCount) * 18));
+          const h = cnt === 0 ? 3 : Math.max(6, Math.round((cnt / maxCount) * 36));
           return (
             <div
               key={n}
               style={{
                 flex: 1,
                 height: h,
-                background: cnt > 0 ? GOLD : 'rgba(148,163,184,0.2)',
-                borderRadius: 1,
-                minHeight: 2,
+                background: cnt > 0 ? GOLD : 'rgba(148,163,184,0.22)',
+                borderRadius: 2,
+                minHeight: 3,
               }}
               title={`${n} tavan: ${cnt} tahmin`}
             />
