@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import { api, formatDate, type IPO, type IPODetail, type IPOCeilingTrack, type IPOBroker, type IPOAllocation, type SPKApplication } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
+import IPOPollWidget from '@/components/IPOPollWidget';
 import AppStoreBanner from '@/components/AppStoreBanner';
 import InlineAppBanner from '@/components/InlineAppBanner';
 import FAQ from '@/components/FAQ';
@@ -439,6 +440,11 @@ function IPOCard({ ipo }: { ipo: IPO }) {
               <TradingProgress days={ipo.trading_day_count} />
             </div>
           )}
+
+          {/* 2 Fazli Anket Widget (Hype / Ceiling) — anket kapali ise null doner */}
+          <div className="mt-3">
+            <IPOPollWidget ipoId={ipo.id} />
+          </div>
         </div>
 
         {/* Expand hint */}
