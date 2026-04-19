@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { fetchAllBlogs, blogPosts, type ApiBlogPost } from '@/lib/blog-data';
+import { fetchAllBlogs } from '@/lib/blog-data';
 
 export const metadata: Metadata = {
   title: 'Borsa Rehberi - Yatırım Eğitim Yazıları',
@@ -41,32 +41,17 @@ interface DisplayPost {
 export default async function BlogPage() {
   const apiBlogs = await fetchAllBlogs();
 
-  // Convert API blogs to display format
-  const apiDisplayPosts: DisplayPost[] = apiBlogs.map((b) => ({
-    slug: b.slug,
-    title: b.title,
-    excerpt: b.meta_description || b.title,
-    date: b.published_at || b.created_at || '',
-    category: b.category,
-    coverImage: b.cover_image_url,
-  }));
-
-  // Add static posts that are not in API (fallback)
-  const apiSlugs = new Set(apiBlogs.map((b) => b.slug));
-  const staticDisplayPosts: DisplayPost[] = blogPosts
-    .filter((p) => !apiSlugs.has(p.slug))
-    .map((p) => ({
-      slug: p.slug,
-      title: p.title,
-      excerpt: p.excerpt,
-      date: p.date,
-      category: p.category,
-    }));
-
-  // Merge and sort by date (newest first)
-  const allPosts = [...apiDisplayPosts, ...staticDisplayPosts].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
+  // Sadece admin panelindeki bloglari goster (API) — statik fallback yok
+  const allPosts: DisplayPost[] = apiBlogs
+    .map((b) => ({
+      slug: b.slug,
+      title: b.title,
+      excerpt: b.meta_description || b.title,
+      date: b.published_at || b.created_at || '',
+      category: b.category,
+      coverImage: b.cover_image_url,
+    }))
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   return (
     <div className="flex flex-col gap-6">

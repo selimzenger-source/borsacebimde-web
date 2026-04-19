@@ -3,25 +3,12 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { fetchAllBlogs, fetchBlogBySlug } from '@/lib/blog-data';
 
-// Static klasoru olan 8 eski blog haric, API'den gelen yeni bloglari
-// build aninda statik HTML'e cevir.
-const STATIC_SLUGS = new Set([
-  'halka-arz-nedir',
-  'kap-haberleri-rehberi',
-  'bist-endeks-rehberi',
-  'borsa-yatirim-temel-kavramlar',
-  'spk-nedir-gorevleri',
-  'tavan-taban-stratejileri',
-  'viop-gece-seansi-rehberi',
-  'yapay-zeka-borsa-analizi',
-]);
-
 export async function generateStaticParams() {
   const blogs = await fetchAllBlogs();
   const params = blogs
-    .filter((b) => b.slug && !STATIC_SLUGS.has(b.slug))
+    .filter((b) => !!b.slug)
     .map((b) => ({ slug: b.slug }));
-  // Fallback: API 0 donerse en azindan bir placeholder koy ki build patlamasin
+  // API 0 donerse en azindan bir placeholder koy ki build patlamasin
   if (params.length === 0) {
     return [{ slug: '__placeholder__' }];
   }
