@@ -166,6 +166,17 @@ const features = [
       </svg>
     ),
   },
+  {
+    href: '/kurum-onerileri',
+    title: 'Kurum Önerileri',
+    desc: 'Aracı kurumların hisse hedef fiyat raporları ve yatırım önerilerini takip edin.',
+    color: '#F59E0B',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="w-6 h-6">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+      </svg>
+    ),
+  },
 ];
 
 // ─── Skeleton Components ──────────────────────────────────────────────────────
@@ -213,7 +224,10 @@ export default function HomePage() {
       api.getNewsFeed(7, 50),
       api.getViopTweets(3),
       fetchKurumOnerileri('today', 20),
-    ]).then(([iposRes, statsRes, newsRes, viopRes, kurumRes]) => {
+      fetch('https://sz-bist-finans-api.onrender.com/api/v1/public/blogs', { cache: 'no-store' })
+        .then(r => r.ok ? r.json() : [])
+        .catch(() => []),
+    ]).then(([iposRes, statsRes, newsRes, viopRes, kurumRes, blogsRes]) => {
       if (iposRes.status === 'fulfilled') setIpos(iposRes.value);
       if (statsRes.status === 'fulfilled') setStats(statsRes.value);
 
@@ -241,6 +255,20 @@ export default function HomePage() {
           created_at: k.created_at,
         }));
         allNews = [...allNews, ...kurumAsNews];
+      }
+      // Rehber/blog yazilarini ekle — son guncellemelere de girsin
+      if (blogsRes.status === 'fulfilled' && Array.isArray(blogsRes.value)) {
+        const blogsAsNews: NewsFeedItem[] = blogsRes.value.slice(0, 10).map((b: any) => ({
+          id: (b.id || 0) + 800000,
+          text: `📚 ${b.title}\n${b.meta_description || ''}`,
+          image_url: b.cover_image_url || null,
+          source: '_rehber_',
+          sent_at: b.published_at || b.created_at || null,
+          created_at: b.created_at || null,
+          // Özel alan: tıklanabilir link
+          link_url: `/blog/${b.slug}`,
+        } as any));
+        allNews = [...allNews, ...blogsAsNews];
       }
       // Tarihe göre sırala (en yeni başta)
       allNews.sort((a, b) => {
