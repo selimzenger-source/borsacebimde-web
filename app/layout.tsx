@@ -13,7 +13,7 @@ const inter = Inter({ subsets: ['latin'], display: 'swap' });
 export const metadata: Metadata = {
   metadataBase: new URL('https://borsacebimde.app'),
   title: {
-    default: 'Borsa Cebimde - Halka Arz, KAP Haberleri, AI Analiz ve Borsa Takibi',
+    default: 'Borsa Cebimde — Halka Arz, KAP AI Haber ve BIST Takibi',
     template: '%s | Borsa Cebimde',
   },
   description:
