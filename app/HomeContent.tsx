@@ -260,12 +260,12 @@ export default function HomePage() {
       if (blogsRes.status === 'fulfilled' && Array.isArray(blogsRes.value)) {
         const blogsAsNews: NewsFeedItem[] = blogsRes.value.slice(0, 10).map((b: any) => ({
           id: (b.id || 0) + 800000,
-          text: `📚 ${b.title}\n${b.meta_description || ''}`,
+          // Baslik ve ozet \n\n ile ayir — paragraphs split title+body'e bolsun
+          text: `${b.title}\n\n${b.meta_description || ''}`,
           image_url: b.cover_image_url || null,
           source: '_rehber_',
           sent_at: b.published_at || b.created_at || null,
           created_at: b.created_at || null,
-          // Özel alan: tıklanabilir link
           link_url: `/blog/${b.slug}`,
         } as any));
         allNews = [...allNews, ...blogsAsNews];
@@ -533,11 +533,23 @@ export default function HomePage() {
                 });
               };
 
+              // Rehber/blog yazilari: tiklayinca detay sayfasina git.
+              // Digerleri: tiklayinca icerigi ac/kapat.
+              const linkUrl = (item as any).link_url as string | undefined;
+              const isBlog = item.source === '_rehber_';
+              const handleCardClick = () => {
+                if (isBlog && linkUrl) {
+                  window.location.href = linkUrl;
+                } else {
+                  toggleExpand();
+                }
+              };
+
               items.push(
                 <div
                   key={item.id}
                   className="card overflow-hidden transition-all duration-150 cursor-pointer hover:scale-[1.005]"
-                  onClick={toggleExpand}
+                  onClick={handleCardClick}
                 >
                   {/* SPK Bülten analizinin görseli uygulama içinde zaten gösterilmiyor —
                       web'de de kapalı: yarım/kesik görünüyordu, yerine tam metin gösterilir */}
@@ -597,21 +609,28 @@ export default function HomePage() {
                         {!isExpanded && body.length > 150 && <span style={{ color: 'var(--text-muted)' }}>...</span>}
                       </p>
                     )}
-                    {body && body.length > 80 && (
-                    <div className="flex items-center gap-1 mt-1" style={{ color: '#2979FF', fontSize: 12, fontWeight: 500 }}>
-                      {isExpanded ? 'Küçült' : 'Devamını Oku'}
-                      <svg
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                        className="w-3 h-3 transition-transform"
-                        style={{ transform: isExpanded ? 'rotate(180deg)' : 'none' }}
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 6l4 4 4-4" />
-                      </svg>
-                    </div>
-                    )}
+                    {isBlog ? (
+                      <div className="flex items-center gap-1 mt-1" style={{ color: '#FFC107', fontSize: 12, fontWeight: 500 }}>
+                        Detayı Aç
+                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={2} className="w-3 h-3">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M3 8h10m-4-4 4 4-4 4" />
+                        </svg>
+                      </div>
+                    ) : (body && body.length > 80 && (
+                      <div className="flex items-center gap-1 mt-1" style={{ color: '#2979FF', fontSize: 12, fontWeight: 500 }}>
+                        {isExpanded ? 'Küçült' : 'Devamını Oku'}
+                        <svg
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          className="w-3 h-3 transition-transform"
+                          style={{ transform: isExpanded ? 'rotate(180deg)' : 'none' }}
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M4 6l4 4 4-4" />
+                        </svg>
+                      </div>
+                    ))}
                   </div>
                 </div>
               );
