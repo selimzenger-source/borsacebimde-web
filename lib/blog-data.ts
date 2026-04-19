@@ -89,18 +89,30 @@ export const blogPosts: StaticBlogPost[] = [
 const API_BASE = 'https://sz-bist-finans-api.onrender.com';
 
 export async function fetchAllBlogs(): Promise<ApiBlogPost[]> {
+  // no-store: her build'de API'den fresh cek, cache sorununu onle
   try {
-    const res = await fetch(`${API_BASE}/api/v1/public/blogs`, { cache: 'force-cache' });
-    if (res.ok) return await res.json();
-  } catch {
-    // API unreachable, return empty
+    const res = await fetch(`${API_BASE}/api/v1/public/blogs`, {
+      cache: 'no-store',
+      next: { revalidate: 0 },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      console.log(`[blog-data] fetchAllBlogs: ${Array.isArray(data) ? data.length : 0} blog alindi`);
+      return data;
+    }
+    console.warn(`[blog-data] fetchAllBlogs HTTP ${res.status}`);
+  } catch (e) {
+    console.error('[blog-data] fetchAllBlogs hata:', e);
   }
   return [];
 }
 
 export async function fetchBlogBySlug(slug: string): Promise<ApiBlogPost | null> {
   try {
-    const res = await fetch(`${API_BASE}/api/v1/public/blogs/${slug}`, { cache: 'force-cache' });
+    const res = await fetch(`${API_BASE}/api/v1/public/blogs/${slug}`, {
+      cache: 'no-store',
+      next: { revalidate: 0 },
+    });
     if (res.ok) return await res.json();
   } catch {
     // API unreachable
