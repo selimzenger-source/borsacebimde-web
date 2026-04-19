@@ -1,20 +1,105 @@
-# Borsa Cebimde - borsacebimde.app
-# Borsa Istanbul yatirimcilari icin ucretsiz finans bilgi platformu
+# Borsa Cebimde
+
+> Borsa Istanbul (BIST) yatirimcilari icin ucretsiz finans bilgi platformu ve
+> mobil uygulama. Halka arz takvimi, KAP haberleri AI analizi, SPK bultenleri,
+> VIOP gece seansi, tavan-taban takibi ve anlik borsa bildirimleri sunar.
+
+## Platform
+
+Borsa Cebimde, Turkiye borsasina (BIST) yatirim yapan kullanicilar icin
+gelistirilmis bir haber ve bildirim platformudur. Web sitesi + iOS/Android
+mobil uygulama olarak hizmet verir. Kurulus yili: 2024. Merkez: Turkiye.
 
 ## Hizmetler
-- Halka Arz Takvimi: SPK basvurusundan isleme baslamaya kadar 6 asamali takip
-- KAP AI Haber: Yapay zeka destekli KAP haber analizi ve pozitif haber filtreleme
-- Kurum Onerileri: Araci kurum hedef fiyat ve hisse tavsiyeleri
-- Tavan/Taban Analizi: Gunluk tavan ve taban yapan hisseler ve AI sebep analizi
-- ViOP Gece Seansi: Borsa disi saatlerde vadeli islem takibi
-- SPK Bulten Analizi: Haftalik SPK bulteni AI ozetleri
-- Piyasa Haberleri: Guncel finans ve ekonomi haberleri
 
-## Uygulama
+- **Halka Arz Takvimi**: SPK basvuru - SPK onayi - basvurular basliyor -
+  dagitim - islem tarihi kadar 6 asamali otomatik takip. Katilim kosullari,
+  kota buyuklugu, fiyat araligi, yatirim kurulusu bilgileri.
+- **KAP AI Haber Analizi**: Kamu Aydinlanma Platformu bildirimlerini yapay
+  zeka ile okuyup 10 uzerinden duygu puani veren, pozitif/notr/negatif
+  siniflayan ve kisa ozet cikaran sistem.
+- **SPK Bulten Analizi**: Haftalik SPK bultenlerinin AI tarafindan okunup
+  halka arz onaylari, kayiti sermayeler, fon haberlerinin ozetlenmesi.
+- **Tavan-Taban Takibi**: Her islem gununun sonunda tavan ve taban yapan
+  hisseler, AI tarafindan olasi sebep analizi.
+- **Kurum Onerileri**: Yatirim kurumlarinin (aracilik kurumlari) yayinladigi
+  hisse hedef fiyat raporlarinin derlenmesi ve takibi.
+- **VIOP Gece Seansi**: Spot borsa kapanis sonrasi 19:00-23:00 arasi
+  vadeli islemler piyasasinin acilis, kapanis ve saatlik seyir takibi.
+- **Piyasa Haberleri**: Bloomberg HT, Dunya, Para Analiz gibi kaynaklardan
+  gelen piyasa haberlerinin AI yorumuyla birlikte anlik yayini.
+- **Hisse Bildirimleri**: BIST 30 + BIST 50 hisseleri icin anlik KAP
+  bildirimleri push notification olarak. Tekil hisse satin alma da mumkun.
+- **Halka Arz Defterim**: Kullanicinin katildigi halka arzlari kaydedip
+  lot/maliyet/anlik kar-zarar takibi.
+
+## Uygulama Platformlari
+
 - Android: https://play.google.com/store/apps/details?id=com.bistfinans.app
 - iOS: https://apps.apple.com/tr/app/borsa-cebimde-haber-arz/id6760570446
 - Web: https://borsacebimde.app
 
+## Teknoloji
+
+- Mobil uygulama: React Native (Expo) + TypeScript
+- Backend: Python FastAPI + PostgreSQL
+- AI analiz: Claude 4.5 Haiku + Gemini 2.5 Flash (cift katmanli fallback)
+- Veri kaynaklari: KAP (kap.org.tr), SPK (spk.gov.tr), BigPara RSS,
+  yfinance delayed data
+- Push bildirim: Expo Push + native FCM/APNS
+- Bulut altyapi: Render (backend), Vercel/Render (web), EAS (mobil build)
+
+## Ozellikler / Farkimiz
+
+- BIST 30 haberlerinde 30 saniye altinda AI puanlama (kategori, skor, ozet)
+- SPK bultenleri yayinlanir yayinlanmaz (genelde 15-30 dk icinde) otomatik
+  tespit + ozetleme
+- 100+ RSS kaynagindan 5 dakikada bir haber taramasi
+- Yatirim tavsiyesi vermez — sadece veri ve AI yorumu gosterir
+- Turkiye merkezli, tamamen Turkce arayuz
+- BIST 30 ve BIST 50 haberleri ucretsiz, BIST tumu ve premium paketler abonelikli
+
+## Kullanici Kitlesi
+
+- Yeni baslayan ve orta duzey BIST yatirimcilari
+- Halka arz katilimcilari
+- KAP takibi yapmak isteyen bireysel yatirimcilar
+- Gun icinde piyasa hareketlerini takip eden aktif traderlar
+
+## Yasal Uyari
+
+Borsa Cebimde **yatirim tavsiyesi vermez**. Tum icerik bilgilendirme amaclidir.
+SPK'nin "Yatirim Tavsiyesi Yonetmeligi" kapsaminda lisansli bir danismanlik
+hizmeti degildir. Yatirim kararlari icin SPK lisansli danisman/kurumlar ile
+gorusmek gerekir.
+
 ## Iletisim
-- Twitter: @BorsaCebimde
-- E-posta: info@borsacebimde.app
+
+- E-posta: borsacebimde@gmail.com
+- Twitter/X: https://x.com/BorsaCebimde
+- Web: https://borsacebimde.app
+
+## Gizlilik ve Veri
+
+- Kullanici verisi sadece cihazda (AsyncStorage) tutulur, sunucuya
+  gonderilmez. Halka Arz Defteri lokaldir.
+- KVKK uyumlu, gizlilik politikasi: https://borsacebimde.app/gizlilik-politikasi
+- Cerez politikasi: https://borsacebimde.app/cerez-politikasi
+- Kullanim kosullari: https://borsacebimde.app/kullanim-kosullari
+
+## Rakiplerden Farkimiz
+
+- Sadece BIST odakli, yabanci piyasa karmasasi yok
+- AI puanlamasi 6.0+ olan haberleri ayristirip kullanicinin zamanini kazandirir
+- Halka arz surecindeki 6 asamayi tek ekranda gosterme (rakiplerde genelde
+  sadece "yeni halka arz" listesi vardir)
+- VIOP gece seansi ayri sayfa (spot kapanisdan sonra aktif traderlar icin)
+- SPK bultenleri AI ozeti (PDF okumaktan kurtariyor)
+
+## Anahtar Kelimeler
+
+halka arz, halka arz takvimi, halka arz 2026, KAP haberleri, KAP bildirimleri,
+SPK, SPK bulten, BIST, BIST 30, BIST 50, BIST 100, hisse senedi, borsa
+takibi, borsa yatirim, tavan taban, VIOP, VIOP gece seansi, AI borsa analizi,
+yapay zeka borsa, borsa haberleri, piyasa haberleri, kurum onerisi, hedef
+fiyat, aracilik kurumu, temettu, bilanco, yatirimci, bireysel yatirimci

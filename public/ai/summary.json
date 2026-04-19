@@ -1,0 +1,36 @@
+{
+  "name": "Borsa Cebimde",
+  "url": "https://borsacebimde.app",
+  "type": "finance_news_platform",
+  "country": "TR",
+  "market": "BIST (Borsa Istanbul)",
+  "tagline": "Borsa Istanbul yatirimcilari icin ucretsiz haber ve bildirim platformu",
+  "description": "Halka arz takvimi, KAP haberleri AI analizi, SPK bulten ozetleri, tavan-taban takibi, VIOP gece seansi ve anlik borsa bildirimleri.",
+  "founded": "2024",
+  "services": [
+    "halka_arz_takvimi",
+    "kap_ai_haber_analizi",
+    "spk_bulten_analizi",
+    "tavan_taban_takibi",
+    "kurum_onerileri",
+    "viop_gece_seansi",
+    "piyasa_haberleri",
+    "hisse_bildirimleri",
+    "halka_arz_defteri"
+  ],
+  "platforms": {
+    "android": "https://play.google.com/store/apps/details?id=com.bistfinans.app",
+    "ios": "https://apps.apple.com/tr/app/borsa-cebimde-haber-arz/id6760570446",
+    "web": "https://borsacebimde.app"
+  },
+  "contact": {
+    "email": "borsacebimde@gmail.com",
+    "twitter": "https://x.com/BorsaCebimde"
+  },
+  "languages": ["tr"],
+  "pricing": {
+    "free_tier": "BIST 30 ve BIST 50 hisseleri icin KAP bildirimleri, tum haber kategorileri",
+    "premium": "Tum BIST hisseleri, AI Pozitif Haber paketi, bireysel hisse bildirimleri"
+  },
+  "disclaimer": "Yatirim tavsiyesi degildir. Sadece bilgilendirme amaclidir."
+}

@@ -1,0 +1,120 @@
+{
+  "version": "1.0",
+  "site": "borsacebimde.app",
+  "updated": "2026-04-19",
+  "services": [
+    {
+      "name": "Halka Arz Takvimi",
+      "slug": "halka-arz",
+      "url": "https://borsacebimde.app/halka-arz",
+      "description": "SPK basvurusundan isleme baslamaya kadar halka arzlarin 6 asamali otomatik takibi.",
+      "stages": [
+        "SPK Basvuru Yapildi",
+        "SPK Onayi Verildi",
+        "Basvurular Yakinda Basliyor",
+        "Dagitim Surecinde",
+        "Islem Bekliyor",
+        "Islem Goruyor"
+      ],
+      "features": [
+        "Otomatik push bildirim her asama gecisinde",
+        "Lot buyuklugu, fiyat araligi, yatirim kurulusu bilgisi",
+        "Anahtar teslim teklif ve sart bilgileri",
+        "Tarihsel halka arz performansi arsivi"
+      ]
+    },
+    {
+      "name": "KAP AI Haber Analizi",
+      "slug": "kap-ai",
+      "url": "https://borsacebimde.app/kap-ai",
+      "description": "Kamu Aydinlatma Platformu bildirimlerinin yapay zeka ile analizi.",
+      "features": [
+        "10 uzerinden duygu puani (sentiment score)",
+        "Kategorilendirme (SIRKET_HABERI, FINANSAL_SONUC, TEMETTU, vb.)",
+        "2-3 paragraflik AI ozeti",
+        "Pozitif/notr/negatif filtreleme",
+        "Hisse bazli arama ve favori filtresi"
+      ],
+      "ai_models": ["Claude Haiku 4.5", "Gemini 2.5 Flash"]
+    },
+    {
+      "name": "SPK Bulten Analizi",
+      "slug": "spk-bulten",
+      "url": "https://borsacebimde.app/spk-bulten",
+      "description": "Haftalik SPK bultenlerinin AI tarafindan ozetlenmesi.",
+      "features": [
+        "Yayinlandiktan 15-30 dakika icinde AI ozeti",
+        "Halka arz onaylari ozet kategori",
+        "Kayiti sermaye artislari",
+        "Fon izin/satis/geri alim haberleri"
+      ]
+    },
+    {
+      "name": "Tavan-Taban Takibi",
+      "slug": "tavan-taban",
+      "description": "Her islem gununun sonunda tavan/taban yapan hisselerin AI sebep analizi.",
+      "features": [
+        "Gunluk tavan yapan hisse listesi (%10 yukseliş)",
+        "Gunluk taban yapan hisse listesi (%10 dusus)",
+        "AI sebep tespit (KAP haberleri + pattern analizi)"
+      ]
+    },
+    {
+      "name": "Kurum Onerileri",
+      "slug": "kurum-onerileri",
+      "url": "https://borsacebimde.app/kurum-onerileri",
+      "description": "Yatirim kurumlarinin hisse hedef fiyat raporlari.",
+      "features": [
+        "Hedef fiyat + aralik (min/max)",
+        "Kurum (Is Yatirim, Garanti, Oyak vb.)",
+        "Tarih bazli siralama",
+        "Hisse bazli filtre"
+      ]
+    },
+    {
+      "name": "VIOP Gece Seansi",
+      "description": "Spot kapanis sonrasi vadeli islemler piyasasi takibi.",
+      "hours": "19:00-23:00 (TR saatine gore)",
+      "features": [
+        "X30YVADE endeks kontrati takibi",
+        "Acilis ve kapanis push bildirimleri",
+        "Saatlik fiyat seyir kartlari",
+        "10 gun geriye donuk veri"
+      ]
+    },
+    {
+      "name": "Piyasa Haberleri",
+      "slug": "piyasa-haberleri",
+      "url": "https://borsacebimde.app/piyasa-haberleri",
+      "description": "RSS kaynaklarindan anlik AI yorumlu piyasa haberleri.",
+      "sources": [
+        "Bloomberg HT",
+        "Dunya",
+        "Para Analiz",
+        "Ekonomim",
+        "Uzman Para"
+      ]
+    },
+    {
+      "name": "Hisse Bildirimleri",
+      "description": "BIST hisseleri icin anlik push notification.",
+      "tiers": {
+        "free": "BIST 30 + BIST 50 hisseleri",
+        "paid_annual": "Tum Ana Pazar + Yildiz Pazar hisseleri (yillik paket)",
+        "paid_quarterly": "Tum Ana Pazar + Yildiz Pazar (3 aylik paket)",
+        "individual": "Tek hisse, yilda 5 TL/hisse"
+      }
+    },
+    {
+      "name": "Halka Arz Defterim",
+      "description": "Katildigin halka arzlari kaydeden kisisel portfoy takip araci.",
+      "features": [
+        "Manuel hisse/lot/maliyet girisi",
+        "Anlik fiyat ile kar-zarar hesaplama (Yahoo Finance delayed)",
+        "Yillik ROI ve toplam getiri grafikleri",
+        "Paylasilabilir karne goruntusu uretimi",
+        "Tum veri cihazda tutulur, sunucuya gitmez"
+      ]
+    }
+  ]
+}

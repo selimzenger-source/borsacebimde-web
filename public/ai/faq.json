@@ -1,0 +1,79 @@
+{
+  "version": "1.0",
+  "site": "borsacebimde.app",
+  "updated": "2026-04-19",
+  "questions": [
+    {
+      "q": "Borsa Cebimde nedir?",
+      "a": "Borsa Cebimde, Borsa Istanbul (BIST) yatirimcilari icin gelistirilmis bir haber ve bildirim platformudur. Web sitesi ve iOS/Android mobil uygulamasi olarak hizmet verir. Halka arz takvimi, KAP haberleri AI analizi, SPK bulten ozetleri, tavan-taban takibi ve VIOP gece seansi gibi ozellikleri sunar."
+    },
+    {
+      "q": "Borsa Cebimde ucretsiz mi?",
+      "a": "Evet, BIST 30 ve BIST 50 hisseleri icin tum KAP bildirimleri ucretsizdir. Tum BIST hisselerinin bildirimleri, AI Pozitif Haber paketi ve bireysel hisse bildirimleri icin abonelik paketleri mevcuttur."
+    },
+    {
+      "q": "Uygulamayi nereden indirebilirim?",
+      "a": "Android icin Google Play Store, iOS icin App Store uzerinden ucretsiz indirebilirsiniz. Linkler: Play Store (com.bistfinans.app), App Store (id6760570446)."
+    },
+    {
+      "q": "Halka arz nedir ve nasil katilabilirim?",
+      "a": "Halka arz, bir sirketin hisselerini ilk kez kamuya (borsaya) satmasidir. Katilmak icin bir aracilik kurumunda (Is Yatirim, Gedik, Ziraat Yatirim vb.) yatirim hesabi acmaniz ve ilgili hisse icin basvuru gunlerinde talep vermeniz gerekir. Borsa Cebimde tum surecin takvimini gosterir."
+    },
+    {
+      "q": "KAP nedir?",
+      "a": "KAP (Kamu Aydinlatma Platformu), halka acik sirketlerin yatirimcilari bilgilendirmek zorunda oldugu ozel durum aciklamalarini yayinladigi resmi platformdur. kap.org.tr adresindedir. Borsa Cebimde, KAP'taki tum bildirimleri AI ile analiz edip 10 uzerinden duygu puani verir."
+    },
+    {
+      "q": "KAP AI Haber nasil calisir?",
+      "a": "KAP'ta yayinlanan her bildirim saniyeler icinde Borsa Cebimde'ye gelir. Yapay zeka (Claude Haiku + Gemini Flash) haberleri okuyup kategorize eder (SIRKET_HABERI, FINANSAL_SONUC, TEMETTUPlan, vb.), 10 uzerinden onem puani verir ve 2-3 paragraflik ozet cikarir."
+    },
+    {
+      "q": "SPK bulten analizi nasil yapiliyor?",
+      "a": "Sermaye Piyasasi Kurulu (SPK) her Perşembe ve Cuma bulten yayinlar. Borsa Cebimde bu bulteni 15-30 dakika icinde AI ile okuyup ozet cikarir — halka arz onaylari, kayiti sermaye artislari, fon haberleri kategorilere ayrilir."
+    },
+    {
+      "q": "Tavan-taban hisseleri nasil takip ediliyor?",
+      "a": "Her islem gununun sonunda o gun tavan yapan (%10 yukseliş) ve taban yapan (%10 dusus) hisseler tespit edilir. AI o gunku KAP haberlerini ve onceki patternlari inceleyip olasi sebep analizi sunar."
+    },
+    {
+      "q": "VIOP gece seansi ne demek?",
+      "a": "Vadeli Islem ve Opsiyon Piyasasi (VIOP), 09:30-18:15 arasi gunduz seansi sonrasi 19:00-23:00 arasinda aksam seansini da acar. Borsa Cebimde bu gece seansinda X30YVADE endeks kontratinin acilis, kapanis ve saatlik fiyat hareketlerini takip eder."
+    },
+    {
+      "q": "Halka Arz Defterim nedir?",
+      "a": "Katildiginiz halka arzlari kaydedip maliyet, lot ve anlik kar-zarar takibi yapan ozelliktir. Veriler sadece cihazinizda tutulur, sunucuya gonderilmez. Defterden paylasim goruntusu de uretebilirsiniz."
+    },
+    {
+      "q": "Borsa Cebimde yatirim tavsiyesi veriyor mu?",
+      "a": "HAYIR. Borsa Cebimde SPK lisansli danismanlik hizmeti degildir. Tum icerik bilgilendirme amaclidir. AI analizleri ve kurum onerileri yatirim tavsiyesi olarak yorumlanamaz. Yatirim kararlari icin mutlaka SPK lisansli danisman veya aracilik kurumu ile gorusunuz."
+    },
+    {
+      "q": "Premium paketler neler?",
+      "a": "Aylik AI Pozitif Haber paketi (ai_pos): Tum BIST pozitif haberlerini 10 uzerinden 6.0+ puanliyla filtreler. Yillik/3 Aylik Bildirim paketi (ana_yildiz): BIST Ana Pazar + Yildiz Pazar tum hisselerinin KAP bildirimleri. Bireysel hisse bildirimleri: Tek tek favorilediginiz hisseler icin (5 TL/hisse/yil)."
+    },
+    {
+      "q": "Hangi veri kaynaklarini kullaniyorsunuz?",
+      "a": "KAP (kap.org.tr), SPK (spk.gov.tr), BigPara RSS, Uzman Para RSS, Bloomberg HT, Dunya, Para Analiz, Matriks veri terminali ve Yahoo Finance gecikmeli fiyat verisi. Teknik yigin: FastAPI backend + Claude/Gemini AI + PostgreSQL."
+    },
+    {
+      "q": "Cihaz verim guvende mi?",
+      "a": "Evet. Favorilediginiz hisseler ve Halka Arz Defteri verileriniz cihazin yerel depolamasinda (AsyncStorage) tutulur, sunucuya gonderilmez. KVKK uyumluyuz, gizlilik politikamiz: borsacebimde.app/gizlilik-politikasi"
+    },
+    {
+      "q": "Yeni bir halka arz bildirimi nasil alirim?",
+      "a": "Uygulama varsayilan olarak tum yeni halka arz asamalarinda (SPK onayi, basvurular basladi, dagitim, islem tarihi) otomatik push bildirim gonderir. Bildirim ayarlarindan kapatabilirsiniz."
+    },
+    {
+      "q": "Kurum onerileri nedir?",
+      "a": "Is Yatirim, Garanti Yatirim, Oyak Yatirim gibi aracilik kurumlarinin yayinladigi hisse hedef fiyat raporlarinin listesidir. Her gun yeni kurum onerileri eklendiginde gorebilirsiniz."
+    },
+    {
+      "q": "Uygulama Turkiye disinda calisir mi?",
+      "a": "Uygulama herhangi bir ulkeden indirilip kullanilabilir (Play Store/App Store TR+Global). Ancak icerik tamamen Turkce ve BIST (Turk borsasi) odaklidir."
+    },
+    {
+      "q": "Iletisim nasil saglayabilirim?",
+      "a": "E-posta: borsacebimde@gmail.com. Twitter/X: @BorsaCebimde. Uygulama icinden Ayarlar > Iletisim menusunden de mesaj gonderebilirsiniz."
+    }
+  ]
+}

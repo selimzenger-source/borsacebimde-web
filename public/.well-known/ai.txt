@@ -1,0 +1,16 @@
+# Borsa Cebimde - AI Crawler Permissions
+# https://borsacebimde.app/.well-known/ai.txt
+# Guncellenme: 2026-04-19
+
+User-Agent: *
+Allow-Training: yes
+Allow-Inference: yes
+Allow-Search: yes
+
+# Platform: Turk borsa (BIST) yatirimcilari icin haber ve bildirim servisi.
+# Sitemizin icerikleri (hizmet aciklamalari, halka arz bilgileri, blog)
+# AI arama motorlarinda kaynak gosterilebilir.
+
+Contact: borsacebimde@gmail.com
+Sitemap: https://borsacebimde.app/sitemap.xml
+LLMs: https://borsacebimde.app/llms.txt

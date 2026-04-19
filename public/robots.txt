@@ -1,10 +1,107 @@
+# Borsa Cebimde - borsacebimde.app
+# https://borsacebimde.app
+
 User-agent: *
 Allow: /
 
-# AI icerik kullanim tercihleri (Cloudflare Content Signals / IETF AI Pref)
-# ai-train=no  -> Yapay zeka model egitimi icin kullanilmasin
-# search=yes   -> Arama motorlarinda indekslenebilir
-# ai-input=no  -> AI cevap uretirken kaynak olarak kullanilmasin
-Content-Signal: ai-train=no, search=yes, ai-input=no
+# ─── AI / LLM Crawlerlari ─────────────────────────────
+# Sitemizi tanitici icerikler icin (hizmet aciklamalari, halka arz,
+# KAP haberleri ozetleri) AI arama motorlarina acik.
+
+# OpenAI
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+# Anthropic
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# Google AI
+User-agent: Google-Extended
+Allow: /
+
+# Apple
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Meta
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: Meta-ExternalFetcher
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+# DuckDuckGo AI
+User-agent: DuckAssistBot
+Allow: /
+
+# Diger arama & AI
+User-agent: YouBot
+Allow: /
+
+User-agent: Diffbot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: cohere-training-data-crawler
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: PanguBot
+Allow: /
+
+User-agent: Timpibot
+Allow: /
+
+User-agent: Kagibot
+Allow: /
+
+# ByteDance / TikTok — sadece arama, egitim yok
+User-agent: Bytespider
+Disallow: /
+
+# Admin / private yollar
+User-agent: *
+Disallow: /admin/
+Disallow: /api/private/
+
+# ─── AI Icerik Kullanim Tercihleri ─────────────────────
+# Cloudflare Content Signals / IETF AI Preferences
+# ai-train=yes  -> AI modellerini eğitmek için kullanilabilir (tanitim amaçlı)
+# search=yes    -> Arama motorlarinda indekslenebilir
+# ai-input=yes  -> AI cevap uretirken kaynak olarak gösterilebilir
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 Sitemap: https://borsacebimde.app/sitemap.xml
