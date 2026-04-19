@@ -89,21 +89,38 @@ export const blogPosts: StaticBlogPost[] = [
 const API_BASE = 'https://sz-bist-finans-api.onrender.com';
 
 export async function fetchAllBlogs(): Promise<ApiBlogPost[]> {
-  // output: 'export' ile uyumlu — force-cache zorunlu (no-store Next.js
-  // static export'ta "Dynamic server usage" hatasi veriyor).
-  // Her Render build fresh container, zaten cache bos baslar.
-  try {
-    const res = await fetch(`${API_BASE}/api/v1/public/blogs`, {
-      cache: 'force-cache',
-    });
-    if (res.ok) {
-      const data = await res.json();
-      console.log(`[blog-data] fetchAllBlogs: ${Array.isArray(data) ? data.length : 0} blog alindi`);
-      return data;
+  // Render build container'da API cold start olabilir — retry + uzun timeout.
+  const MAX_ATTEMPTS = 3;
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 45000); // 45s timeout
+      const res = await fetch(`${API_BASE}/api/v1/public/blogs`, {
+        cache: 'force-cache',
+        signal: controller.signal,
+        headers: {
+          'User-Agent': 'borsacebimde-web-build/1.0',
+          'Accept': 'application/json',
+        },
+      });
+      clearTimeout(timer);
+      if (res.ok) {
+        const data = await res.json();
+        const count = Array.isArray(data) ? data.length : 0;
+        console.log(`[blog-data] fetchAllBlogs (attempt ${attempt}): ${count} blog`);
+        if (count > 0) return data;
+        // 0 bloglu cevap — retry
+        console.warn(`[blog-data] Bos response, retry ${attempt}/${MAX_ATTEMPTS}`);
+      } else {
+        console.warn(`[blog-data] fetchAllBlogs HTTP ${res.status} (attempt ${attempt})`);
+      }
+    } catch (e: any) {
+      console.error(`[blog-data] fetchAllBlogs hata (attempt ${attempt}):`, e?.message || e);
     }
-    console.warn(`[blog-data] fetchAllBlogs HTTP ${res.status}`);
-  } catch (e) {
-    console.error('[blog-data] fetchAllBlogs hata:', e);
+    // Retry'dan once bekle (cold start icin)
+    if (attempt < MAX_ATTEMPTS) {
+      await new Promise((r) => setTimeout(r, 5000));
+    }
   }
   return [];
 }
