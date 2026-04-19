@@ -1,0 +1,41 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://borsacebimde.app/",
+      "service-desc": [
+        {
+          "href": "https://borsacebimde.app/ai/summary.json",
+          "type": "application/json",
+          "title": "Platform summary (Borsa Cebimde)"
+        },
+        {
+          "href": "https://borsacebimde.app/ai/service.json",
+          "type": "application/json",
+          "title": "Service catalog — 9 services"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://borsacebimde.app/llms.txt",
+          "type": "text/plain",
+          "title": "LLM-friendly site documentation"
+        },
+        {
+          "href": "https://borsacebimde.app/ai/faq.json",
+          "type": "application/json",
+          "title": "Frequently asked questions (18)"
+        },
+        {
+          "href": "https://borsacebimde.app/hakkimizda",
+          "type": "text/html",
+          "title": "About Borsa Cebimde"
+        }
+      ],
+      "author": [
+        {
+          "href": "https://x.com/BorsaCebimde"
+        }
+      ]
+    }
+  ]
+}

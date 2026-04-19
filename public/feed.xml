@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Borsa Cebimde Blog</title>
+    <link>https://borsacebimde.app/blog</link>
+    <description>Borsa Istanbul (BIST) yatirimcilari icin halka arz, KAP haberleri, SPK bulten, tavan-taban ve VIOP rehberleri.</description>
+    <language>tr-TR</language>
+    <atom:link href="https://borsacebimde.app/feed.xml" rel="self" type="application/rss+xml" />
+
+    <item>
+      <title>Halka Arz Nedir?</title>
+      <link>https://borsacebimde.app/blog/halka-arz-nedir</link>
+      <guid>https://borsacebimde.app/blog/halka-arz-nedir</guid>
+      <description>Halka arz nedir, nasil isler, yatirimci olarak nasil katilabilirsiniz? Temel kavramlar ve adimlar.</description>
+      <category>Halka Arz</category>
+    </item>
+
+    <item>
+      <title>KAP Haberleri Rehberi</title>
+      <link>https://borsacebimde.app/blog/kap-haberleri-rehberi</link>
+      <guid>https://borsacebimde.app/blog/kap-haberleri-rehberi</guid>
+      <description>KAP (Kamu Aydinlatma Platformu) nedir, hangi bildirimler onemlidir ve yatirimci olarak nasil takip etmelisiniz?</description>
+      <category>KAP</category>
+    </item>
+
+    <item>
+      <title>BIST Endeks Rehberi</title>
+      <link>https://borsacebimde.app/blog/bist-endeks-rehberi</link>
+      <guid>https://borsacebimde.app/blog/bist-endeks-rehberi</guid>
+      <description>BIST 30, BIST 50, BIST 100 endekslerinin anlami, farklari ve yatirim stratejilerinde kullanimi.</description>
+      <category>Borsa Egitim</category>
+    </item>
+
+    <item>
+      <title>Borsa Yatirim Temel Kavramlar</title>
+      <link>https://borsacebimde.app/blog/borsa-yatirim-temel-kavramlar</link>
+      <guid>https://borsacebimde.app/blog/borsa-yatirim-temel-kavramlar</guid>
+      <description>Yeni yatirimcilar icin borsa temel terimleri: lot, emir, bekleyen emir, tavan, taban, spread ve daha fazlasi.</description>
+      <category>Borsa Egitim</category>
+    </item>
+
+    <item>
+      <title>SPK Nedir, Gorevleri Neler?</title>
+      <link>https://borsacebimde.app/blog/spk-nedir-gorevleri</link>
+      <guid>https://borsacebimde.app/blog/spk-nedir-gorevleri</guid>
+      <description>Sermaye Piyasasi Kurulu (SPK) nedir, yatirimci guvenligi icin ne yapar, haftalik bultenleri neden onemli?</description>
+      <category>SPK</category>
+    </item>
+
+    <item>
+      <title>Tavan-Taban Stratejileri</title>
+      <link>https://borsacebimde.app/blog/tavan-taban-stratejileri</link>
+      <guid>https://borsacebimde.app/blog/tavan-taban-stratejileri</guid>
+      <description>Gun icinde tavan veya taban yapan hisselere yaklasim stratejileri, riskler ve trend yorumlari.</description>
+      <category>Strateji</category>
+    </item>
+
+    <item>
+      <title>VIOP Gece Seansi Rehberi</title>
+      <link>https://borsacebimde.app/blog/viop-gece-seansi-rehberi</link>
+      <guid>https://borsacebimde.app/blog/viop-gece-seansi-rehberi</guid>
+      <description>Vadeli Islem Opsiyon Piyasasi (VIOP) gece seansi 19:00-23:00 arasi nasil calisir, neler islem gorur?</description>
+      <category>VIOP</category>
+    </item>
+
+    <item>
+      <title>Yapay Zeka ile Borsa Analizi</title>
+      <link>https://borsacebimde.app/blog/yapay-zeka-borsa-analizi</link>
+      <guid>https://borsacebimde.app/blog/yapay-zeka-borsa-analizi</guid>
+      <description>Yapay zekanin KAP haber analizi, duygu puanlama ve halka arz takibinde yatirimcilara saglayabilecegi avantajlar.</description>
+      <category>AI</category>
+    </item>
+  </channel>
+</rss>

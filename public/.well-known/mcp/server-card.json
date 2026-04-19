@@ -1,0 +1,41 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/server-card-v1",
+  "serverInfo": {
+    "name": "borsa-cebimde-discovery",
+    "version": "1.0.0",
+    "description": "Borsa Cebimde site icerigini keşfetmek icin statik kaynak kartlari (haber, halka arz, SSS)."
+  },
+  "publisher": {
+    "name": "Borsa Cebimde",
+    "url": "https://borsacebimde.app",
+    "contact": "borsacebimde@gmail.com"
+  },
+  "transport": {
+    "type": "none",
+    "notes": "Bu site canli MCP transport sunmaz. Statik kaynaklar icin api-catalog'u kullanin."
+  },
+  "capabilities": {
+    "resources": [
+      {
+        "uri": "https://borsacebimde.app/llms.txt",
+        "name": "Site documentation (LLM-friendly)",
+        "mimeType": "text/plain"
+      },
+      {
+        "uri": "https://borsacebimde.app/ai/summary.json",
+        "name": "Platform summary",
+        "mimeType": "application/json"
+      },
+      {
+        "uri": "https://borsacebimde.app/ai/faq.json",
+        "name": "Frequently asked questions (18 items)",
+        "mimeType": "application/json"
+      },
+      {
+        "uri": "https://borsacebimde.app/ai/service.json",
+        "name": "Service catalog (9 services)",
+        "mimeType": "application/json"
+      }
+    ]
+  }
+}
