@@ -89,11 +89,12 @@ export const blogPosts: StaticBlogPost[] = [
 const API_BASE = 'https://sz-bist-finans-api.onrender.com';
 
 export async function fetchAllBlogs(): Promise<ApiBlogPost[]> {
-  // no-store: her build'de API'den fresh cek, cache sorununu onle
+  // output: 'export' ile uyumlu — force-cache zorunlu (no-store Next.js
+  // static export'ta "Dynamic server usage" hatasi veriyor).
+  // Her Render build fresh container, zaten cache bos baslar.
   try {
     const res = await fetch(`${API_BASE}/api/v1/public/blogs`, {
-      cache: 'no-store',
-      next: { revalidate: 0 },
+      cache: 'force-cache',
     });
     if (res.ok) {
       const data = await res.json();
@@ -110,8 +111,7 @@ export async function fetchAllBlogs(): Promise<ApiBlogPost[]> {
 export async function fetchBlogBySlug(slug: string): Promise<ApiBlogPost | null> {
   try {
     const res = await fetch(`${API_BASE}/api/v1/public/blogs/${slug}`, {
-      cache: 'no-store',
-      next: { revalidate: 0 },
+      cache: 'force-cache',
     });
     if (res.ok) return await res.json();
   } catch {
