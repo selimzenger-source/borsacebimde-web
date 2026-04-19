@@ -17,14 +17,32 @@ function formatDisplayDate(dateStr: string) {
   });
 }
 
+// API'den gelen raw category'i ("borsa_rehberi") guzel formata cevir
+function formatCategory(raw: string): string {
+  const labels: Record<string, string> = {
+    halka_arz: 'Halka Arz',
+    kap: 'KAP',
+    borsa_rehberi: 'Borsa Rehberi',
+    teknoloji: 'Teknoloji',
+    spk: 'SPK',
+    viop: 'VİOP',
+    tavan_taban: 'Tavan Taban',
+    temel_analiz: 'Temel Analiz',
+  };
+  return labels[raw] || raw;
+}
+
 function getCategoryColor(category: string): { bg: string; text: string } {
+  // Once pretty name kontrol et, yoksa raw slug dene
   const map: Record<string, { bg: string; text: string }> = {
     'Halka Arz': { bg: 'rgba(76,175,80,0.12)', text: '#4CAF50' },
     KAP: { bg: 'rgba(41,121,255,0.12)', text: '#2979FF' },
     'Borsa Rehberi': { bg: 'rgba(38,198,218,0.12)', text: '#26C6DA' },
     Teknoloji: { bg: 'rgba(156,39,176,0.12)', text: '#AB47BC' },
-    'Düzenleyici': { bg: 'rgba(255,152,0,0.12)', text: '#FF9800' },
-    'VİOP': { bg: 'rgba(179,136,255,0.12)', text: '#B388FF' },
+    SPK: { bg: 'rgba(255,152,0,0.12)', text: '#FF9800' },
+    VİOP: { bg: 'rgba(179,136,255,0.12)', text: '#B388FF' },
+    'Tavan Taban': { bg: 'rgba(255,82,82,0.12)', text: '#FF5252' },
+    'Temel Analiz': { bg: 'rgba(255,193,7,0.12)', text: '#FFC107' },
   };
   return map[category] ?? { bg: 'rgba(41,121,255,0.1)', text: '#2979FF' };
 }
@@ -76,7 +94,8 @@ export default async function BlogPage() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         {allPosts.map((post) => {
-          const catColor = getCategoryColor(post.category);
+          const catLabel = formatCategory(post.category);
+          const catColor = getCategoryColor(catLabel);
           return (
             <Link key={post.slug} href={`/blog/${post.slug}`} className="block group">
               <article className="card h-full flex flex-col transition-all duration-200 group-hover:shadow-lg overflow-hidden">
@@ -95,7 +114,7 @@ export default async function BlogPage() {
                       className="text-[11px] font-semibold px-2 py-0.5 rounded-full"
                       style={{ backgroundColor: catColor.bg, color: catColor.text }}
                     >
-                      {post.category}
+                      {catLabel}
                     </span>
                     {post.date && (
                       <span className="text-[11px]" style={{ color: 'var(--text-muted)' }}>
