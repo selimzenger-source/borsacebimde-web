@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
 
+# AI icerik kullanim tercihleri (Cloudflare Content Signals / IETF AI Pref)
+# ai-train=no  -> Yapay zeka model egitimi icin kullanilmasin
+# search=yes   -> Arama motorlarinda indekslenebilir
+# ai-input=no  -> AI cevap uretirken kaynak olarak kullanilmasin
+Content-Signal: ai-train=no, search=yes, ai-input=no
+
 Sitemap: https://borsacebimde.app/sitemap.xml
