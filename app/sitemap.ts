@@ -1,14 +1,14 @@
 import type { MetadataRoute } from 'next';
+import { fetchAllBlogs } from '@/lib/blog-data';
 
 // Build aninda uretilir — her deploy'da lastmod guncellenir.
-// Onceki statik sitemap.xml'deki 27 URL'i dinamik halde.
+// Statik sayfalar + backend'den gelen dinamik blog yazilari (AI
+// tarafindan uretilenler dahil).
 
 const BASE = 'https://borsacebimde.app';
-
-// Build anindaki tarih. Her deploy'da yenilenir.
 const NOW = new Date();
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const pages: Array<{
     path: string;
     changefreq: MetadataRoute.Sitemap[number]['changeFrequency'];
@@ -54,10 +54,32 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/blog/yapay-zeka-borsa-analizi', changefreq: 'monthly', priority: 0.7 },
   ];
 
-  return pages.map((p) => ({
+  const staticEntries: MetadataRoute.Sitemap = pages.map((p) => ({
     url: `${BASE}${p.path}`,
     lastModified: NOW,
     changeFrequency: p.changefreq,
     priority: p.priority,
   }));
+
+  // Backend'den dinamik blog yazilarini cek (AI uretimleri dahil).
+  // Build aninda calisir, fetch hata verirse statik liste gider.
+  const staticBlogSlugs = new Set(
+    pages.filter((p) => p.path.startsWith('/blog/')).map((p) => p.path.replace('/blog/', '')),
+  );
+  let apiEntries: MetadataRoute.Sitemap = [];
+  try {
+    const apiBlogs = await fetchAllBlogs();
+    apiEntries = apiBlogs
+      .filter((b) => b.slug && !staticBlogSlugs.has(b.slug))
+      .map((b): MetadataRoute.Sitemap[number] => ({
+        url: `${BASE}/blog/${b.slug}`,
+        lastModified: b.published_at ? new Date(b.published_at) : NOW,
+        changeFrequency: 'monthly',
+        priority: 0.7,
+      }));
+  } catch {
+    // Backend erisilemezse sadece statik entry'ler — build bozulmaz
+  }
+
+  return [...staticEntries, ...apiEntries];
 }
