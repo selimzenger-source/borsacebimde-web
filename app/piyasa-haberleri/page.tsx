@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 };
 
 export default async function PiyasaHaberleriPage() {
-  const ssrItems = await fetchNewsFeedSSR('news_scanner', 30, 30);
+  const ssrItems = await fetchNewsFeedSSR('news_scanner', 60, 60);
 
   return (
     <>

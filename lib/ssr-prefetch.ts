@@ -33,7 +33,7 @@ export interface SsrNewsItem {
   image_url?: string | null;
 }
 
-export async function fetchNewsFeedSSR(source?: string, limit = 30, days = 30) {
+export async function fetchNewsFeedSSR(source?: string, limit = 60, days = 60) {
   const params = new URLSearchParams({ days: String(days), limit: String(limit) });
   if (source) params.set('source', source);
   return safeFetch<SsrNewsItem[]>(`${API_BASE}/api/v1/public/news-feed?${params}`, []);

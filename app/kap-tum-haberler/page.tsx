@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function KapTumHaberlerPage() {
-  const ssrItems = await fetchNewsFeedSSR('kap_news', 30, 30);
+  const ssrItems = await fetchNewsFeedSSR('kap_news', 60, 60);
 
   return (
     <>

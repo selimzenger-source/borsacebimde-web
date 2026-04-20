@@ -26,8 +26,8 @@ export const metadata: Metadata = {
 
 export default async function TavanTabanPage() {
   const [tavanItems, tabanItems] = await Promise.all([
-    fetchNewsFeedSSR('market_close_tavan', 15, 30),
-    fetchNewsFeedSSR('market_close_taban', 15, 30),
+    fetchNewsFeedSSR('market_close_tavan', 30, 60),
+    fetchNewsFeedSSR('market_close_taban', 30, 60),
   ]);
 
   return (

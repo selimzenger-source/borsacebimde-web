@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default async function KapAiPage() {
   // Server-side prefetch — Googlebot HTML'de haberleri goruyor
-  const ssrItems = await fetchNewsFeedSSR('tweet_kap_news', 30, 30);
+  const ssrItems = await fetchNewsFeedSSR('tweet_kap_news', 60, 60);
 
   return (
     <>

@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 
 export default async function ViopPage() {
   // VIOP tweetler bot_proxy source'unda; keyword filter client tarafinda — SSR icin tumunu al
-  const ssrItems = await fetchNewsFeedSSR('bot_proxy', 60, 30);
+  const ssrItems = await fetchNewsFeedSSR('bot_proxy', 100, 60);
   const viopItems = ssrItems.filter((it) =>
     /viop|x30vade|x30y|endeks|vadeli|gündüz seans|gece seans/i.test(it.text || it.title || ''),
   );
