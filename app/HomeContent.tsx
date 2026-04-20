@@ -616,12 +616,14 @@ export default function HomePage() {
                       </h3>
                     )}
                     {body && (
+                      // Tam metni HER ZAMAN DOM'a yaz (Google/AdSense crawler goruyor),
+                      // sadece kullanicilar icin CSS line-clamp ile kirpiyoruz.
+                      // isExpanded=true → line-clamp kaldiriliyor.
                       <p
                         className={`text-sm leading-relaxed ${isExpanded ? '' : 'line-clamp-2'}`}
-                        style={{ color: 'var(--text-secondary)', whiteSpace: isExpanded ? 'pre-line' : undefined }}
+                        style={{ color: 'var(--text-secondary)', whiteSpace: 'pre-line' }}
                       >
-                        {isExpanded ? body : body.replace(/\n\n/g, ' ').slice(0, 150)}
-                        {!isExpanded && body.length > 150 && <span style={{ color: 'var(--text-muted)' }}>...</span>}
+                        {body}
                       </p>
                     )}
                     {isBlog ? (
