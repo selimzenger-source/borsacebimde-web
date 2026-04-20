@@ -138,6 +138,24 @@ export default function Footer() {
                   Çerez Politikası
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/kvkk-aydinlatma"
+                  className="text-xs transition-colors hover:text-brand"
+                  style={{ color: 'var(--text-muted)' }}
+                >
+                  KVKK Aydınlatma
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/iletisim"
+                  className="text-xs transition-colors hover:text-brand"
+                  style={{ color: 'var(--text-muted)' }}
+                >
+                  İletişim
+                </Link>
+              </li>
             </ul>
             <a
               href="mailto:borsacebimde@gmail.com"

@@ -35,10 +35,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/androidindir', changefreq: 'monthly', priority: 0.6 },
     { path: '/appstoreindir', changefreq: 'monthly', priority: 0.6 },
 
-    // Yasal
+    // Yasal & iletisim
     { path: '/gizlilik-politikasi', changefreq: 'yearly', priority: 0.3 },
     { path: '/cerez-politikasi', changefreq: 'yearly', priority: 0.3 },
     { path: '/kullanim-kosullari', changefreq: 'yearly', priority: 0.3 },
+    { path: '/kvkk-aydinlatma', changefreq: 'yearly', priority: 0.4 },
+    { path: '/iletisim', changefreq: 'monthly', priority: 0.6 },
 
     // Blog ana
     { path: '/blog', changefreq: 'weekly', priority: 0.8 },
