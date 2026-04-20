@@ -1,5 +1,21 @@
 import type { Metadata } from 'next';
 import SSSContent from './Content';
+import { halkaArzFAQ, kapFAQ, tavanTabanFAQ, viopFAQ, spkBultenFAQ, genelFAQ } from '@/lib/faq-data';
+
+// FAQPage JSON-LD — sadece bu sayfada, cunku Google "FAQ icerigi gorunur olmali" diyor.
+// Daha once layout.tsx'te global'di, her sayfada gecersiz goruluyordu.
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [...genelFAQ, ...halkaArzFAQ, ...kapFAQ, ...tavanTabanFAQ, ...viopFAQ, ...spkBultenFAQ].map((q: any) => ({
+    '@type': 'Question',
+    name: q.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: q.answer,
+    },
+  })),
+};
 
 export const metadata: Metadata = {
   title: 'Sıkça Sorulan Sorular - Borsa, Halka Arz ve KAP Hakkında',
@@ -19,6 +35,10 @@ export const metadata: Metadata = {
 export default function SSSPage() {
   return (
     <div className="flex flex-col gap-4">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       {/* Header */}
       <header
         className="card relative overflow-hidden p-6 sm:p-8"

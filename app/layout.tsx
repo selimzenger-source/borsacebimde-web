@@ -364,10 +364,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(appJsonLd) }}
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
+        {/* FAQPage schema'si layout'tan kaldirildi — sadece /sss sayfasinda yayinlaniyor.
+            Google: FAQ schema ancak sayfada gorunur FAQ icerigi varsa gecerli. */}
       </head>
       <body
         className="min-h-screen transition-colors duration-200"
