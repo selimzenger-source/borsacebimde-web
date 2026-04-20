@@ -44,14 +44,32 @@ export interface SsrIpoItem {
   ticker?: string | null;
   company_name?: string | null;
   price?: number | null;
+  ipo_price?: number | null;
   lot?: number | null;
+  total_lots?: number | null;
   min_lot?: number | null;
   max_lot?: number | null;
+  offering_size_tl?: number | null;
+  public_float_pct?: number | null;
+  discount_pct?: number | null;
   start_date?: string | null;
   end_date?: string | null;
+  subscription_start?: string | null;
+  subscription_end?: string | null;
   trading_date?: string | null;
+  trading_start?: string | null;
   status?: string | null;
   broker?: string | null;
+  distribution_method?: string | null;
+  market_segment?: string | null;
+  katilim_endeksi?: string | null;
+  spk_approval_date?: string | null;
+  spk_bulletin_no?: string | null;
+  prospectus_url?: string | null;
+  total_applicants?: number | null;
+  estimated_lots_per_person?: number | null;
+  ai_report?: any;
+  prospectus_analysis?: any;
 }
 
 export async function fetchIposSSR() {
