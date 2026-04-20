@@ -70,10 +70,10 @@ export interface SsrKurumOneri {
   created_at?: string | null;
 }
 
-export async function fetchKurumOnerileriSSR(limit = 20) {
-  // period=today az veri; week/month ile daha zengin icerik SSR'de
+export async function fetchKurumOnerileriSSR(limit = 30) {
+  // period=month: daha zengin icerik (today/week cok az)
   const data = await safeFetch<{ items?: SsrKurumOneri[] } | SsrKurumOneri[]>(
-    `${API_BASE}/api/v1/kurum-onerileri?period=week&limit=${limit}`,
+    `${API_BASE}/api/v1/kurum-onerileri?period=month&limit=${limit}`,
     [],
   );
   if (Array.isArray(data)) return data;
