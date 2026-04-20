@@ -19,15 +19,15 @@ export default async function KurumOnerileriPage() {
 
   return (
     <>
-      <KurumOnerileriContent />
-
       <div style={{ maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
         <SsrKurumList
           items={items}
           heading="Son Kurum Önerileri"
-          description="Aracı kurumların güncel hedef fiyat ve hisse tavsiyeleri — Al/Tut/Sat ve potansiyel getiri."
+          description="Aracı kurumların güncel hedef fiyat ve hisse tavsiyeleri — Al/Tut/Sat önerisi, potansiyel getiri ve AI yorumları."
         />
       </div>
+
+      <KurumOnerileriContent />
       <section className="mt-8 px-4" style={{ color: 'var(--text-muted)', fontSize: 13, lineHeight: 1.7 }}>
         <h2 style={{ fontSize: 16, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 8 }}>
           Kurum Önerileri Nedir?

@@ -70,11 +70,58 @@ export interface SsrIpoItem {
   estimated_lots_per_person?: number | null;
   ai_report?: any;
   prospectus_analysis?: any;
+  // Detay endpoint ek alanlari
+  company_description?: string | null;
+  fund_usage?: any;
+  lead_broker?: string | null;
+  first_day_close_price?: string | number | null;
+  ceiling_broken?: boolean | null;
+  ceiling_broken_at?: string | null;
+  lock_up_period_days?: number | null;
+  capital_increase_lots?: number | null;
+  partner_sale_lots?: number | null;
+  allocations?: Array<{
+    group_name?: string;
+    allocation_pct?: string | number;
+    allocated_lots?: number;
+    participants?: number;
+    lots_per_person?: number | string;
+  }>;
+  ceiling_tracks?: Array<{
+    trading_day?: number;
+    trade_date?: string;
+    close_price?: string | number;
+    change_pct?: string | number;
+    status?: string;
+    cumulative_return_pct?: string | number;
+  }>;
+  brokers?: Array<{
+    broker_name?: string;
+    broker_type?: string;
+  }>;
 }
 
 export async function fetchIposSSR() {
-  // Trailing slash 307 redirect yapiyor — Next.js fetch bazen takip etmiyor
-  return safeFetch<SsrIpoItem[]>(`${API_BASE}/api/v1/ipos`, []);
+  const list = await safeFetch<SsrIpoItem[]>(`${API_BASE}/api/v1/ipos`, []);
+  if (!list || list.length === 0) return list;
+
+  // Aktif IPO'lar (trading/in_distribution/awaiting_trading) icin detay cek — paralel.
+  // Pasif (completed/archived) icin detay cekmeye gerek yok, liste alani zaten yeter.
+  const active = list.filter((i) =>
+    ['trading', 'in_distribution', 'awaiting_trading', 'newly_approved'].includes(i.status || ''),
+  );
+  const details = await Promise.all(
+    active.map((i) =>
+      i.id
+        ? safeFetch<SsrIpoItem | null>(`${API_BASE}/api/v1/ipos/${i.id}`, null)
+        : Promise.resolve(null),
+    ),
+  );
+  const byId = new Map<number, SsrIpoItem>();
+  details.forEach((d) => {
+    if (d && d.id) byId.set(d.id, d);
+  });
+  return list.map((i) => (i.id && byId.has(i.id) ? { ...i, ...byId.get(i.id)! } : i));
 }
 
 export interface SsrKurumOneri {
