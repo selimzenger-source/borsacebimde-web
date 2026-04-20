@@ -70,7 +70,9 @@ export default function SsrIpoList({ items, heading, description }: Props) {
           const rb = riskBadge(risk);
           const positives: string[] = Array.isArray(pa?.positives) ? pa.positives : [];
           const negatives: string[] = Array.isArray(pa?.negatives) ? pa.negatives : [];
-          const tracks = Array.isArray(ipo.ceiling_tracks) ? ipo.ceiling_tracks : [];
+          const tracks = Array.isArray(ipo.ceiling_tracks)
+            ? [...ipo.ceiling_tracks].sort((a, b) => (a.trading_day ?? 0) - (b.trading_day ?? 0))
+            : [];
           const allocs = Array.isArray(ipo.allocations) ? ipo.allocations : [];
           const brokers = Array.isArray(ipo.brokers) ? ipo.brokers : [];
           let fundUsage: string[] = [];
@@ -93,7 +95,9 @@ export default function SsrIpoList({ items, heading, description }: Props) {
             taban: { label: 'TABAN', color: '#FF5252' },
             satici: { label: 'SATICILI', color: '#FF9800' },
             saticili: { label: 'SATICILI', color: '#FF9800' },
+            satici_kapatti: { label: 'SATICILI', color: '#FF9800' },
             alici: { label: 'ALICILI', color: '#4CAF50' },
+            alici_kapatti: { label: 'ALICILI', color: '#4CAF50' },
             normal: { label: 'NORMAL', color: 'var(--text-muted)' },
           };
 
@@ -307,8 +311,12 @@ export default function SsrIpoList({ items, heading, description }: Props) {
                       </thead>
                       <tbody>
                         {tracks.slice(0, 25).map((t, i) => {
-                          const st = statusDayLabel[(t.status || '').toLowerCase()] || { label: t.status || '-', color: 'var(--text-muted)' };
-                          const chg = t.change_pct != null ? Number(t.change_pct) : null;
+                          const durumKey = (t.durum || '').toLowerCase();
+                          let st = statusDayLabel[durumKey];
+                          if (!st && t.hit_ceiling) st = statusDayLabel.tavan;
+                          if (!st && t.hit_floor) st = statusDayLabel.taban;
+                          if (!st) st = { label: (t.durum || '-').toUpperCase().replace(/_/g, ' '), color: 'var(--text-muted)' };
+                          const chg = t.pct_change != null ? Number(t.pct_change) : null;
                           const chgColor = chg == null ? 'var(--text-muted)' : chg > 0 ? '#4CAF50' : chg < 0 ? '#FF5252' : 'var(--text-muted)';
                           return (
                             <tr key={i} style={{ borderTop: '1px solid var(--border-subtle, rgba(255,255,255,0.05))' }}>
@@ -321,7 +329,7 @@ export default function SsrIpoList({ items, heading, description }: Props) {
                                 {chg != null ? `${chg > 0 ? '+' : ''}${chg.toFixed(2)}%` : '-'}
                               </td>
                               <td style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--text-muted)' }}>
-                                {t.cumulative_return_pct != null ? `%${Number(t.cumulative_return_pct).toFixed(2)}` : '-'}
+                                {t.cumulative_edo_pct != null ? `%${Number(t.cumulative_edo_pct).toFixed(2)}` : '-'}
                               </td>
                               <td style={{ padding: '6px 8px', textAlign: 'center' }}>
                                 <span style={{ color: st.color, fontWeight: 700, fontSize: 11 }}>{st.label}</span>

@@ -93,9 +93,11 @@ export interface SsrIpoItem {
     trading_day?: number;
     trade_date?: string;
     close_price?: string | number;
-    change_pct?: string | number;
-    status?: string;
-    cumulative_return_pct?: string | number;
+    pct_change?: string | number;
+    durum?: string;
+    cumulative_edo_pct?: string | number;
+    hit_ceiling?: boolean;
+    hit_floor?: boolean;
   }>;
   brokers?: Array<{
     broker_name?: string;

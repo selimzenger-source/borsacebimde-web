@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import KurumOnerileriContent from './Content';
 import SsrKurumList from '@/components/SsrKurumList';
 import { fetchKurumOnerileriSSR } from '@/lib/ssr-prefetch';
 
@@ -27,7 +26,6 @@ export default async function KurumOnerileriPage() {
         />
       </div>
 
-      <KurumOnerileriContent />
       <section className="mt-8 px-4" style={{ color: 'var(--text-muted)', fontSize: 13, lineHeight: 1.7 }}>
         <h2 style={{ fontSize: 16, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 8 }}>
           Kurum Önerileri Nedir?
