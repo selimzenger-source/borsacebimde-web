@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import KapTumContent from './Content';
+import SsrNewsList from '@/components/SsrNewsList';
+import { fetchNewsFeedSSR } from '@/lib/ssr-prefetch';
 
 export const metadata: Metadata = {
   title: 'Tüm KAP Haberleri - BIST Şirket Bildirimleri ve AI Analiz',
@@ -12,10 +14,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function KapTumHaberlerPage() {
+export default async function KapTumHaberlerPage() {
+  const ssrItems = await fetchNewsFeedSSR('kap_news', 30, 30);
+
   return (
     <>
       <KapTumContent />
+
+      <SsrNewsList
+        items={ssrItems}
+        heading="Son KAP Bildirimleri (Tam Liste)"
+        description="BIST şirketlerinin son yayınlanan KAP özel durum açıklamaları — bilanço, temettü, sermaye artırımı, sözleşme, ortaklık ve daha fazlası."
+      />
 
       {/* ── Static SEO Content ── */}
       <article

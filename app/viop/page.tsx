@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import ViopContent from './Content';
+import SsrNewsList from '@/components/SsrNewsList';
+import { fetchNewsFeedSSR } from '@/lib/ssr-prefetch';
 
 export const metadata: Metadata = {
   title: 'VİOP Gece Seansı - Vadeli İşlem ve Opsiyon Piyasası',
@@ -23,11 +25,23 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ViopPage() {
+export default async function ViopPage() {
+  // VIOP tweetler bot_proxy source'unda; keyword filter client tarafinda — SSR icin tumunu al
+  const ssrItems = await fetchNewsFeedSSR('bot_proxy', 25, 14);
+  const viopItems = ssrItems.filter((it) =>
+    /viop|x30vade|x30y|endeks|vadeli/i.test(it.text || it.title || ''),
+  );
+
   return (
     <>
       {/* Önce dinamik içerik */}
       <ViopContent />
+
+      <SsrNewsList
+        items={viopItems.slice(0, 20)}
+        heading="Son VİOP Seansı Verileri"
+        description="BIST 30 endeks vadeli işlem sözleşmesi, açılış, kapanış, gece seansı özeti ve saatlik seyir güncellemeleri."
+      />
 
       {/* SEO içerik aşağıda */}
       <article className="mt-10 flex flex-col gap-6">

@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import SpkBasvurularContent from './Content';
+import SsrNewsList from '@/components/SsrNewsList';
+import { fetchNewsFeedSSR } from '@/lib/ssr-prefetch';
 
 export const metadata: Metadata = {
   title: 'SPK Başvuruları - Onay Bekleyen Halka Arz Başvuruları',
@@ -15,11 +17,19 @@ export const metadata: Metadata = {
   ],
 };
 
-export default function SpkBasvurularPage() {
+export default async function SpkBasvurularPage() {
+  const ssrItems = await fetchNewsFeedSSR('tweet_spk_application', 30, 90);
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       {/* Dinamik başvuru listesi */}
       <SpkBasvurularContent />
+
+      <SsrNewsList
+        items={ssrItems}
+        heading="Son SPK Halka Arz Başvuruları"
+        description="Sermaye Piyasası Kurulu'na yapılan yeni halka arz başvuruları — şirket, başvuru tarihi ve statü."
+      />
 
       {/* Statik SEO İçeriği */}
       <article

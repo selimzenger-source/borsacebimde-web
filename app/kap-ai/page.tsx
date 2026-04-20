@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import KapAIContent from './Content';
+import SsrNewsList from '@/components/SsrNewsList';
+import { fetchNewsFeedSSR } from '@/lib/ssr-prefetch';
 
 export const metadata: Metadata = {
   title: 'KAP Pozitif Haberler - Yapay Zeka Destekli KAP Analizi',
@@ -12,10 +14,20 @@ export const metadata: Metadata = {
   },
 };
 
-export default function KapAiPage() {
+export default async function KapAiPage() {
+  // Server-side prefetch — Googlebot HTML'de haberleri goruyor
+  const ssrItems = await fetchNewsFeedSSR('tweet_kap_news', 30, 30);
+
   return (
     <>
       <KapAIContent />
+
+      {/* Server-rendered haber arsivi (her build'de guncellenir — Googlebot + arama motorlari icin kritik) */}
+      <SsrNewsList
+        items={ssrItems}
+        heading="Son KAP AI Pozitif Haberleri"
+        description="BIST şirketlerinin olumlu KAP bildirimleri, yapay zeka tarafından filtrelendi ve özetlendi."
+      />
 
       {/* ── Static SEO Content ── */}
       <article

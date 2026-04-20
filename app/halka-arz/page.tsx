@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import HalkaArzContent from './Content';
+import SsrIpoList from '@/components/SsrIpoList';
+import { fetchIposSSR } from '@/lib/ssr-prefetch';
 
 export const metadata: Metadata = {
   title: 'Halka Arz Takvimi 2026 - Güncel SPK Onaylı Halka Arzlar',
@@ -8,10 +10,20 @@ export const metadata: Metadata = {
   keywords: ['halka arz', 'halka arz takvimi', 'halka arz 2026', 'SPK onaylı halka arz', 'borsa halka arz', 'lot dağıtımı', 'tavan takibi'],
 };
 
-export default function HalkaArzPage() {
+export default async function HalkaArzPage() {
+  const ipos = await fetchIposSSR();
+
   return (
     <>
       <HalkaArzContent />
+
+      <div style={{ maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
+        <SsrIpoList
+          items={ipos}
+          heading="Güncel Halka Arz Takvimi"
+          description="SPK onaylı halka arzlar, talep toplama tarihleri, lot dağıtımı ve aracı kurum bilgileri."
+        />
+      </div>
 
       {/* SEO Content Section */}
       <section className="mt-10 flex flex-col gap-8 max-w-4xl mx-auto px-4">

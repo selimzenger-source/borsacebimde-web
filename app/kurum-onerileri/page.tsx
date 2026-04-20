@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import KurumOnerileriContent from './Content';
+import SsrKurumList from '@/components/SsrKurumList';
+import { fetchKurumOnerileriSSR } from '@/lib/ssr-prefetch';
 
 export const metadata: Metadata = {
   title: 'Kurum Önerileri - Aracı Kurum Hedef Fiyat ve Hisse Tavsiyeleri',
@@ -12,10 +14,20 @@ export const metadata: Metadata = {
   },
 };
 
-export default function KurumOnerileriPage() {
+export default async function KurumOnerileriPage() {
+  const items = await fetchKurumOnerileriSSR(25);
+
   return (
     <>
       <KurumOnerileriContent />
+
+      <div style={{ maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
+        <SsrKurumList
+          items={items}
+          heading="Son Kurum Önerileri"
+          description="Aracı kurumların güncel hedef fiyat ve hisse tavsiyeleri — Al/Tut/Sat ve potansiyel getiri."
+        />
+      </div>
       <section className="mt-8 px-4" style={{ color: 'var(--text-muted)', fontSize: 13, lineHeight: 1.7 }}>
         <h2 style={{ fontSize: 16, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 8 }}>
           Kurum Önerileri Nedir?

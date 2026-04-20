@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import SpkBultenContent from './Content';
+import SsrNewsList from '@/components/SsrNewsList';
+import { fetchNewsFeedSSR } from '@/lib/ssr-prefetch';
 
 export const metadata: Metadata = {
   title: 'SPK Bülten Analizleri - Sermaye Piyasası Kurulu Haftalık Bülten',
@@ -16,11 +18,19 @@ export const metadata: Metadata = {
   ],
 };
 
-export default function SpkBultenPage() {
+export default async function SpkBultenPage() {
+  const ssrItems = await fetchNewsFeedSSR('tweet_spk_bulletin_analysis', 20, 60);
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       {/* Dinamik bülten içeriği */}
       <SpkBultenContent />
+
+      <SsrNewsList
+        items={ssrItems}
+        heading="Son SPK Bülten Analizleri"
+        description="Sermaye Piyasası Kurulu haftalık bültenlerinin yapay zeka destekli konu başlığı özetleri."
+      />
 
       {/* Statik SEO İçeriği */}
       <article

@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import PiyasaHaberleriContent from './Content';
+import SsrNewsList from '@/components/SsrNewsList';
+import { fetchNewsFeedSSR } from '@/lib/ssr-prefetch';
 
 export const metadata: Metadata = {
   title: 'Piyasa Haberleri - Güncel Borsa ve Finans Haberleri',
@@ -21,11 +23,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PiyasaHaberleriPage() {
+export default async function PiyasaHaberleriPage() {
+  const ssrItems = await fetchNewsFeedSSR('news_scanner', 30, 30);
+
   return (
     <>
       {/* Önce dinamik içerik */}
       <PiyasaHaberleriContent />
+
+      <SsrNewsList
+        items={ssrItems}
+        heading="Son Piyasa Haberleri"
+        description="Borsa İstanbul ve küresel piyasalardan güncel finans haberleri, yapay zeka ile özetlendi."
+      />
 
       {/* SEO içerik aşağıda */}
       <article className="mt-10 flex flex-col gap-6">

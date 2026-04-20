@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import TavanTabanContent from './Content';
+import SsrNewsList from '@/components/SsrNewsList';
+import { fetchNewsFeedSSR } from '@/lib/ssr-prefetch';
 
 export const metadata: Metadata = {
   title: 'Tavan Taban Hisseleri - BIST Günlük Fiyat Limitleri',
@@ -22,11 +24,28 @@ export const metadata: Metadata = {
   },
 };
 
-export default function TavanTabanPage() {
+export default async function TavanTabanPage() {
+  const [tavanItems, tabanItems] = await Promise.all([
+    fetchNewsFeedSSR('market_close_tavan', 15, 30),
+    fetchNewsFeedSSR('market_close_taban', 15, 30),
+  ]);
+
   return (
     <>
       {/* Önce dinamik içerik */}
       <TavanTabanContent />
+
+      <SsrNewsList
+        items={tavanItems}
+        heading="Son Tavan Yapan Hisseler"
+        description="Borsa İstanbul'da gün içinde fiyat limitinin üst sınırına (tavan) ulaşan hisseler ve ardışık tavan serileri."
+      />
+
+      <SsrNewsList
+        items={tabanItems}
+        heading="Son Taban Yapan Hisseler"
+        description="Borsa İstanbul'da gün içinde fiyat limitinin alt sınırına (taban) ulaşan hisseler."
+      />
 
       {/* SEO içerik aşağıda */}
       <article className="mt-10 flex flex-col gap-6">
