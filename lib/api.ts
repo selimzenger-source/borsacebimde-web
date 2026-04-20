@@ -316,6 +316,8 @@ export interface KurumOneri {
   report_date: string;
   source_url: string | null;
   created_at: string | null;
+  ai_comment?: string | null;
+  ai_comment_at?: string | null;
 }
 
 export interface KurumOnerileriResponse {

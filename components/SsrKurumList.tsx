@@ -41,6 +41,24 @@ export default function SsrKurumList({ items, heading, description }: Props) {
               {k.target_price ? ` · Hedef: ${k.target_price.toFixed(2)} TL` : ''}
               {k.potential_return != null ? ` · Potansiyel: %${k.potential_return.toFixed(1)}` : ''}
             </p>
+            {k.ai_comment ? (
+              <p
+                style={{
+                  fontSize: 13,
+                  color: 'var(--text-secondary)',
+                  margin: '6px 0 0',
+                  padding: '10px 12px',
+                  background: 'rgba(41,121,255,0.06)',
+                  borderLeft: '3px solid #2979FF',
+                  borderRadius: 4,
+                  lineHeight: 1.6,
+                  fontStyle: 'italic',
+                }}
+              >
+                <strong style={{ color: '#2979FF', fontStyle: 'normal' }}>AI Yorum: </strong>
+                {k.ai_comment}
+              </p>
+            ) : null}
           </article>
         ))}
       </div>

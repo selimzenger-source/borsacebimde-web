@@ -66,8 +66,10 @@ export interface SsrKurumOneri {
   institution_name: string;
   recommendation?: string | null;
   target_price?: number | null;
+  current_price?: number | null;
   potential_return?: number | null;
   created_at?: string | null;
+  ai_comment?: string | null;
 }
 
 export async function fetchKurumOnerileriSSR(limit = 30) {

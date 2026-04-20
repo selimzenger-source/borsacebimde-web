@@ -258,7 +258,7 @@ export default function KurumOnerileriContent() {
   const [data, setData] = useState<KurumOneri[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [period, setPeriod] = useState<Period>('today');
+  const [period, setPeriod] = useState<Period>('all');
   const [visibleCount, setVisibleCount] = useState(5);
 
   useEffect(() => {
