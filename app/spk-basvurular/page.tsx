@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default async function SpkBasvurularPage() {
-  const ssrItems = await fetchNewsFeedSSR('tweet_spk_application', 30, 90);
+  const ssrItems = await fetchNewsFeedSSR('tweet_spk_application', 30, 30);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>

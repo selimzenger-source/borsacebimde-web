@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 };
 
 export default async function SpkBultenPage() {
-  const ssrItems = await fetchNewsFeedSSR('tweet_spk_bulletin_analysis', 20, 60);
+  const ssrItems = await fetchNewsFeedSSR('tweet_spk_bulletin_analysis', 30, 30);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>

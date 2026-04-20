@@ -55,7 +55,8 @@ export interface SsrIpoItem {
 }
 
 export async function fetchIposSSR() {
-  return safeFetch<SsrIpoItem[]>(`${API_BASE}/api/v1/ipos/`, []);
+  // Trailing slash 307 redirect yapiyor — Next.js fetch bazen takip etmiyor
+  return safeFetch<SsrIpoItem[]>(`${API_BASE}/api/v1/ipos`, []);
 }
 
 export interface SsrKurumOneri {
@@ -70,8 +71,9 @@ export interface SsrKurumOneri {
 }
 
 export async function fetchKurumOnerileriSSR(limit = 20) {
+  // period=today az veri; week/month ile daha zengin icerik SSR'de
   const data = await safeFetch<{ items?: SsrKurumOneri[] } | SsrKurumOneri[]>(
-    `${API_BASE}/api/v1/kurum-onerileri?period=today&limit=${limit}`,
+    `${API_BASE}/api/v1/kurum-onerileri?period=week&limit=${limit}`,
     [],
   );
   if (Array.isArray(data)) return data;
