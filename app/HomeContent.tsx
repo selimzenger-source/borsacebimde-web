@@ -227,7 +227,10 @@ export default function HomePage() {
       fetch('https://sz-bist-finans-api.onrender.com/api/v1/public/blogs', { cache: 'no-store' })
         .then(r => r.ok ? r.json() : [])
         .catch(() => []),
-    ]).then(([iposRes, statsRes, newsRes, viopRes, kurumRes, blogsRes]) => {
+      fetch('https://sz-bist-finans-api.onrender.com/api/v1/public/system-announcements?limit=10', { cache: 'no-store' })
+        .then(r => r.ok ? r.json() : [])
+        .catch(() => []),
+    ]).then(([iposRes, statsRes, newsRes, viopRes, kurumRes, blogsRes, sysRes]) => {
       if (iposRes.status === 'fulfilled') setIpos(iposRes.value);
       if (statsRes.status === 'fulfilled') setStats(statsRes.value);
 
@@ -269,6 +272,18 @@ export default function HomePage() {
           link_url: `/blog/${b.slug}`,
         } as any));
         allNews = [...allNews, ...blogsAsNews];
+      }
+      // Sistem bilgilendirmeleri (borsa tatili, bakim vs.)
+      if (sysRes.status === 'fulfilled' && Array.isArray(sysRes.value)) {
+        const sysAsNews: NewsFeedItem[] = sysRes.value.slice(0, 10).map((s: any) => ({
+          id: (s.id || 0) + 700000,
+          text: s.text || '',
+          image_url: null,
+          source: '_sistem_',
+          sent_at: s.sent_at || null,
+          created_at: s.sent_at || null,
+        } as any));
+        allNews = [...allNews, ...sysAsNews];
       }
       // Tarihe göre sırala (en yeni başta)
       allNews.sort((a, b) => {
