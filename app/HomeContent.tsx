@@ -251,7 +251,7 @@ export default function HomePage() {
       if (kurumRes.status === 'fulfilled' && kurumRes.value.items) {
         const kurumAsNews: NewsFeedItem[] = kurumRes.value.items.slice(0, 10).map((k) => ({
           id: k.id + 900000,
-          text: `${k.ticker}${k.company_name ? ' - ' + k.company_name : ''}\n${k.institution_name}: ${k.recommendation || 'Yeni Öneri'}${k.target_price ? ' — Hedef: ' + k.target_price.toFixed(2) + ' ₺' : ''}${k.potential_return ? ' (%' + k.potential_return.toFixed(1) + ')' : ''}`,
+          text: `${k.ticker}${k.company_name ? ' - ' + k.company_name : ''}\n${k.institution_name}: ${k.recommendation || 'Yeni Öneri'}${k.target_price ? ' — Hedef: ' + k.target_price.toFixed(2) + ' ₺' : ''}${k.potential_return ? ' (%' + k.potential_return.toFixed(1) + ')' : ''}${k.ai_comment ? '\n\n🤖 AI Yorum: ' + k.ai_comment : ''}`,
           image_url: null,
           source: '_kurum_oneri_',
           sent_at: k.created_at,
