@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import KurumOnerileriContent from './Content';
 import SsrKurumList from '@/components/SsrKurumList';
 import { fetchKurumOnerileriSSR } from '@/lib/ssr-prefetch';
 
@@ -18,6 +19,8 @@ export default async function KurumOnerileriPage() {
 
   return (
     <>
+      <KurumOnerileriContent />
+
       <div style={{ maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
         <SsrKurumList
           items={items}
