@@ -1,0 +1,49 @@
+# Render Static Site config — Borsa Cebimde web
+# Guvenlik header'lari + cache politikasi
+# Degisikliklerin uygulanmasi icin Render Dashboard'da bu yaml'in tanindigini
+# dogrulayin: Static Site Settings → Headers bolumunde bu entry'ler gorunmeli.
+
+services:
+  - type: web
+    runtime: static
+    name: borsacebimde-web
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./out
+    headers:
+      # Tum sayfalar icin temel guvenlik header'lari
+      - path: /*
+        name: Strict-Transport-Security
+        value: "max-age=31536000; includeSubDomains; preload"
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: Permissions-Policy
+        value: "camera=(), microphone=(), geolocation=(), payment=()"
+      - path: /*
+        name: Content-Security-Policy
+        value: >-
+          default-src 'self';
+          script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagmanager.com https://www.google-analytics.com https://tpc.googlesyndication.com https://adservice.google.com;
+          style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+          img-src 'self' data: blob: https: http:;
+          font-src 'self' data: https://fonts.gstatic.com;
+          connect-src 'self' https://sz-bist-finans-api.onrender.com https://pagead2.googlesyndication.com https://www.google-analytics.com https://www.googletagmanager.com;
+          frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com;
+          frame-ancestors 'self';
+          base-uri 'self';
+          form-action 'self';
+          upgrade-insecure-requests;
+      # Static dosyalar icin uzun cache
+      - path: /_next/static/*
+        name: Cache-Control
+        value: "public, max-age=31536000, immutable"
+      - path: /images/*
+        name: Cache-Control
+        value: "public, max-age=86400"
