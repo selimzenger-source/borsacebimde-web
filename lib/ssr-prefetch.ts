@@ -80,6 +80,8 @@ export interface SsrIpoItem {
   lock_up_period_days?: number | null;
   capital_increase_lots?: number | null;
   partner_sale_lots?: number | null;
+  trading_day_count?: number | null;
+  high_from_start?: number | null;
   allocations?: Array<{
     group_name?: string;
     allocation_pct?: string | number;
