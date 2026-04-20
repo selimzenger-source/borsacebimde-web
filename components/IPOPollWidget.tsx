@@ -135,7 +135,7 @@ export default function IPOPollWidget({ ipoId }: { ipoId: number }) {
           <>
             <div className="flex justify-between items-center" style={{ fontSize: 10 }}>
               <span style={{ color: GREEN, fontWeight: 700 }}>%{Math.round(h.participate_pct)} katılacağım</span>
-              <span style={{ color: RED, fontWeight: 700 }}>%{Math.round(h.skip_pct)} hayır</span>
+              <span style={{ color: RED, fontWeight: 700 }}>%{Math.round(h.skip_pct)} katılmayacağım</span>
             </div>
             <StackedBar p={h.participate_pct} s={h.skip_pct} />
             <div style={{ fontSize: 9, color: 'var(--text-muted)', textAlign: 'right', marginTop: -2 }}>
@@ -167,8 +167,8 @@ export default function IPOPollWidget({ ipoId }: { ipoId: number }) {
             Bu halka arza katılacak mısın?
           </div>
           <div className="flex gap-1.5">
-            <HypeBtn color={GREEN} label="Evet, Katılacağım"      onClick={() => submit('hype', 'participate')} disabled={submitting} />
-            <HypeBtn color={RED}   label="Hayır, Katılmayacağım"  onClick={() => submit('hype', 'skip')}        disabled={submitting} />
+            <HypeBtn color={GREEN} label="Katılacağım"      onClick={() => submit('hype', 'participate')} disabled={submitting} />
+            <HypeBtn color={RED}   label="Katılmayacağım"   onClick={() => submit('hype', 'skip')}        disabled={submitting} />
           </div>
         </div>
       );
