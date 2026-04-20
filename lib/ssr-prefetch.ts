@@ -11,7 +11,7 @@ async function safeFetch<T>(url: string, fallback: T): Promise<T> {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), DEFAULT_TIMEOUT);
     const res = await fetch(url, {
-      cache: 'no-store',
+      cache: 'force-cache',
       signal: controller.signal,
       headers: { 'User-Agent': 'borsacebimde-build' },
     });
