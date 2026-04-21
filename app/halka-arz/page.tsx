@@ -15,15 +15,15 @@ export default async function HalkaArzPage() {
 
   return (
     <>
+      <HalkaArzContent />
+
       <div style={{ maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
         <SsrIpoList
           items={ipos}
-          heading="Güncel Halka Arz Takvimi"
-          description="SPK onaylı halka arzlar, talep toplama tarihleri, lot dağıtımı, günlük kapanış verileri, dağıtım sonuçları ve AI değerlendirmesi."
+          heading="Detaylı Halka Arz Verileri"
+          description="Her halka arz için izahname analizi, günlük kapanış tablosu, dağıtım sonuçları, aracı kurumlar ve AI değerlendirmesi."
         />
       </div>
-
-      <HalkaArzContent />
 
       {/* SEO Content Section */}
       <section className="mt-10 flex flex-col gap-8 max-w-4xl mx-auto px-4">
