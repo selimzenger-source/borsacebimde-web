@@ -8,6 +8,7 @@ interface Props {
   heading: string;
   description?: string;
   emptyText?: string;
+  showBody?: boolean;
 }
 
 export default function SsrNewsList({ items, heading, description, emptyText }: Props) {

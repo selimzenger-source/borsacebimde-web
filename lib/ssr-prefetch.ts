@@ -109,11 +109,13 @@ export async function fetchIposSSR() {
   const list = await safeFetch<SsrIpoItem[]>(`${API_BASE}/api/v1/ipos`, []);
   if (!list || list.length === 0) return list;
 
-  // Aktif IPO'lar (trading/in_distribution/awaiting_trading) icin detay cek — paralel.
-  // Pasif (completed/archived) icin detay cekmeye gerek yok, liste alani zaten yeter.
+  // Sadece aktif IPO'lari dondur: talep toplayan, islem bekleyen, islem goren, yeni onay alan.
+  // Tamamlananlari / arsivlenenleri SSR'da gostermiyoruz — sayfa temiz kalsin.
   const active = list.filter((i) =>
     ['trading', 'in_distribution', 'awaiting_trading', 'newly_approved'].includes(i.status || ''),
   );
+  if (active.length === 0) return [];
+
   const details = await Promise.all(
     active.map((i) =>
       i.id
@@ -125,7 +127,7 @@ export async function fetchIposSSR() {
   details.forEach((d) => {
     if (d && d.id) byId.set(d.id, d);
   });
-  return list.map((i) => (i.id && byId.has(i.id) ? { ...i, ...byId.get(i.id)! } : i));
+  return active.map((i) => (i.id && byId.has(i.id) ? { ...i, ...byId.get(i.id)! } : i));
 }
 
 export interface SsrKurumOneri {
@@ -139,6 +141,23 @@ export interface SsrKurumOneri {
   potential_return?: number | null;
   created_at?: string | null;
   ai_comment?: string | null;
+}
+
+export interface SsrSpkApplication {
+  id: number;
+  company_name: string;
+  application_date?: string | null;
+  sale_price?: string | null;
+  notes?: string | null;
+  company_description?: string | null;
+  status?: string;
+}
+
+export async function fetchSpkApplicationsSSR() {
+  return safeFetch<SsrSpkApplication[]>(
+    `${API_BASE}/api/v1/ipos/spk-applications`,
+    [],
+  );
 }
 
 export async function fetchKurumOnerileriSSR(limit = 30) {

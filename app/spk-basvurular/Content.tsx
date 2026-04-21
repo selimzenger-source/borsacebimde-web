@@ -5,26 +5,21 @@ import Link from 'next/link';
 import { api, type SPKApplication } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 
-export default function SpkBasvurularContent() {
-  const [apps, setApps] = useState<SPKApplication[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
+interface Props {
+  initialApps?: SPKApplication[];
+}
 
-  const toggleExpand = (id: number) => {
-    setExpandedIds(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  };
+export default function SpkBasvurularContent({ initialApps }: Props = {}) {
+  const [apps, setApps] = useState<SPKApplication[]>(initialApps || []);
+  const [loading, setLoading] = useState(!initialApps || initialApps.length === 0);
 
   useEffect(() => {
+    if (initialApps && initialApps.length > 0) return;
     api.getSPKApplications()
       .then(setApps)
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, []);
+  }, [initialApps]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
@@ -128,31 +123,21 @@ export default function SpkBasvurularContent() {
                   </p>
                 )}
 
-                {/* Şirket Hakkında */}
+                {/* Şirket Hakkında — SEO için her zaman görünür */}
                 {app.company_description && (
                   <div className="mt-3" style={{ borderTop: '1px solid var(--border-primary)', paddingTop: 10 }}>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); toggleExpand(app.id); }}
-                      className="flex items-center gap-1.5 text-xs font-semibold transition-colors"
-                      style={{ color: '#FF9800', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
-                    >
-                      <svg
-                        className="w-3.5 h-3.5 transition-transform"
-                        style={{ transform: expandedIds.has(app.id) ? 'rotate(180deg)' : 'rotate(0)' }}
-                        viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                    <h5 className="flex items-center gap-1.5 text-xs font-semibold mb-2" style={{ color: '#FF9800' }}>
+                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                       Şirket Hakkında
-                    </button>
-                    {expandedIds.has(app.id) && (
-                      <p
-                        className="mt-2 text-xs leading-relaxed"
-                        style={{ color: 'var(--text-secondary)', whiteSpace: 'pre-line' }}
-                      >
-                        {app.company_description}
-                      </p>
-                    )}
+                    </h5>
+                    <p
+                      className="text-xs leading-relaxed"
+                      style={{ color: 'var(--text-secondary)', whiteSpace: 'pre-line' }}
+                    >
+                      {app.company_description}
+                    </p>
                   </div>
                 )}
               </div>
