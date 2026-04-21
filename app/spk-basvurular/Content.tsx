@@ -9,9 +9,18 @@ interface Props {
   initialApps?: SPKApplication[];
 }
 
+// Türkçe karakter normalizasyonu — "özova" ↔ "ozova" aramasını eşit yapsın
+const normalize = (s: string) =>
+  s
+    .toLocaleLowerCase('tr-TR')
+    .replace(/ı/g, 'i').replace(/ş/g, 's').replace(/ğ/g, 'g')
+    .replace(/ü/g, 'u').replace(/ö/g, 'o').replace(/ç/g, 'c')
+    .trim();
+
 export default function SpkBasvurularContent({ initialApps }: Props = {}) {
   const [apps, setApps] = useState<SPKApplication[]>(initialApps || []);
   const [loading, setLoading] = useState(!initialApps || initialApps.length === 0);
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     if (initialApps && initialApps.length > 0) return;
@@ -20,6 +29,14 @@ export default function SpkBasvurularContent({ initialApps }: Props = {}) {
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [initialApps]);
+
+  const q = normalize(query);
+  const filteredApps = q
+    ? apps.filter((a) =>
+        normalize(a.company_name || '').includes(q) ||
+        normalize(a.company_description || '').includes(q),
+      )
+    : apps;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
@@ -55,9 +72,56 @@ export default function SpkBasvurularContent({ initialApps }: Props = {}) {
                 SPK Onayı Beklenen Halka Arzlar
               </h1>
               <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-                {loading ? 'Yükleniyor...' : `${apps.length} başvuru bekliyor`}
+                {loading
+                  ? 'Yükleniyor...'
+                  : q
+                    ? `${filteredApps.length} / ${apps.length} sonuç`
+                    : `${apps.length} başvuru bekliyor`}
               </p>
             </div>
+          </div>
+
+          {/* Arama */}
+          <div className="relative mt-4">
+            <svg
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
+              style={{ color: 'var(--text-muted)' }}
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 10.5a7.5 7.5 0 0012.15 6.15z" />
+            </svg>
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Şirket ara (örn. Özova, Golda, Kırlıoğlu...)"
+              style={{
+                width: '100%',
+                padding: '10px 36px 10px 38px',
+                borderRadius: 10,
+                background: 'var(--bg-surface, rgba(15,23,42,0.4))',
+                border: '1px solid rgba(255,152,0,0.25)',
+                color: 'var(--text-primary)',
+                fontSize: 14,
+                outline: 'none',
+              }}
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery('')}
+                aria-label="Temizle"
+                style={{
+                  position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)',
+                  background: 'none', border: 'none', cursor: 'pointer', padding: 4,
+                  color: 'var(--text-muted)',
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            )}
           </div>
         </div>
       </header>
@@ -75,9 +139,9 @@ export default function SpkBasvurularContent({ initialApps }: Props = {}) {
       )}
 
       {/* -- List -- */}
-      {!loading && apps.length > 0 && (
+      {!loading && filteredApps.length > 0 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {apps.map((app, idx) => (
+          {filteredApps.map((app, idx) => (
             <div key={app.id}>
               {idx > 0 && idx % 10 === 0 && (
                 <div style={{ marginBottom: 8 }}>
@@ -148,9 +212,11 @@ export default function SpkBasvurularContent({ initialApps }: Props = {}) {
       )}
 
       {/* -- Empty State -- */}
-      {!loading && apps.length === 0 && (
+      {!loading && filteredApps.length === 0 && (
         <div className="card p-8 flex flex-col items-center gap-3 text-center">
-          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Henüz bekleyen SPK başvurusu yok.</p>
+          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+            {q ? `"${query}" için sonuç bulunamadı.` : 'Henüz bekleyen SPK başvurusu yok.'}
+          </p>
         </div>
       )}
     </div>
