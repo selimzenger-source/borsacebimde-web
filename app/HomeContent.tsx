@@ -488,7 +488,29 @@ export default function HomePage() {
               const cleaned = cleanText(rawText);
               const paragraphs = cleaned.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
               let title = paragraphs[0] || '';
-              const body = paragraphs.slice(1).join('\n\n').trim();
+              let body = paragraphs.slice(1).join('\n\n').trim();
+
+              // KAP haberleri icin ozel parser: gereksiz meta satirlari temizle, sadece
+              // gercek AI yorum paragrafi body'de kalsin.
+              if (isKap) {
+                // Title: tire/em-dash oncesindeki ticker'i yakala ("DOHOL — Haber Bildirimi" → "DOHOL")
+                const tickerMatch = title.match(/^([A-ZÇĞİÖŞÜ0-9]{2,10})(?:\s*[—\-–])/);
+                if (tickerMatch) {
+                  title = tickerMatch[1];
+                }
+                // Body: meta satirlarini at — "Anlık Haber Yakalandı HH:MM:SS", "İlişkili Kelime : ...",
+                // "AI Puanı: X/10", "KAP :" (bos), "Daha detaylı...", son hashtag satiri
+                const filtered = paragraphs.slice(1).filter((p) => {
+                  if (/^Anlık Haber Yakalandı/i.test(p)) return false;
+                  if (/^İlişkili Kelime/i.test(p)) return false;
+                  if (/^AI Puan[ıi]/i.test(p)) return false;
+                  if (/^KAP\s*:?\s*$/i.test(p)) return false;
+                  if (/^Daha detaylı veriler/i.test(p)) return false;
+                  if (/^\.{2,}$/.test(p)) return false;
+                  return true;
+                });
+                body = filtered.join('\n\n').trim();
+              }
 
               // KAP haberleri için AI puanı ve sentiment çıkar
               let aiScore: number | null = null;

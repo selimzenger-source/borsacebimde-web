@@ -220,6 +220,12 @@ export function cleanText(text: string): string {
   return text
     // KAP linkleri hariç URL'leri sil
     .replace(/https?:\/\/(?!(?:www\.)?kap\.org\.tr)\S+/g, '')
+    // Twitter/KAP son satır hashtag bloku: "#DOHOL #KAP #BorsaIstanbul #madencilik"
+    // — # işaretleri kaldırılınca "DOHOL KAP BorsaIstanbul madencilik" yarım cümle gibi kalıyor.
+    // Bunu # temizlemeden ÖNCE kaldır.
+    .replace(/(?:^|\n)[ \t]*(?:#[\w\u00C0-\u024F]+[ \t]*)+$/gm, '')
+    // Promo: "Daha detaylı veriler için BorsaCebimde uygulamasını..."
+    .replace(/^[ \t]*Daha detaylı veriler için[^\n]*$/gim, '')
     // # işaretini kaldır ama ticker kodunu koru (#THYAO → THYAO)
     .replace(/#(\w+)/g, '$1')
     .replace(/@\w+/g, '')
