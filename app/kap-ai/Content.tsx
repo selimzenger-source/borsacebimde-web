@@ -33,18 +33,22 @@ function parseNewsItem(item: NewsFeedItem): ParsedNews {
     || text.match(/(\d+(?:[.,]\d+)?)\s*\/\s*10/);
   const score = scoreMatch ? parseFloat(scoreMatch[1].replace(',', '.')) : null;
 
-  // Determine sentiment
+  // Determine sentiment — skor > kelime onceligi
+  // AI metni icinde "olumsuz etkilemeyecek" gibi yanlis anlasilan kelimeler olabilir,
+  // bu yuzden once skora bakiyoruz. Skor 6+ = olumlu, 4- = olumsuz, arasi = kelime analizi.
   let sentiment: 'olumlu' | 'notr' | 'olumsuz' = 'notr';
-  const lowerText = text.toLowerCase();
-  if (lowerText.includes('olumlu') || lowerText.includes('pozitif') || lowerText.includes('positive')) {
-    sentiment = 'olumlu';
-  } else if (lowerText.includes('olumsuz') || lowerText.includes('negatif') || lowerText.includes('negative')) {
-    sentiment = 'olumsuz';
-  }
-  // Also infer from score
-  if (score !== null && sentiment === 'notr') {
+  if (score !== null) {
     if (score >= 6) sentiment = 'olumlu';
     else if (score <= 4) sentiment = 'olumsuz';
+    // Arasi (4-6) notr kalir, kelime analizi asagida override edebilir
+  }
+  if (sentiment === 'notr') {
+    const lowerText = text.toLowerCase();
+    if (lowerText.includes('olumlu') || lowerText.includes('pozitif') || lowerText.includes('positive')) {
+      sentiment = 'olumlu';
+    } else if (lowerText.includes('olumsuz') || lowerText.includes('negatif') || lowerText.includes('negative')) {
+      sentiment = 'olumsuz';
+    }
   }
 
   // Clean text and remove metadata lines
@@ -364,8 +368,13 @@ export default function KapAIContent() {
       .then((items) => {
         const filtered = items.filter((it) => isKapPositive(it.source));
         const parsed = filtered.map(parseNewsItem);
-        setTotalCount(parsed.length);
-        setGroups(groupByDate(parsed));
+        // KAP Pozitif sayfasi: sadece olumlu + notr (skoru >=6) haberleri goster
+        // AI yanlis "olumsuz" etiketleyebilir, bu filtrasyon sayfa konseptini korur
+        const positiveOnly = parsed.filter(
+          (p) => p.sentiment !== 'olumsuz',
+        );
+        setTotalCount(positiveOnly.length);
+        setGroups(groupByDate(positiveOnly));
       })
       .catch(() => setError('Haberler yüklenirken bir sorun oluştu. Lütfen sayfayı yenileyin.'))
       .finally(() => setLoading(false));
