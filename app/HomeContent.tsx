@@ -513,15 +513,22 @@ export default function HomePage() {
               }
 
               // KAP haberleri için AI puanı ve sentiment çıkar
+              // Oncelik: skor > kelime. Cunku "olumsuz etkilemeyecek" gibi ifadeler
+              // metinde "olumsuz" gecip de bagalam pozitif olabilir.
               let aiScore: number | null = null;
               let sentiment: 'olumlu' | 'notr' | 'olumsuz' = 'notr';
               if (isKap) {
                 const scoreMatch = rawText.match(/(\d+(?:[.,]\d+)?)\s*\/\s*10/);
                 aiScore = scoreMatch ? parseFloat(scoreMatch[1].replace(',', '.')) : null;
-                const lower = rawText.toLowerCase();
-                if (lower.includes('olumlu') || lower.includes('pozitif')) sentiment = 'olumlu';
-                else if (lower.includes('olumsuz') || lower.includes('negatif')) sentiment = 'olumsuz';
-                else if (aiScore !== null) sentiment = aiScore >= 6 ? 'olumlu' : aiScore <= 4 ? 'olumsuz' : 'notr';
+                if (aiScore !== null) {
+                  if (aiScore >= 6) sentiment = 'olumlu';
+                  else if (aiScore <= 4) sentiment = 'olumsuz';
+                }
+                if (sentiment === 'notr') {
+                  const lower = rawText.toLowerCase();
+                  if (lower.includes('olumlu') || lower.includes('pozitif')) sentiment = 'olumlu';
+                  else if (lower.includes('olumsuz') || lower.includes('negatif')) sentiment = 'olumsuz';
+                }
               }
 
               // "PIYASA" → "Piyasa Haberi"
