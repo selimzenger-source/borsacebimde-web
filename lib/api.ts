@@ -199,7 +199,7 @@ export const api = {
   getSpkBulletins: (limit = 30) =>
     fetchAPI<SpkBulletinAnalysis[]>('/api/v1/public/spk-bulletin-analyses', { limit }),
 
-  getKapDisclosures: (params?: { hours?: number; ticker?: string; min_score?: number; max_score?: number; limit?: number; offset?: number }) =>
+  getKapDisclosures: (params?: { hours?: number; date?: string; ticker?: string; min_score?: number; max_score?: number; limit?: number; offset?: number }) =>
     fetchAPI<KapDisclosure[]>('/api/v1/kap-all-disclosures', params as Record<string, string | number>),
 
   getIPODetail: (id: number) =>

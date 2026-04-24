@@ -356,6 +356,8 @@ export default function KapTumContent() {
   const [tickerFilter, setTickerFilter] = useState('');
   const [timeFilter, setTimeFilter] = useState<TimeFilter>(720);
   const [sentimentFilter, setSentimentFilter] = useState<SentimentFilter>('all');
+  // Belirli bir gun secilirse timeFilter yok sayilir, sadece o gunun haberleri gelir
+  const [dateFilter, setDateFilter] = useState<string>(''); // YYYY-MM-DD formati
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
@@ -368,10 +370,16 @@ export default function KapTumContent() {
     }
 
     const params: Record<string, string | number> = {
-      hours: timeFilter,
       limit: 50,
       offset: reset ? 0 : items.length,
     };
+
+    // date filtresi aktifse timeFilter'i atla
+    if (dateFilter) {
+      params.date = dateFilter;
+    } else {
+      params.hours = timeFilter;
+    }
 
     if (tickerFilter.trim()) {
       params.ticker = tickerFilter.trim().toUpperCase();
@@ -396,13 +404,13 @@ export default function KapTumContent() {
         setLoading(false);
         setLoadingMore(false);
       });
-  }, [timeFilter, tickerFilter, sentimentFilter, items.length]);
+  }, [timeFilter, dateFilter, tickerFilter, sentimentFilter, items.length]);
 
   // Initial load + filter changes
   useEffect(() => {
     fetchData(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timeFilter, sentimentFilter]);
+  }, [timeFilter, dateFilter, sentimentFilter]);
 
   const handleTickerSearch = () => {
     fetchData(true);
@@ -556,15 +564,15 @@ export default function KapTumContent() {
         </div>
       </div>
 
-      {/* ── Time Filters ── */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 4, padding: '0 2px' }}>
+      {/* ── Time Filters + Date Picker ── */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 4, padding: '0 2px', alignItems: 'center' }}>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
           {TIME_FILTERS.map((f) => {
-            const active = timeFilter === f.key;
+            const active = !dateFilter && timeFilter === f.key;
             return (
               <button
                 key={f.key}
-                onClick={() => setTimeFilter(f.key)}
+                onClick={() => { setDateFilter(''); setTimeFilter(f.key); }}
                 style={{
                   padding: '5px 14px',
                   borderRadius: 20,
@@ -581,6 +589,53 @@ export default function KapTumContent() {
               </button>
             );
           })}
+        </div>
+
+        {/* Tarih Secici — son 30 gun icinde belirli bir gun */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: 'auto' }}>
+          <label style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 500 }}>
+            Gün seç:
+          </label>
+          <input
+            type="date"
+            value={dateFilter}
+            max={new Date().toISOString().split('T')[0]}
+            min={(() => {
+              const d = new Date();
+              d.setDate(d.getDate() - 30);
+              return d.toISOString().split('T')[0];
+            })()}
+            onChange={(e) => setDateFilter(e.target.value)}
+            style={{
+              padding: '5px 10px',
+              borderRadius: 8,
+              fontSize: 12,
+              fontWeight: 600,
+              cursor: 'pointer',
+              border: dateFilter ? '1px solid rgba(41,121,255,0.4)' : '1px solid var(--border-primary)',
+              background: dateFilter ? 'rgba(41,121,255,0.12)' : 'var(--bg-surface)',
+              color: dateFilter ? '#2979FF' : 'var(--text-secondary)',
+              colorScheme: 'dark',
+            }}
+          />
+          {dateFilter && (
+            <button
+              onClick={() => setDateFilter('')}
+              title="Tarih filtresini temizle"
+              style={{
+                padding: '4px 8px',
+                borderRadius: 6,
+                fontSize: 11,
+                fontWeight: 600,
+                cursor: 'pointer',
+                border: '1px solid var(--border-primary)',
+                background: 'var(--bg-surface)',
+                color: 'var(--text-muted)',
+              }}
+            >
+              ✕
+            </button>
+          )}
         </div>
       </div>
 
