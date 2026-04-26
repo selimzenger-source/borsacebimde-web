@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://borsacebimde.app/blog' },
 };
 
+// ISR: yeni eklenen blog'lar 5dk icinde rehber sayfasinda gorunsun
+export const revalidate = 300;
+
 function formatDisplayDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('tr-TR', {
     year: 'numeric',

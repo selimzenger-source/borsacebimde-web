@@ -15,7 +15,10 @@ export async function generateStaticParams() {
   return params;
 }
 
-export const dynamicParams = false;
+// Build sonrasi eklenen yeni blog'lar da gorunebilsin diye true
+export const dynamicParams = true;
+// ISR: 5 dakikada bir cache yenile (yeni blog'lar gorunsun)
+export const revalidate = 300;
 
 export async function generateMetadata({
   params,
