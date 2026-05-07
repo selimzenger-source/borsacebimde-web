@@ -3,15 +3,15 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Borsa Cebimde - Uygulamayı İndir',
   description:
-    'Borsa Cebimde uygulamasını Android ve iOS için ücretsiz indirin. Halka arz takibi, AI destekli KAP haberleri, tavan taban bildirimleri ve daha fazlası.',
-  keywords: ['borsa uygulaması', 'borsa takip uygulaması', 'halka arz uygulaması', 'KAP haber uygulaması', 'borsa cebimde indir', 'borsa bildirim uygulaması', 'BIST uygulama', 'hisse takip uygulaması', 'ücretsiz borsa uygulaması'],
+    'Borsa Cebimde uygulamasını Android ve iOS için ücretsiz indirin. Halka arz takibi, AI destekli şirket haberleri, tavan taban bildirimleri ve daha fazlası.',
+  keywords: ['borsa uygulaması', 'borsa takip uygulaması', 'halka arz uygulaması', 'şirket haber uygulaması', 'borsa cebimde indir', 'borsa bildirim uygulaması', 'BIST uygulama', 'hisse takip uygulaması', 'ücretsiz borsa uygulaması'],
   alternates: {
     canonical: 'https://borsacebimde.app/indir',
   },
   openGraph: {
     title: 'Borsa Cebimde - Uygulamayı Ücretsiz İndir',
     description:
-      'Halka arz, KAP haberleri, AI analiz ve borsa takibi. Şimdi ücretsiz indir!',
+      'Halka arz, şirket haberleri, AI analiz ve borsa takibi. Şimdi ücretsiz indir!',
     url: 'https://borsacebimde.app/indir',
     images: [{ url: '/images/icon-512.png', width: 512, height: 512, alt: 'Borsa Cebimde' }],
   },
@@ -26,7 +26,7 @@ export default function IndirLayout({ children }: { children: React.ReactNode })
           <h1>Borsa Cebimde - Uygulamayı İndir</h1>
           <p>
             Borsa Cebimde uygulamasını Android ve iOS için ücretsiz indirin.
-            Halka arz takvimi, yapay zeka destekli KAP haberleri, tavan taban bildirimleri,
+            Halka arz takvimi, yapay zeka destekli şirket haberleri, tavan taban bildirimleri,
             VİOP gece seansı ve SPK bülten analizleri tek uygulamada.
           </p>
           <ul>

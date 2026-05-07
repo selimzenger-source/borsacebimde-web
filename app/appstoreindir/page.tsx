@@ -6,7 +6,7 @@ import Image from 'next/image';
 const STORE_LINK = 'https://apps.apple.com/tr/app/borsa-cebimde-haber-arz/id6760570446?l=tr';
 
 const FEATURES = [
-  { emoji: '\u{1F514}', text: 'Anl\u0131k KAP Bildirimleri' },
+  { emoji: '\u{1F514}', text: 'Anl\u0131k \u015eirket Bildirimleri' },
   { emoji: '\u{1F4CA}', text: 'Halka Arz Takibi' },
   { emoji: '\u{1F916}', text: 'AI Haber Analizi' },
   { emoji: '\u{1F4C8}', text: 'Tavan / Taban' },
@@ -14,7 +14,7 @@ const FEATURES = [
 ];
 
 const BANNERS = [
-  { title: 'AI Destekli KAP Haberleri', desc: 'Yapay zek\u00e2 ile analiz edilmi\u015f KAP bildirimleri an\u0131nda cebinizde', color: 'rgba(16,185,129,0.12)', border: 'rgba(16,185,129,0.25)', icon: '\u{1F916}' },
+  { title: 'AI Destekli \u015eirket Haberleri', desc: 'Yapay zek\u00e2 ile analiz edilmi\u015f \u015firket bildirimleri an\u0131nda cebinizde', color: 'rgba(16,185,129,0.12)', border: 'rgba(16,185,129,0.25)', icon: '\u{1F916}' },
   { title: 'Halka Arz Takvimi', desc: 'T\u00fcm halka arzlar\u0131 takip edin, bildirim al\u0131n, f\u0131rsat ka\u00e7\u0131rmay\u0131n', color: 'rgba(59,130,246,0.12)', border: 'rgba(59,130,246,0.25)', icon: '\u{1F4CA}' },
   { title: 'Tavan & Taban Hisseleri', desc: 'G\u00fcn\u00fcn tavan ve taban hisseleri ve sebepleri', color: 'rgba(245,158,11,0.12)', border: 'rgba(245,158,11,0.25)', icon: '\u{1F4C9}\u{1F4C8}' },
   { title: 'Piyasa Haberleri', desc: 'G\u00fcncel ekonomi ve borsa haberleri, SPK b\u00fclten analizleri', color: 'rgba(168,85,247,0.12)', border: 'rgba(168,85,247,0.25)', icon: '\u{1F4F0}' },
@@ -55,7 +55,7 @@ export default function AppStoreIndirPage() {
         </div>
 
         <h1 style={{ marginTop: 10, fontSize: 24, fontWeight: 700, background: 'linear-gradient(135deg, #60a5fa, #a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.5px', opacity: isVisible ? 1 : 0, transform: isVisible ? 'translateY(0)' : 'translateY(12px)', transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s' }}>Borsa Cebimde</h1>
-        <p style={{ marginTop: 3, fontSize: 12, color: '#94A3B8', textAlign: 'center', maxWidth: 280, lineHeight: 1.4, opacity: isVisible ? 1 : 0, transition: 'opacity 0.5s 0.3s' }}>Halka Arz, KAP Haberleri, AI Analiz ve Borsa Takibi</p>
+        <p style={{ marginTop: 3, fontSize: 12, color: '#94A3B8', textAlign: 'center', maxWidth: 280, lineHeight: 1.4, opacity: isVisible ? 1 : 0, transition: 'opacity 0.5s 0.3s' }}>Halka Arz, Şirket Haberleri, AI Analiz ve Borsa Takibi</p>
 
         <div style={{ marginTop: 10, padding: '6px 18px', borderRadius: 999, background: 'linear-gradient(135deg, rgba(59,130,246,0.15), rgba(167,139,250,0.1))', border: '1px solid rgba(59,130,246,0.3)', opacity: isVisible ? 1 : 0, transition: 'opacity 0.5s 0.32s' }}>
           <span style={{ fontSize: 14, fontWeight: 700, background: 'linear-gradient(135deg, #60a5fa, #a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '1px' }}>%100 {'\u00DC'}CRETS{'\u0130'}Z & REKLAMSIZ</span>

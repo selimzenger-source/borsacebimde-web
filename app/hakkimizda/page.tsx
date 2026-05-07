@@ -49,7 +49,7 @@ export default function HakkimizdaPage() {
         </h2>
         <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
           Borsa Cebimde, Türkiye borsasını (BIST) yakından takip etmek isteyen bireysel yatırımcılar
-          için geliştirilen bir finans bilgi platformudur. Halka arz takvimi, yapay zeka destekli KAP
+          için geliştirilen bir finans bilgi platformudur. Halka arz takvimi, yapay zeka destekli şirket
           haber analizleri, tavan-taban hisseleri, VİOP gece seansı verileri, SPK haftalık bülten
           özetleri ve piyasa haberleri gibi içerikleri tek bir çatı altında sunar.
         </p>
@@ -72,7 +72,7 @@ export default function HakkimizdaPage() {
           </li>
           <li className="flex gap-2">
             <span style={{ color: '#10b981' }}>&#x2022;</span>
-            <span><strong style={{ color: 'var(--text-primary)' }}>KAP Haberleri (AI Analiz):</strong> Kamuyu Aydınlatma Platformu bildirimlerinin yapay zeka ile özetlenmesi ve pozitif/negatif sınıflandırması.</span>
+            <span><strong style={{ color: 'var(--text-primary)' }}>Şirket Haberleri (AI Analiz):</strong> Şirket bildirimlerinin yapay zeka ile özetlenmesi ve pozitif/negatif sınıflandırması.</span>
           </li>
           <li className="flex gap-2">
             <span style={{ color: '#10b981' }}>&#x2022;</span>
@@ -186,7 +186,7 @@ export default function HakkimizdaPage() {
           ve kullanıcılara sunulmaktadır.
         </p>
         <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-          Yapay zeka altyapımız, KAP bildirimlerini ve SPK bültenlerini otomatik olarak analiz
+          Yapay zeka altyapımız, şirket bildirimlerini ve SPK bültenlerini otomatik olarak analiz
           ederek olumlu, olumsuz veya nötr olarak sınıflandırmaktadır. Her haber için 1-10 arası
           etki puanı hesaplanarak yatırımcılara özetlenmiş ve hızlıca değerlendirilebilir bilgi
           sunulmaktadır. Bu teknoloji, yatırımcıların günde yüzlerce haberi tek tek okumasına
@@ -206,14 +206,14 @@ export default function HakkimizdaPage() {
           kullanılabilmektedir.
         </p>
         <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-          Anlık push bildirim sistemi sayesinde halka arz dağıtım tarihleri, önemli KAP
+          Anlık push bildirim sistemi sayesinde halka arz dağıtım tarihleri, önemli şirket
           haberleri, tavan-taban bildirimleri ve SPK bülten analizleri anında kullanıcılara
           iletilmektedir. Bildirim ayarları tamamen özelleştirilebilir olup kullanıcılar
           yalnızca ilgilendikleri konularda bildirim alabilmektedir.
         </p>
         <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
           Borsa Cebimde ücretsiz olarak indirilebilir ve kullanılabilir. BIST 50 hisselerinin
-          KAP haberleri ve temel özellikler ücretsiz sunulmaktadır. Tüm BIST hisselerine
+          Şirket haberleri ve temel özellikler ücretsiz sunulmaktadır. Tüm BIST hisselerine
           erişim için uygun fiyatlı VIP abonelik seçenekleri mevcuttur.
         </p>
       </section>

@@ -91,8 +91,8 @@ const features = [
   },
   {
     href: '/kap-ai',
-    title: 'KAP Pozitif Haber',
-    desc: 'Yapay zeka destekli KAP açıklama özetleri. Uzun metinleri saniyede kavrayın.',
+    title: 'Şirket Haber AI',
+    desc: 'Yapay zeka destekli şirket açıklama özetleri. Uzun metinleri saniyede kavrayın.',
     color: '#FFD700',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="w-6 h-6">
@@ -102,8 +102,8 @@ const features = [
   },
   {
     href: '/kap-tum-haberler',
-    title: 'Tüm KAP Haber',
-    desc: 'Yapay zeka analizi ile tüm KAP bildirimlerini takip edin.',
+    title: 'Tüm Şirket Haberleri',
+    desc: 'Yapay zeka analizi ile tüm şirket bildirimlerini takip edin.',
     color: '#FFD700',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="w-6 h-6">
@@ -348,7 +348,7 @@ export default function HomePage() {
               Borsa <span style={{ color: '#2979FF' }}>Cebimde</span>
             </h1>
             <p className="text-base sm:text-lg leading-relaxed mb-8 max-w-lg" style={{ color: '#94A3B8' }}>
-              Halka arz, KAP haberleri ve piyasa verileri tek elde
+              Halka arz, şirket haberleri ve piyasa verileri tek elde
             </p>
 
             <div className="flex flex-wrap gap-3 justify-center sm:justify-start">

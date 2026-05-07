@@ -3,14 +3,14 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Borsa Cebimde - Android Uygulama | Google Play',
   description:
-    'Borsa Cebimde Android uygulamasini Google Play\'den ucretsiz indirin. Halka arz takibi, AI destekli KAP haberleri, tavan taban bildirimleri.',
+    'Borsa Cebimde Android uygulamasini Google Play\'den ucretsiz indirin. Halka arz takibi, AI destekli sirket haberleri, tavan taban bildirimleri.',
   keywords: ['borsa uygulamasi android', 'borsa takip uygulamasi', 'halka arz uygulamasi android', 'borsa cebimde google play', 'ucretsiz borsa uygulamasi android', 'BIST uygulama android'],
   alternates: {
     canonical: 'https://borsacebimde.app/indir',
   },
   openGraph: {
     title: 'Borsa Cebimde - Android Uygulama | Ucretsiz',
-    description: 'Halka arz, KAP haberleri, AI analiz. Google Play\'den ucretsiz indir!',
+    description: 'Halka arz, sirket haberleri, AI analiz. Google Play\'den ucretsiz indir!',
     url: 'https://borsacebimde.app/androidindir',
     images: [{ url: '/images/icon-512.png', width: 512, height: 512, alt: 'Borsa Cebimde' }],
   },

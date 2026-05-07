@@ -2,11 +2,11 @@ import type { Metadata } from 'next';
 import KapAIContent from './Content';
 
 export const metadata: Metadata = {
-  title: 'KAP Pozitif Haberler - Yapay Zeka Destekli KAP Analizi',
+  title: 'Şirket Haberleri - Yapay Zeka Destekli Haber Analizi',
   description:
-    'Yapay zeka ile filtrelenmiş pozitif KAP haberleri. BIST şirketlerinin olumlu bildirimleri, AI etki puanı ve duygu analizi ile anlık takip.',
+    'Yapay zeka ile filtrelenmiş pozitif şirket haberleri. BIST şirketlerinin olumlu bildirimleri, AI etki puanı ve duygu analizi ile anlık takip.',
   alternates: { canonical: 'https://borsacebimde.app/kap-ai' },
-  keywords: ['KAP', 'KAP haberleri', 'pozitif KAP', 'KAP AI', 'BIST KAP bildirimleri'],
+  keywords: ['borsa haberleri', 'şirket bildirimleri', 'pozitif haber', 'haber AI', 'BIST bildirimleri'],
 };
 
 export default function KapAiPage() {

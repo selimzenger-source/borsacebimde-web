@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Tüm KAP Haberleri - Kamuyu Aydınlatma Platformu Bildirimleri',
+  title: 'Tüm Şirket Haberleri - Borsa Bildirimleri',
   description:
-    'KAP bildirimlerinin tam listesi. Tüm hisse senetleri için KAP haberleri, özel durum açıklamaları ve finansal raporlar.',
-  keywords: ['KAP haberleri', 'tüm KAP bildirimleri', 'özel durum açıklaması', 'KAP finansal rapor', 'BIST hisse haberleri', 'KAP bildirimi', 'şirket haberleri', 'borsa bildirimleri', 'kamuyu aydınlatma'],
+    'Şirket bildirimlerinin tam listesi. Tüm hisse senetleri için haberler, özel durum açıklamaları ve finansal raporlar.',
+  keywords: ['borsa haberleri', 'şirket bildirimleri', 'özel durum açıklaması', 'finansal rapor', 'BIST hisse haberleri', 'şirket haberleri', 'borsa bildirimleri'],
   alternates: { canonical: 'https://borsacebimde.app/kap-tum-haberler' },
   openGraph: {
-    title: 'Tüm KAP Haberleri | Borsa Cebimde',
-    description: 'KAP bildirimlerinin tam listesi, özel durum açıklamaları ve finansal raporlar.',
+    title: 'Tüm Şirket Haberleri | Borsa Cebimde',
+    description: 'Şirket bildirimlerinin tam listesi, özel durum açıklamaları ve finansal raporlar.',
   },
 };
 
@@ -18,7 +18,7 @@ export default function KapTumHaberlerLayout({ children }: { children: React.Rea
       {children}
       <noscript>
         <div style={{ padding: 20 }}>
-          <h1>Tüm KAP Haberleri</h1>
+          <h1>Tüm Şirket Haberleri</h1>
           <p>
             Kamuyu Aydınlatma Platformu üzerinden yayınlanan tüm bildirimleri bu sayfada
             takip edebilirsiniz. Özel durum açıklamaları, finansal raporlar ve genel kurul kararları

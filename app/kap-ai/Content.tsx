@@ -348,7 +348,7 @@ function NewsCard({ parsed }: { parsed: ParsedNews }) {
       {/* Source label */}
       <div style={{ marginTop: 8, display: 'flex', justifyContent: 'flex-end' }}>
         <span style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 500 }}>
-          KAP Pozitif Haber
+          Şirket Haberleri
         </span>
       </div>
     </article>
@@ -439,10 +439,10 @@ export default function KapAIContent() {
                 marginBottom: 6,
               }}
             >
-              KAP Pozitif Haber
+              Şirket Haber AI
             </h1>
             <p style={{ color: 'var(--text-secondary)', fontSize: 14, lineHeight: 1.5 }}>
-              Yapay zeka ile filtrelenmiş pozitif KAP bildirimleri
+              Yapay zeka ile filtrelenmiş pozitif şirket bildirimleri
             </p>
           </div>
 
@@ -470,7 +470,7 @@ export default function KapAIContent() {
       </header>
 
       <InlineAppBanner
-        title="Anlık KAP Bildirimleri Alın!"
+        title="Anlık Şirket Bildirimleri Alın!"
         message="Haber düşer düşmez tüm BIST senetlerinden anında bildirim alın."
       />
 
@@ -565,12 +565,12 @@ export default function KapAIContent() {
             <DocumentIcon className="w-6 h-6" />
           </div>
           <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>
-            Son 30 günde pozitif KAP haberi bulunamadı.
+            Son 30 günde pozitif şirket haberi bulunamadı.
           </p>
         </div>
       )}
 
-      <FAQ items={kapFAQ} title="KAP Haberleri Hakkında Sıkça Sorulan Sorular" />
+      <FAQ items={kapFAQ} title="Şirket Haberleri Hakkında Sıkça Sorulan Sorular" />
 
       {/* ── App Store Banner ── */}
       <div style={{ marginTop: 40 }}>

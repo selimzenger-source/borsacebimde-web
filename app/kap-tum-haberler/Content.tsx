@@ -339,7 +339,7 @@ function DisclosureCard({ item }: { item: KapDisclosure }) {
             <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
             </svg>
-            KAP Linki Aç
+            Resmi Bildirimi Aç
           </a>
         </div>
       )}
@@ -468,10 +468,10 @@ export default function KapTumContent() {
               </span>
             </div>
             <h1 style={{ color: 'var(--text-primary)', fontSize: 'clamp(22px, 4vw, 30px)', fontWeight: 800, marginBottom: 6 }}>
-              Tüm KAP Haberleri
+              Tüm Şirket Haberleri
             </h1>
             <p style={{ color: 'var(--text-secondary)', fontSize: 14, lineHeight: 1.5 }}>
-              Yapay zeka analizi ile tüm KAP bildirimleri
+              Yapay zeka analizi ile tüm şirket bildirimleri
             </p>
           </div>
           {!loading && (
@@ -499,8 +499,8 @@ export default function KapTumContent() {
       </header>
 
       <InlineAppBanner
-        title="KAP Haberlerini AI ile Takip Edin!"
-        message="Tüm şirketlerin KAP haberlerini AI yorumuyla takip edin, favori listenize bildirim alın."
+        title="Şirket Haberlerini AI ile Takip Edin!"
+        message="Tüm şirketlerin haberlerini AI yorumuyla takip edin, favori listenize bildirim alın."
       />
 
       {/* ── Ticker Search ── */}
@@ -797,10 +797,10 @@ export default function KapTumContent() {
 
       <InlineAppBanner
         title="Tüm Hisseler İçin Bildirim Alın!"
-        message="Anlık KAP bildirimleri ve favori hisse takibi için uygulamayı indirin."
+        message="Anlık şirket bildirimleri ve favori hisse takibi için uygulamayı indirin."
       />
 
-      <FAQ items={kapFAQ} title="KAP Haberleri Hakkında Sıkça Sorulan Sorular" />
+      <FAQ items={kapFAQ} title="Şirket Haberleri Hakkında Sıkça Sorulan Sorular" />
 
       {/* ── AppStore Banner ── */}
       <div style={{ marginTop: 24 }}>

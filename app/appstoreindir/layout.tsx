@@ -3,14 +3,14 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Borsa Cebimde - iPhone Uygulama | App Store',
   description:
-    'Borsa Cebimde iOS uygulamasini App Store\'dan ucretsiz indirin. Halka arz takibi, AI destekli KAP haberleri, tavan taban bildirimleri.',
+    'Borsa Cebimde iOS uygulamasini App Store\'dan ucretsiz indirin. Halka arz takibi, AI destekli sirket haberleri, tavan taban bildirimleri.',
   keywords: ['borsa uygulamasi ios', 'borsa uygulamasi iphone', 'halka arz uygulamasi iphone', 'borsa cebimde app store', 'ucretsiz borsa uygulamasi ios', 'BIST uygulama iphone'],
   alternates: {
     canonical: 'https://borsacebimde.app/indir',
   },
   openGraph: {
     title: 'Borsa Cebimde - iPhone Uygulama | Ucretsiz',
-    description: 'Halka arz, KAP haberleri, AI analiz. App Store\'dan ucretsiz indir!',
+    description: 'Halka arz, sirket haberleri, AI analiz. App Store\'dan ucretsiz indir!',
     url: 'https://borsacebimde.app/appstoreindir',
     images: [{ url: '/images/icon-512.png', width: 512, height: 512, alt: 'Borsa Cebimde' }],
   },

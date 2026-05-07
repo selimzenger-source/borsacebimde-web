@@ -9,7 +9,7 @@ const STORE_LINKS = {
 };
 
 const FEATURES = [
-  { emoji: '\u{1F514}', text: 'Anl\u0131k KAP Bildirimleri' },
+  { emoji: '\u{1F514}', text: 'Anl\u0131k \u015eirket Bildirimleri' },
   { emoji: '\u{1F4CA}', text: 'Halka Arz Takibi' },
   { emoji: '\u{1F916}', text: 'AI Haber Analizi' },
   { emoji: '\u{1F4C8}', text: 'Tavan / Taban' },
@@ -18,8 +18,8 @@ const FEATURES = [
 
 const BANNERS = [
   {
-    title: 'AI Destekli KAP Haberleri',
-    desc: 'Yapay zek\u00e2 ile analiz edilmi\u015f KAP bildirimleri an\u0131nda cebinizde',
+    title: 'AI Destekli \u015eirket Haberleri',
+    desc: 'Yapay zek\u00e2 ile analiz edilmi\u015f \u015firket bildirimleri an\u0131nda cebinizde',
     color: 'rgba(16,185,129,0.12)',
     border: 'rgba(16,185,129,0.25)',
     icon: '\u{1F916}',
@@ -110,7 +110,7 @@ export default function IndirPage() {
         </h1>
 
         <p style={{ marginTop: 3, fontSize: 12, color: '#94A3B8', textAlign: 'center', maxWidth: 280, lineHeight: 1.4, opacity: isVisible ? 1 : 0, transition: 'opacity 0.5s 0.3s' }}>
-          Halka Arz, KAP Haberleri, AI Analiz ve Borsa Takibi
+          Halka Arz, Şirket Haberleri, AI Analiz ve Borsa Takibi
         </p>
 
         {/* {'\u00DC'}cretsiz badge */}
