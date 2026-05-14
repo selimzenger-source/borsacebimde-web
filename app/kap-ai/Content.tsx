@@ -439,7 +439,7 @@ export default function KapAIContent() {
                 marginBottom: 6,
               }}
             >
-              Şirket Haber AI
+              Şirket Pozitif Haber
             </h1>
             <p style={{ color: 'var(--text-secondary)', fontSize: 14, lineHeight: 1.5 }}>
               Yapay zeka ile filtrelenmiş pozitif şirket bildirimleri

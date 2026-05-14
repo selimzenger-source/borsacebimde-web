@@ -91,8 +91,8 @@ const features = [
   },
   {
     href: '/kap-ai',
-    title: 'Şirket Haber AI',
-    desc: 'Yapay zeka destekli şirket açıklama özetleri. Uzun metinleri saniyede kavrayın.',
+    title: 'Şirket Pozitif Haber',
+    desc: 'BIST 50 pozitif haberler AI ile anında. Uzun metinleri saniyede kavrayın.',
     color: '#FFD700',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} className="w-6 h-6">

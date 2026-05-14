@@ -122,7 +122,6 @@ function StockTable({ stocks, type }: { stocks: DailyMarketStat[]; type: 'ceilin
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border-primary)' }}>
                 <th className="text-left font-semibold pb-2.5 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 12 }}>Hisse</th>
-                <th className="text-right font-semibold pb-2.5 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 12 }}>Fiyat</th>
                 <th className="text-right font-semibold pb-2.5 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 12 }}>Son 30G</th>
                 <th className="text-center font-semibold pb-2.5 px-1.5" style={{ color: 'var(--text-muted)', fontSize: 12 }}>Seri</th>
               </tr>
@@ -145,9 +144,6 @@ function StockTable({ stocks, type }: { stocks: DailyMarketStat[]; type: 'ceilin
                           <span style={{ fontSize: 12, lineHeight: 1.45, color: 'var(--text-muted)', marginTop: 3 }}>{s.reason}</span>
                         )}
                       </div>
-                    </td>
-                    <td className="py-2.5 px-1.5 text-right font-mono" style={{ color: 'var(--text-secondary)', fontSize: 13 }}>
-                      {s.close_price.toFixed(2)}
                     </td>
                     <td className="py-2.5 px-1.5 text-right">
                       {(() => {
