@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     'VİOP gece seansı verileri, vadeli işlem kontratları, endeks ve döviz vadeli fiyatları. VIOP gece seansı anlık takip.',
   keywords: ['VİOP', 'VİOP gece seansı', 'VİOP akşam seansı', 'vadeli işlem', 'opsiyon piyasası', 'BIST vadeli', 'endeks vadeli', 'döviz vadeli', 'VİOP verileri'],
-  alternates: { canonical: 'https://borsacebimde.app/viop' },
+  alternates: { canonical: 'https://borsacebimde.com/viop' },
   openGraph: {
     title: 'VİOP Gece Seansı | Borsa Cebimde',
     description: 'VİOP gece seansı verileri, vadeli işlem kontratları ve anlık fiyatlar.',

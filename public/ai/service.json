@@ -1,12 +1,12 @@
 {
   "version": "1.0",
-  "site": "borsacebimde.app",
+  "site": "borsacebimde.com",
   "updated": "2026-04-19",
   "services": [
     {
       "name": "Halka Arz Takvimi",
       "slug": "halka-arz",
-      "url": "https://borsacebimde.app/halka-arz",
+      "url": "https://borsacebimde.com/halka-arz",
       "description": "SPK basvurusundan isleme baslamaya kadar halka arzlarin 6 asamali otomatik takibi.",
       "stages": [
         "SPK Basvuru Yapildi",
@@ -26,7 +26,7 @@
     {
       "name": "KAP AI Haber Analizi",
       "slug": "kap-ai",
-      "url": "https://borsacebimde.app/kap-ai",
+      "url": "https://borsacebimde.com/kap-ai",
       "description": "Kamu Aydinlatma Platformu bildirimlerinin yapay zeka ile analizi.",
       "features": [
         "10 uzerinden duygu puani (sentiment score)",
@@ -40,7 +40,7 @@
     {
       "name": "SPK Bulten Analizi",
       "slug": "spk-bulten",
-      "url": "https://borsacebimde.app/spk-bulten",
+      "url": "https://borsacebimde.com/spk-bulten",
       "description": "Haftalik SPK bultenlerinin AI tarafindan ozetlenmesi.",
       "features": [
         "Yayinlandiktan 15-30 dakika icinde AI ozeti",
@@ -62,7 +62,7 @@
     {
       "name": "Kurum Onerileri",
       "slug": "kurum-onerileri",
-      "url": "https://borsacebimde.app/kurum-onerileri",
+      "url": "https://borsacebimde.com/kurum-onerileri",
       "description": "Yatirim kurumlarinin hisse hedef fiyat raporlari.",
       "features": [
         "Hedef fiyat + aralik (min/max)",
@@ -85,7 +85,7 @@
     {
       "name": "Piyasa Haberleri",
       "slug": "piyasa-haberleri",
-      "url": "https://borsacebimde.app/piyasa-haberleri",
+      "url": "https://borsacebimde.com/piyasa-haberleri",
       "description": "RSS kaynaklarindan anlik AI yorumlu piyasa haberleri.",
       "sources": [
         "Bloomberg HT",

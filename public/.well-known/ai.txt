@@ -1,5 +1,5 @@
 # Borsa Cebimde - AI Crawler Permissions
-# https://borsacebimde.app/.well-known/ai.txt
+# https://borsacebimde.com/.well-known/ai.txt
 # Guncellenme: 2026-04-19
 
 User-Agent: *
@@ -12,5 +12,5 @@ Allow-Search: yes
 # AI arama motorlarinda kaynak gosterilebilir.
 
 Contact: borsacebimde@gmail.com
-Sitemap: https://borsacebimde.app/sitemap.xml
-LLMs: https://borsacebimde.app/llms.txt
+Sitemap: https://borsacebimde.com/sitemap.xml
+LLMs: https://borsacebimde.com/llms.txt

@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: 'Tavan Taban Hisseleri - BIST Günlük Fiyat Limitleri',
   description:
     'Borsa İstanbul günlük tavan ve taban yapan hisseler. Ardışık tavan-taban serileri, fiyat limitleri ve detaylı hisse analizi.',
-  alternates: { canonical: 'https://borsacebimde.app/tavan-taban' },
+  alternates: { canonical: 'https://borsacebimde.com/tavan-taban' },
   keywords: ['tavan hisseler', 'taban hisseler', 'BIST tavan taban', 'tavan yapan hisseler'],
 };
 

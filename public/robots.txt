@@ -1,5 +1,5 @@
-# Borsa Cebimde - borsacebimde.app
-# https://borsacebimde.app
+# Borsa Cebimde - borsacebimde.com
+# https://borsacebimde.com
 
 User-agent: *
 Allow: /
@@ -104,4 +104,4 @@ Disallow: /api/private/
 # ai-input=yes  -> AI cevap uretirken kaynak olarak gösterilebilir
 Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
-Sitemap: https://borsacebimde.app/sitemap.xml
+Sitemap: https://borsacebimde.com/sitemap.xml

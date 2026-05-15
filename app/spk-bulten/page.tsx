@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: 'SPK Bülten Analizleri - Sermaye Piyasası Kurulu Haftalık Bülten',
   description:
     'SPK haftalık bültenlerinin yapay zeka destekli analizleri. Sermaye Piyasası Kurulu kararları, halka arz onayları ve yatırımcılar için önemli duyurular.',
-  alternates: { canonical: 'https://borsacebimde.app/spk-bulten' },
+  alternates: { canonical: 'https://borsacebimde.com/spk-bulten' },
   keywords: ['SPK bülten', 'SPK haftalık bülten', 'Sermaye Piyasası Kurulu', 'SPK kararları'],
 };
 

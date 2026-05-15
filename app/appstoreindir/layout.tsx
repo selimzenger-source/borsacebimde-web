@@ -6,12 +6,12 @@ export const metadata: Metadata = {
     'Borsa Cebimde iOS uygulamasini App Store\'dan ucretsiz indirin. Halka arz takibi, AI destekli sirket haberleri, tavan taban bildirimleri.',
   keywords: ['borsa uygulamasi ios', 'borsa uygulamasi iphone', 'halka arz uygulamasi iphone', 'borsa cebimde app store', 'ucretsiz borsa uygulamasi ios', 'BIST uygulama iphone'],
   alternates: {
-    canonical: 'https://borsacebimde.app/indir',
+    canonical: 'https://borsacebimde.com/indir',
   },
   openGraph: {
     title: 'Borsa Cebimde - iPhone Uygulama | Ucretsiz',
     description: 'Halka arz, sirket haberleri, AI analiz. App Store\'dan ucretsiz indir!',
-    url: 'https://borsacebimde.app/appstoreindir',
+    url: 'https://borsacebimde.com/appstoreindir',
     images: [{ url: '/images/icon-512.png', width: 512, height: 512, alt: 'Borsa Cebimde' }],
   },
 };

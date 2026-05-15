@@ -3,7 +3,7 @@
 ## Proje Bilgileri
 - **Teknoloji**: Next.js 14 + Tailwind CSS (static export)
 - **Deploy**: Render Static Site (free tier)
-- **Domain**: borsacebimde.app (Cloudflare DNS)
+- **Domain**: borsacebimde.com (Cloudflare DNS)
 - **API**: https://sz-bist-finans-api.onrender.com (aynı backend)
 
 ## AdSense

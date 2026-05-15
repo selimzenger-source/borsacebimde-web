@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: 'KVKK Aydınlatma Metni | Borsa Cebimde',
   description:
     '6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında Borsa Cebimde kullanıcılarına yönelik aydınlatma metni. Veri sahibi haklarınız ve başvuru yolları.',
-  alternates: { canonical: 'https://borsacebimde.app/kvkk-aydinlatma' },
+  alternates: { canonical: 'https://borsacebimde.com/kvkk-aydinlatma' },
 };
 
 export default function KvkkPage() {
@@ -39,7 +39,7 @@ export default function KvkkPage() {
             1. Veri Sorumlusu
           </h2>
           <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-            Borsa Cebimde uygulaması ve borsacebimde.app web sitesi kapsamında kişisel verileriniz,
+            Borsa Cebimde uygulaması ve borsacebimde.com web sitesi kapsamında kişisel verileriniz,
             6698 sayılı KVKK'ya uygun şekilde işlenmektedir. Veri sorumlusu sıfatıyla bu aydınlatma metni
             hazırlanmıştır. İletişim: <strong>borsacebimde@gmail.com</strong>
           </p>

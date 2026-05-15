@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     'Güncel borsa haberleri, piyasa analizleri, ekonomi haberleri. BIST, döviz, altın ve emtia piyasalarından son gelişmeler.',
   keywords: ['borsa haberleri', 'piyasa haberleri', 'finans haberleri', 'BIST haberler', 'ekonomi haberleri', 'döviz haberleri', 'altın haberleri', 'borsa gündem'],
-  alternates: { canonical: 'https://borsacebimde.app/piyasa-haberleri' },
+  alternates: { canonical: 'https://borsacebimde.com/piyasa-haberleri' },
   openGraph: {
     title: 'Piyasa Haberleri | Borsa Cebimde',
     description: 'Güncel borsa haberleri, piyasa analizleri ve ekonomi haberleri.',

@@ -6,7 +6,7 @@ import { fetchIposSSR } from '@/lib/ssr-prefetch';
 export const metadata: Metadata = {
   title: 'Halka Arz Takvimi 2026 - Güncel SPK Onaylı Halka Arzlar',
   description: 'Güncel halka arz takvimi 2026. SPK onaylı halka arzlar, talep toplama tarihleri, lot dağıtımı, aracı kurum bilgileri ve tavan takibi. BIST halka arz takibi.',
-  alternates: { canonical: 'https://borsacebimde.app/halka-arz' },
+  alternates: { canonical: 'https://borsacebimde.com/halka-arz' },
   keywords: ['halka arz', 'halka arz takvimi', 'halka arz 2026', 'SPK onaylı halka arz', 'borsa halka arz', 'lot dağıtımı', 'tavan takibi'],
 };
 

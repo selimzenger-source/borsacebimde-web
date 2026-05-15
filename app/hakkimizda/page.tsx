@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: 'Hakkımızda',
   description:
     'Borsa Cebimde hakkında bilgi, iletişim ve ekip tanıtımı. Halka arz takvimi, KAP haberleri ve borsa takibi uygulaması.',
-  alternates: { canonical: 'https://borsacebimde.app/hakkimizda' },
+  alternates: { canonical: 'https://borsacebimde.com/hakkimizda' },
 };
 
 export default function HakkimizdaPage() {

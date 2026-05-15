@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     'Şirket bildirimlerinin tam listesi. Tüm hisse senetleri için haberler, özel durum açıklamaları ve finansal raporlar.',
   keywords: ['borsa haberleri', 'şirket bildirimleri', 'özel durum açıklaması', 'finansal rapor', 'BIST hisse haberleri', 'şirket haberleri', 'borsa bildirimleri'],
-  alternates: { canonical: 'https://borsacebimde.app/kap-tum-haberler' },
+  alternates: { canonical: 'https://borsacebimde.com/kap-tum-haberler' },
   openGraph: {
     title: 'Tüm Şirket Haberleri | Borsa Cebimde',
     description: 'Şirket bildirimlerinin tam listesi, özel durum açıklamaları ve finansal raporlar.',

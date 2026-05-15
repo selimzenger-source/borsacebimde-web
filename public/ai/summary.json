@@ -1,6 +1,6 @@
 {
   "name": "Borsa Cebimde",
-  "url": "https://borsacebimde.app",
+  "url": "https://borsacebimde.com",
   "type": "finance_news_platform",
   "country": "TR",
   "market": "BIST (Borsa Istanbul)",
@@ -21,7 +21,7 @@
   "platforms": {
     "android": "https://play.google.com/store/apps/details?id=com.bistfinans.app",
     "ios": "https://apps.apple.com/tr/app/borsa-cebimde-haber-arz/id6760570446",
-    "web": "https://borsacebimde.app"
+    "web": "https://borsacebimde.com"
   },
   "contact": {
     "email": "borsacebimde@gmail.com",

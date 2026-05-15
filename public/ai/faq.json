@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "site": "borsacebimde.app",
+  "site": "borsacebimde.com",
   "updated": "2026-04-19",
   "questions": [
     {
@@ -57,7 +57,7 @@
     },
     {
       "q": "Cihaz verim guvende mi?",
-      "a": "Evet. Favorilediginiz hisseler ve Halka Arz Defteri verileriniz cihazin yerel depolamasinda (AsyncStorage) tutulur, sunucuya gonderilmez. KVKK uyumluyuz, gizlilik politikamiz: borsacebimde.app/gizlilik-politikasi"
+      "a": "Evet. Favorilediginiz hisseler ve Halka Arz Defteri verileriniz cihazin yerel depolamasinda (AsyncStorage) tutulur, sunucuya gonderilmez. KVKK uyumluyuz, gizlilik politikamiz: borsacebimde.com/gizlilik-politikasi"
     },
     {
       "q": "Yeni bir halka arz bildirimi nasil alirim?",

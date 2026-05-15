@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: 'İletişim | Borsa Cebimde',
   description:
     'Borsa Cebimde iletişim bilgileri. Öneri, şikayet, iş birliği ve destek talepleriniz için bize ulaşabilirsiniz.',
-  alternates: { canonical: 'https://borsacebimde.app/iletisim' },
+  alternates: { canonical: 'https://borsacebimde.com/iletisim' },
 };
 
 export default function IletisimPage() {
@@ -180,7 +180,7 @@ export default function IletisimPage() {
         </h2>
         <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
           <strong>Proje Adı:</strong> Borsa Cebimde<br />
-          <strong>Web:</strong> borsacebimde.app<br />
+          <strong>Web:</strong> borsacebimde.com<br />
           <strong>E-posta:</strong> borsacebimde@gmail.com<br />
           <strong>Platformlar:</strong> iOS, Android, Web
         </p>

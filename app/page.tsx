@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: 'Borsa Cebimde - Halka Arz Takvimi, KAP Haberleri, AI Analiz ve Borsa Takibi',
   description:
     'Halka arz takvimi 2026, yapay zeka destekli KAP haberleri, tavan taban hisseleri, VİOP gece seansı, SPK bülten analizleri ve piyasa haberleri. BIST borsa verilerini anlık takip edin.',
-  alternates: { canonical: 'https://borsacebimde.app' },
+  alternates: { canonical: 'https://borsacebimde.com' },
 };
 
 export default function HomePage() {

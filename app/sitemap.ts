@@ -5,7 +5,7 @@ import { fetchAllBlogs } from '@/lib/blog-data';
 // Statik sayfalar + backend'den gelen dinamik blog yazilari (AI
 // tarafindan uretilenler dahil).
 
-const BASE = 'https://borsacebimde.app';
+const BASE = 'https://borsacebimde.com';
 const NOW = new Date();
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

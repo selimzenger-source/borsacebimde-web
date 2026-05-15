@@ -14,12 +14,12 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: 'https://borsacebimde.app' },
+      { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: 'https://borsacebimde.com' },
       ...items.map((item, idx) => ({
         '@type': 'ListItem',
         position: idx + 2,
         name: item.label,
-        ...(item.href ? { item: `https://borsacebimde.app${item.href}` } : {}),
+        ...(item.href ? { item: `https://borsacebimde.com${item.href}` } : {}),
       })),
     ],
   };

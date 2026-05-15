@@ -142,7 +142,7 @@ export const genelFAQ: FAQItem[] = [
   },
   {
     question: 'Web sitesi ile mobil uygulama arasındaki fark nedir?',
-    answer: 'Web sitemiz (borsacebimde.app) tüm temel özellikleri sunmaktadır: halka arz takvimi, KAP haberleri, tavan taban hisseleri, VİOP gece seansı ve SPK bülten analizleri. Mobil uygulama ise bunlara ek olarak anlık push bildirimler, favori hisse listesi, kişiselleştirilmiş bildirim ayarları ve çevrimdışı erişim gibi özellikler sunmaktadır.',
+    answer: 'Web sitemiz (borsacebimde.com) tüm temel özellikleri sunmaktadır: halka arz takvimi, KAP haberleri, tavan taban hisseleri, VİOP gece seansı ve SPK bülten analizleri. Mobil uygulama ise bunlara ek olarak anlık push bildirimler, favori hisse listesi, kişiselleştirilmiş bildirim ayarları ve çevrimdışı erişim gibi özellikler sunmaktadır.',
   },
   {
     question: 'Veriler ne sıklıkla güncelleniyor?',

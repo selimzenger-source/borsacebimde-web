@@ -28,7 +28,7 @@ export default function KullanimKosullariPage() {
         <section>
           <h2 className="text-lg font-bold mb-3" style={{ color: 'var(--text-primary)' }}>1. Genel</h2>
           <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-            Bu kullan{'\u0131'}m ko{'\u015f'}ullar{'\u0131'}, <strong>borsacebimde.app</strong> web sitesi ve
+            Bu kullan{'\u0131'}m ko{'\u015f'}ullar{'\u0131'}, <strong>borsacebimde.com</strong> web sitesi ve
             &ldquo;Borsa Cebimde - Haber &amp; Arz&rdquo; mobil uygulamas{'\u0131'}n{'\u0131'}n (bundan sonra &ldquo;Hizmet&rdquo; olarak an{'\u0131'}lacakt{'\u0131'}r)
             kullan{'\u0131'}m{'\u0131'}na ili{'\u015f'}kin {'\u015f'}art ve ko{'\u015f'}ullar{'\u0131'} belirler. Hizmeti kullanarak bu ko{'\u015f'}ullar{'\u0131'} kabul etmi{'\u015f'} say{'\u0131'}l{'\u0131'}rs{'\u0131'}n{'\u0131'}z.
           </p>

@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Borsa Rehberi - Yatırım Eğitim Yazıları',
   description:
     'Halka arz, KAP haberleri, tavan taban hisseleri, VİOP, SPK ve borsa yatırımı hakkında kapsamlı eğitim yazıları ve rehberler.',
-  alternates: { canonical: 'https://borsacebimde.app/blog' },
+  alternates: { canonical: 'https://borsacebimde.com/blog' },
 };
 
 // ISR: yeni eklenen blog'lar 5dk icinde rehber sayfasinda gorunsun

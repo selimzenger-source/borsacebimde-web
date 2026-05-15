@@ -6,12 +6,12 @@ export const metadata: Metadata = {
     'Borsa Cebimde Android uygulamasini Google Play\'den ucretsiz indirin. Halka arz takibi, AI destekli sirket haberleri, tavan taban bildirimleri.',
   keywords: ['borsa uygulamasi android', 'borsa takip uygulamasi', 'halka arz uygulamasi android', 'borsa cebimde google play', 'ucretsiz borsa uygulamasi android', 'BIST uygulama android'],
   alternates: {
-    canonical: 'https://borsacebimde.app/indir',
+    canonical: 'https://borsacebimde.com/indir',
   },
   openGraph: {
     title: 'Borsa Cebimde - Android Uygulama | Ucretsiz',
     description: 'Halka arz, sirket haberleri, AI analiz. Google Play\'den ucretsiz indir!',
-    url: 'https://borsacebimde.app/androidindir',
+    url: 'https://borsacebimde.com/androidindir',
     images: [{ url: '/images/icon-512.png', width: 512, height: 512, alt: 'Borsa Cebimde' }],
   },
 };

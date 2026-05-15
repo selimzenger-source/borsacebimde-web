@@ -28,7 +28,7 @@ export default function GizlilikPolitikasiPage() {
         <section>
           <h2 className="text-lg font-bold mb-3" style={{ color: 'var(--text-primary)' }}>1. Veri Sorumlusu</h2>
           <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-            Bu web sitesi (&quot;borsacebimde.app&quot;) ve Borsa Cebimde mobil uygulaması, bireysel geli&#351;tirici Selim Zenger taraf&#305;ndan i&#351;letilmektedir.
+            Bu web sitesi (&quot;borsacebimde.com&quot;) ve Borsa Cebimde mobil uygulaması, bireysel geli&#351;tirici Selim Zenger taraf&#305;ndan i&#351;letilmektedir.
             Ki&#351;isel verileriniz 6698 say&#305;l&#305; Ki&#351;isel Verilerin Korunmas&#305; Kanunu (&quot;KVKK&quot;) kapsam&#305;nda i&#351;lenmektedir.
           </p>
           <p className="text-sm mt-2" style={{ color: 'var(--text-secondary)' }}>
@@ -148,7 +148,7 @@ export default function GizlilikPolitikasiPage() {
           </p>
           <ul className="list-none mt-2 space-y-1 text-sm" style={{ color: 'var(--text-secondary)' }}>
             <li><strong style={{ color: 'var(--text-primary)' }}>E-posta:</strong> borsacebimde@gmail.com</li>
-            <li><strong style={{ color: 'var(--text-primary)' }}>Web:</strong> borsacebimde.app</li>
+            <li><strong style={{ color: 'var(--text-primary)' }}>Web:</strong> borsacebimde.com</li>
           </ul>
         </section>
 

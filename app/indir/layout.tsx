@@ -6,13 +6,13 @@ export const metadata: Metadata = {
     'Borsa Cebimde uygulamasını Android ve iOS için ücretsiz indirin. Halka arz takibi, AI destekli şirket haberleri, tavan taban bildirimleri ve daha fazlası.',
   keywords: ['borsa uygulaması', 'borsa takip uygulaması', 'halka arz uygulaması', 'şirket haber uygulaması', 'borsa cebimde indir', 'borsa bildirim uygulaması', 'BIST uygulama', 'hisse takip uygulaması', 'ücretsiz borsa uygulaması'],
   alternates: {
-    canonical: 'https://borsacebimde.app/indir',
+    canonical: 'https://borsacebimde.com/indir',
   },
   openGraph: {
     title: 'Borsa Cebimde - Uygulamayı Ücretsiz İndir',
     description:
       'Halka arz, şirket haberleri, AI analiz ve borsa takibi. Şimdi ücretsiz indir!',
-    url: 'https://borsacebimde.app/indir',
+    url: 'https://borsacebimde.com/indir',
     images: [{ url: '/images/icon-512.png', width: 512, height: 512, alt: 'Borsa Cebimde' }],
   },
 };

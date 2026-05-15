@@ -11,7 +11,7 @@ import CookieConsent from '@/components/CookieConsent';
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://borsacebimde.app'),
+  metadataBase: new URL('https://borsacebimde.com'),
   title: {
     default: 'Borsa Cebimde — Halka Arz, KAP AI Haber ve BIST Takibi',
     template: '%s | Borsa Cebimde',
@@ -60,12 +60,12 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://borsacebimde.app',
+    canonical: 'https://borsacebimde.com',
   },
   openGraph: {
     type: 'website',
     locale: 'tr_TR',
-    url: 'https://borsacebimde.app',
+    url: 'https://borsacebimde.com',
     siteName: 'Borsa Cebimde',
     title: 'Borsa Cebimde - Halka Arz, KAP Haberleri, AI Analiz ve Borsa Takibi',
     description:
@@ -110,7 +110,7 @@ const jsonLd = {
   '@type': 'WebSite',
   name: 'Borsa Cebimde',
   alternateName: 'BorsaCebimde',
-  url: 'https://borsacebimde.app',
+  url: 'https://borsacebimde.com',
   inLanguage: 'tr-TR',
   dateModified: LAST_MODIFIED,
   description:
@@ -120,14 +120,14 @@ const jsonLd = {
     name: 'Borsa Cebimde',
     logo: {
       '@type': 'ImageObject',
-      url: 'https://borsacebimde.app/images/icon-512.png',
+      url: 'https://borsacebimde.com/images/icon-512.png',
     },
   },
   potentialAction: {
     '@type': 'SearchAction',
     target: {
       '@type': 'EntryPoint',
-      urlTemplate: 'https://borsacebimde.app/piyasa-haberleri/?q={search_term_string}',
+      urlTemplate: 'https://borsacebimde.com/piyasa-haberleri/?q={search_term_string}',
     },
     'query-input': 'required name=search_term_string',
   },
@@ -137,8 +137,8 @@ const orgJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'Borsa Cebimde',
-  url: 'https://borsacebimde.app',
-  logo: 'https://borsacebimde.app/images/icon-512.png',
+  url: 'https://borsacebimde.com',
+  logo: 'https://borsacebimde.com/images/icon-512.png',
   foundingDate: '2024',
   dateModified: LAST_MODIFIED,
   sameAs: [
@@ -290,8 +290,8 @@ const appJsonLd = {
   operatingSystem: 'Android, iOS',
   applicationCategory: 'FinanceApplication',
   description: 'Halka arz takvimi, yapay zeka destekli KAP haberleri, tavan taban hisseleri, VİOP gece seansı, SPK bülten analizleri ve borsa takibi. BIST senetlerinden anlık bildirim alın.',
-  url: 'https://borsacebimde.app/indir',
-  image: 'https://borsacebimde.app/images/icon-512.png',
+  url: 'https://borsacebimde.com/indir',
+  image: 'https://borsacebimde.com/images/icon-512.png',
   author: {
     '@type': 'Organization',
     name: 'Borsa Cebimde',

@@ -29,7 +29,7 @@ export async function generateMetadata({
   if (slug === '__placeholder__') return { title: 'Yazi' };
   const blog = await fetchBlogBySlug(slug);
   if (!blog) return { title: 'Yazi Bulunamadi' };
-  const url = `https://borsacebimde.app/blog/${slug}`;
+  const url = `https://borsacebimde.com/blog/${slug}`;
   return {
     title: blog.title,
     description: blog.meta_description || blog.title,
@@ -67,7 +67,7 @@ export default async function BlogDetailPage({
   const blog = await fetchBlogBySlug(slug);
   if (!blog) notFound();
 
-  const url = `https://borsacebimde.app/blog/${slug}`;
+  const url = `https://borsacebimde.com/blog/${slug}`;
   const published = blog.published_at || blog.created_at || '';
 
   const jsonLd = {
@@ -82,7 +82,7 @@ export default async function BlogDetailPage({
       name: 'Borsa Cebimde',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://borsacebimde.app/images/icon-512.png',
+        url: 'https://borsacebimde.com/images/icon-512.png',
       },
     },
     datePublished: published,

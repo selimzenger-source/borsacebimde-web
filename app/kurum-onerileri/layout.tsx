@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     'Aracı kurum hedef fiyat ve hisse tavsiyeleri. Al, Tut, Sat önerileri, potansiyel getiri ve güncel hedef fiyatlar.',
   keywords: ['kurum önerileri', 'hedef fiyat', 'aracı kurum tavsiye', 'hisse önerisi', 'BIST tavsiye', 'borsa önerileri', 'al sat tut'],
-  alternates: { canonical: 'https://borsacebimde.app/kurum-onerileri' },
+  alternates: { canonical: 'https://borsacebimde.com/kurum-onerileri' },
   openGraph: {
     title: 'Kurum Önerileri | Borsa Cebimde',
     description: 'Aracı kurum hedef fiyat ve hisse tavsiyeleri. Güncel al/sat/tut önerileri.',

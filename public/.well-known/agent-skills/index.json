@@ -3,35 +3,35 @@
   "version": "0.2.0",
   "publisher": {
     "name": "Borsa Cebimde",
-    "url": "https://borsacebimde.app"
+    "url": "https://borsacebimde.com"
   },
   "skills": [
     {
       "name": "site-summary",
       "type": "data",
       "description": "Borsa Cebimde platform ozeti — hizmetler, platformlar, iletisim (JSON)",
-      "url": "https://borsacebimde.app/ai/summary.json",
+      "url": "https://borsacebimde.com/ai/summary.json",
       "mimeType": "application/json"
     },
     {
       "name": "faq",
       "type": "data",
       "description": "Borsa, halka arz, KAP, SPK, tavan-taban hakkinda 18 detayli soru-cevap",
-      "url": "https://borsacebimde.app/ai/faq.json",
+      "url": "https://borsacebimde.com/ai/faq.json",
       "mimeType": "application/json"
     },
     {
       "name": "service-catalog",
       "type": "data",
       "description": "9 hizmetin detayli aciklamalari, ozellikleri ve fiyatlandirma katmanlari",
-      "url": "https://borsacebimde.app/ai/service.json",
+      "url": "https://borsacebimde.com/ai/service.json",
       "mimeType": "application/json"
     },
     {
       "name": "site-docs",
       "type": "documentation",
       "description": "LLM dostu site dokumantasyonu (Markdown)",
-      "url": "https://borsacebimde.app/llms.txt",
+      "url": "https://borsacebimde.com/llms.txt",
       "mimeType": "text/plain"
     }
   ]

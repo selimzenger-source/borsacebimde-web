@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     'Borsa, halka arz, KAP haberleri, tavan taban, VİOP ve SPK bülten hakkında sıkça sorulan sorular ve cevapları. Yeni başlayanlar için borsa rehberi.',
   keywords: ['borsa nedir', 'halka arz nedir', 'halka arza nasıl katılırım', 'KAP nedir', 'tavan taban nedir', 'VİOP nedir', 'SPK nedir', 'borsa sıkça sorulan sorular', 'borsa rehberi', 'yeni başlayanlar için borsa'],
-  alternates: { canonical: 'https://borsacebimde.app/sss' },
+  alternates: { canonical: 'https://borsacebimde.com/sss' },
   openGraph: {
     title: 'Sıkça Sorulan Sorular | Borsa Cebimde',
     description: 'Borsa, halka arz, KAP haberleri ve daha fazlası hakkında SSS.',

@@ -37,7 +37,7 @@ mobil uygulama olarak hizmet verir. Kurulus yili: 2024. Merkez: Turkiye.
 
 - Android: https://play.google.com/store/apps/details?id=com.bistfinans.app
 - iOS: https://apps.apple.com/tr/app/borsa-cebimde-haber-arz/id6760570446
-- Web: https://borsacebimde.app
+- Web: https://borsacebimde.com
 
 ## Teknoloji
 
@@ -77,15 +77,15 @@ gorusmek gerekir.
 
 - E-posta: borsacebimde@gmail.com
 - Twitter/X: https://x.com/BorsaCebimde
-- Web: https://borsacebimde.app
+- Web: https://borsacebimde.com
 
 ## Gizlilik ve Veri
 
 - Kullanici verisi sadece cihazda (AsyncStorage) tutulur, sunucuya
   gonderilmez. Halka Arz Defteri lokaldir.
-- KVKK uyumlu, gizlilik politikasi: https://borsacebimde.app/gizlilik-politikasi
-- Cerez politikasi: https://borsacebimde.app/cerez-politikasi
-- Kullanim kosullari: https://borsacebimde.app/kullanim-kosullari
+- KVKK uyumlu, gizlilik politikasi: https://borsacebimde.com/gizlilik-politikasi
+- Cerez politikasi: https://borsacebimde.com/cerez-politikasi
+- Kullanim kosullari: https://borsacebimde.com/kullanim-kosullari
 
 ## Rakiplerden Farkimiz
 

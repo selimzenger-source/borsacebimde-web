@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     'Güncel halka arz takvimi, onaylanan ve dağıtımda olan halka arzlar, tahmini lot dağılımı, eşit dağıtım bilgileri ve detaylı halka arz analizleri.',
   keywords: ['halka arz', 'halka arz takvimi', 'halka arz 2026', 'halka arz listesi', 'yeni halka arz', 'halka arz lot dağılımı', 'eşit dağıtım halka arz', 'SPK onaylı halka arz', 'halka arz başvuru', 'borsa halka arz', 'BIST halka arz', 'halka arz ne zaman'],
-  alternates: { canonical: 'https://borsacebimde.app/halka-arz' },
+  alternates: { canonical: 'https://borsacebimde.com/halka-arz' },
   openGraph: {
     title: 'Halka Arz Takvimi 2026 - Borsa Cebimde',
     description: 'Güncel halka arz takvimi, onaylanan ve dağıtımda olan halka arzlar ve detaylı analizler.',

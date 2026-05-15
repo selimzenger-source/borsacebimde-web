@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: 'SPK Başvuruları - Onay Bekleyen Halka Arz Başvuruları',
   description:
     'SPK onayı bekleyen halka arz başvurularının güncel listesi. Sermaye Piyasası Kurulu\'na yapılan halka arz başvuruları, onay süreci ve yatırımcılar için önemli bilgiler.',
-  alternates: { canonical: 'https://borsacebimde.app/spk-basvurular' },
+  alternates: { canonical: 'https://borsacebimde.com/spk-basvurular' },
   keywords: [
     'SPK başvuruları',
     'halka arz başvurusu',

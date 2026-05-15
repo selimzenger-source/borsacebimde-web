@@ -7,7 +7,7 @@
   },
   "publisher": {
     "name": "Borsa Cebimde",
-    "url": "https://borsacebimde.app",
+    "url": "https://borsacebimde.com",
     "contact": "borsacebimde@gmail.com"
   },
   "transport": {
@@ -17,22 +17,22 @@
   "capabilities": {
     "resources": [
       {
-        "uri": "https://borsacebimde.app/llms.txt",
+        "uri": "https://borsacebimde.com/llms.txt",
         "name": "Site documentation (LLM-friendly)",
         "mimeType": "text/plain"
       },
       {
-        "uri": "https://borsacebimde.app/ai/summary.json",
+        "uri": "https://borsacebimde.com/ai/summary.json",
         "name": "Platform summary",
         "mimeType": "application/json"
       },
       {
-        "uri": "https://borsacebimde.app/ai/faq.json",
+        "uri": "https://borsacebimde.com/ai/faq.json",
         "name": "Frequently asked questions (18 items)",
         "mimeType": "application/json"
       },
       {
-        "uri": "https://borsacebimde.app/ai/service.json",
+        "uri": "https://borsacebimde.com/ai/service.json",
         "name": "Service catalog (9 services)",
         "mimeType": "application/json"
       }
