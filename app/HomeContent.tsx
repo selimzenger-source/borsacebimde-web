@@ -310,121 +310,52 @@ export default function HomePage() {
   return (
     <div className="flex flex-col gap-0">
 
-      {/* ── Hero — Modern Glow + Gradient Text ─────────────────────────────── */}
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section
         className="relative overflow-hidden rounded-2xl mb-8"
         style={{
-          background: 'radial-gradient(ellipse at top, #0E2841 0%, #0A1A2F 50%, #050D1A 100%)',
-          minHeight: 360,
+          background: 'linear-gradient(135deg, #0A1A3E 0%, #0D2451 50%, #061230 100%)',
+          minHeight: 320,
         }}
       >
-        {/* Animasyonlu ışık küreleri */}
         <div
-          className="absolute -top-32 -right-32 w-[480px] h-[480px] rounded-full pointer-events-none"
-          style={{
-            background: 'radial-gradient(circle, rgba(0, 200, 83, 0.18) 0%, transparent 70%)',
-            filter: 'blur(60px)',
-            animation: 'heroFloat 18s ease-in-out infinite',
-          }}
+          className="absolute -top-20 -right-20 w-80 h-80 rounded-full pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(41,121,255,0.15) 0%, transparent 70%)' }}
         />
         <div
-          className="absolute -bottom-32 -left-32 w-[420px] h-[420px] rounded-full pointer-events-none"
-          style={{
-            background: 'radial-gradient(circle, rgba(41, 121, 255, 0.20) 0%, transparent 70%)',
-            filter: 'blur(60px)',
-            animation: 'heroFloat 22s ease-in-out infinite reverse',
-          }}
+          className="absolute -bottom-16 -left-16 w-56 h-56 rounded-full pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(41,121,255,0.08) 0%, transparent 70%)' }}
         />
         <div
-          className="absolute top-1/3 left-1/2 w-[260px] h-[260px] rounded-full pointer-events-none"
+          className="absolute inset-0 pointer-events-none opacity-[0.03]"
           style={{
-            background: 'radial-gradient(circle, rgba(179, 136, 255, 0.12) 0%, transparent 70%)',
-            filter: 'blur(80px)',
-            animation: 'heroFloat 26s ease-in-out infinite',
-          }}
-        />
-        <div
-          className="absolute inset-0 pointer-events-none opacity-[0.025]"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
-            backgroundSize: '48px 48px',
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
+            backgroundSize: '40px 40px',
           }}
         />
 
-        <style jsx>{`
-          @keyframes heroFloat {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(30px, -20px) scale(1.08); }
-          }
-        `}</style>
-
-        <div className="relative px-6 py-12 sm:px-12 sm:py-16 flex flex-col sm:flex-row items-center gap-10">
+        <div className="relative px-6 py-12 sm:px-10 sm:py-16 flex flex-col sm:flex-row items-center gap-8">
           <div className="flex-1 min-w-0 text-center sm:text-left">
-            {/* Badge — animated pulse */}
             <div
-              className="inline-flex items-center gap-2 mb-5 px-3.5 py-1.5 rounded-full"
-              style={{
-                background: 'rgba(0, 230, 118, 0.10)',
-                border: '1px solid rgba(0, 230, 118, 0.30)',
-              }}
+              className="inline-flex items-center gap-1.5 mb-4 px-3 py-1 rounded-full"
+              style={{ background: 'rgba(41,121,255,0.12)', border: '1px solid rgba(41,121,255,0.25)' }}
             >
-              <span
-                className="block w-1.5 h-1.5 rounded-full"
-                style={{
-                  background: '#00E676',
-                  boxShadow: '0 0 0 0 #00E676',
-                  animation: 'heroPulse 2s infinite',
-                }}
-              />
-              <span style={{ color: '#00E676', fontSize: 12, fontWeight: 700, letterSpacing: 0.3 }}>
-                v3.0.0 · 600+ BIST Hissesi
-              </span>
+              <span className="pulse-dot" style={{ background: '#2979FF' }} />
+              <span style={{ color: '#5C9AFF', fontSize: 12, fontWeight: 600 }}>Canlı Veri</span>
             </div>
-            <style jsx>{`
-              @keyframes heroPulse {
-                0% { box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.6); }
-                70% { box-shadow: 0 0 0 8px rgba(0, 230, 118, 0); }
-                100% { box-shadow: 0 0 0 0 rgba(0, 230, 118, 0); }
-              }
-            `}</style>
 
-            <h1
-              className="font-extrabold text-white leading-[1.05] mb-4 tracking-tight"
-              style={{ fontSize: 'clamp(32px, 5vw, 52px)', letterSpacing: '-1.2px' }}
-            >
-              Türkiye Borsası için<br />
-              <span
-                style={{
-                  background: 'linear-gradient(135deg, #00E676 0%, #2979FF 50%, #B388FF 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}
-              >
-                AI Destekli Asistan
-              </span>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-3 tracking-tight">
+              Borsa <span style={{ color: '#2979FF' }}>Cebimde</span>
             </h1>
-
-            <p
-              className="leading-relaxed mb-8 max-w-xl mx-auto sm:mx-0"
-              style={{
-                color: '#94A3B8',
-                fontSize: 'clamp(15px, 2vw, 18px)',
-              }}
-            >
-              KAP haberleri 9 kategoride yapay zekayla etiketlenir, halka arz defterin tek yerden,
-              tedbirli hisseler Borsa İstanbul resmi listesinden.
+            <p className="text-base sm:text-lg leading-relaxed mb-8 max-w-lg" style={{ color: '#94A3B8' }}>
+              Halka arz, şirket haberleri ve piyasa verileri tek elde
             </p>
 
             <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
               <Link
                 href="/halka-arz"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-white font-semibold text-sm transition-all duration-200 hover:scale-[1.02] active:scale-95"
-                style={{
-                  background: 'linear-gradient(135deg, #00E676 0%, #00897B 100%)',
-                  boxShadow: '0 8px 24px rgba(0, 230, 118, 0.25)',
-                }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white font-semibold text-sm transition-all duration-150 hover:shadow-lg active:scale-95"
+                style={{ background: '#2979FF' }}
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75" />
@@ -435,22 +366,16 @@ export default function HomePage() {
                 href={store.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-white font-semibold text-sm backdrop-blur-sm transition-all duration-200 hover:scale-[1.02] active:scale-95"
-                style={{
-                  background: 'rgba(255,255,255,0.06)',
-                  border: '1px solid rgba(255,255,255,0.18)',
-                }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white font-semibold text-sm backdrop-blur-sm transition-all duration-150 active:scale-95"
+                style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.15)' }}
               >
                 {store.isIOS ? (
                   <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
                     <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.42c1.32.07 2.24.73 3.01.77.97-.19 1.9-.81 3.01-.88 1.29-.09 2.61.43 3.57 1.56-3.1 1.86-2.58 5.96.41 7.65-.57 1.56-1.31 3.06-3 3.76zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
                   </svg>
                 ) : (
-                  <svg viewBox="0 0 24 24" className="w-4 h-4">
-                    <path fill="#00D7FE" d="M3.6 2.4c-.4.4-.6.9-.6 1.6v16c0 .7.2 1.2.6 1.6L12 12 3.6 2.4z"/>
-                    <path fill="#FFCE00" d="M16.5 8.4 12 12l4.5 3.6 4-2.3c1.2-.7 1.2-2.5 0-3.2l-4-2.3z"/>
-                    <path fill="#FF3A44" d="M3.6 21.6 12 12l4.5 3.6-9.4 5.4c-1.2.7-2.5.4-3.5-.4z"/>
-                    <path fill="#00F076" d="M3.6 2.4 12 12l4.5-3.6-9.4-5.4c-1.2-.7-2.5-.4-3.5.4z"/>
+                  <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                    <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.199l2.807 1.626a1 1 0 010 1.732l-2.807 1.626L15.206 12l2.492-2.492zM5.864 2.658L16.8 8.99l-2.302 2.302-8.635-8.635z" />
                   </svg>
                 )}
                 {store.label}
@@ -460,11 +385,11 @@ export default function HomePage() {
 
           <div className="shrink-0 flex items-center justify-center">
             <div
-              className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-3xl overflow-hidden"
+              className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden"
               style={{
-                background: 'linear-gradient(135deg, rgba(0,230,118,0.10), rgba(41,121,255,0.10))',
-                border: '1px solid rgba(255,255,255,0.12)',
-                boxShadow: '0 20px 60px rgba(0, 230, 118, 0.20), 0 8px 24px rgba(41, 121, 255, 0.15)',
+                background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                boxShadow: '0 0 40px rgba(41,121,255,0.2)',
               }}
             >
               <Image
@@ -477,37 +402,6 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </section>
-
-      {/* ── İstatistik Şeridi ───────────────────────────────────────────── */}
-      <section
-        className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8"
-      >
-        {[
-          { num: '600+', label: 'BIST Hissesi', color: '#00E676' },
-          { num: '9', label: 'AI Puan Kategorisi', color: '#2979FF' },
-          { num: '24/7', label: 'KAP Takibi', color: '#B388FF' },
-          { num: '3×', label: 'Günlük Tedbirli Sync', color: '#FFC400' },
-        ].map((s) => (
-          <div
-            key={s.label}
-            className="rounded-xl px-4 py-4 text-center"
-            style={{
-              background: 'rgba(255,255,255,0.025)',
-              border: '1px solid rgba(255,255,255,0.06)',
-            }}
-          >
-            <div
-              className="text-2xl sm:text-3xl font-extrabold mb-1"
-              style={{ color: s.color, letterSpacing: '-0.8px' }}
-            >
-              {s.num}
-            </div>
-            <div className="text-[11px] sm:text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
-              {s.label}
-            </div>
-          </div>
-        ))}
       </section>
 
       {/* Stats bar removed - user requested */}
