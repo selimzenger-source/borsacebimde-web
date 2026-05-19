@@ -243,8 +243,22 @@ export default function IPOPollWidget({ ipoId }: { ipoId: number }) {
       </div>
 
       {/* Ekseni */}
-      <div className="flex justify-between px-1" style={{ fontSize: 9, color: 'var(--text-muted)' }}>
-        <span>1</span><span>13</span><span>25</span>
+      {/* X-ekseni etiket satiri — histogram ile birebir hizali (her bar altinda hucre) */}
+      <div className="flex" style={{ padding: '0 2px', gap: 2, fontSize: 9, color: 'var(--text-muted)' }}>
+        {Array.from({ length: MAX_CEILING }, (_, i) => i + 1).map((n) => (
+          <div
+            key={`xl-${n}`}
+            style={{
+              flex: 1,
+              textAlign: 'center',
+              lineHeight: 1,
+              minHeight: 11,
+            }}
+          >
+            {/* Tek sayilar (1, 3, 5, ..., 25) etiket gosterir — okunabilir */}
+            {n % 2 === 1 ? n : ''}
+          </div>
+        ))}
       </div>
 
       {/* Canlı topluluk ortalaması */}
@@ -341,8 +355,22 @@ function CeilingResult({ c, myVote }: {
           );
         })}
       </div>
-      <div className="flex justify-between px-1" style={{ fontSize: 9, color: 'var(--text-muted)' }}>
-        <span>1</span><span>13</span><span>25</span>
+      {/* X-ekseni etiket satiri — histogram ile birebir hizali (her bar altinda hucre) */}
+      <div className="flex" style={{ padding: '0 2px', gap: 2, fontSize: 9, color: 'var(--text-muted)' }}>
+        {Array.from({ length: MAX_CEILING }, (_, i) => i + 1).map((n) => (
+          <div
+            key={`xl-${n}`}
+            style={{
+              flex: 1,
+              textAlign: 'center',
+              lineHeight: 1,
+              minHeight: 11,
+            }}
+          >
+            {/* Tek sayilar (1, 3, 5, ..., 25) etiket gosterir — okunabilir */}
+            {n % 2 === 1 ? n : ''}
+          </div>
+        ))}
       </div>
 
       <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>
