@@ -29,11 +29,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/spk-basvurular', changefreq: 'daily', priority: 0.8 },
 
     // Indirme & bilgi
+    // NOT: /androidindir ve /appstoreindir kaldirildi — canonical zaten /indir'e isaret ediyor.
+    // Sitemap'te de tutmak Google'a "Dogru standart etikete sahip alternatif sayfa" raporu yaratiyor.
     { path: '/indir', changefreq: 'monthly', priority: 0.7 },
     { path: '/sss', changefreq: 'monthly', priority: 0.7 },
     { path: '/hakkimizda', changefreq: 'monthly', priority: 0.6 },
-    { path: '/androidindir', changefreq: 'monthly', priority: 0.6 },
-    { path: '/appstoreindir', changefreq: 'monthly', priority: 0.6 },
 
     // Yasal & iletisim
     { path: '/gizlilik-politikasi', changefreq: 'yearly', priority: 0.3 },

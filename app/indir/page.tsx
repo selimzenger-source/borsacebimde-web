@@ -47,11 +47,27 @@ const BANNERS = [
   },
 ];
 
+type Platform = 'ios' | 'android' | 'desktop';
+
+function detectPlatform(): Platform {
+  if (typeof window === 'undefined') return 'desktop';
+  const ua = (navigator.userAgent || navigator.vendor || '').toLowerCase();
+  if (/android/.test(ua)) return 'android';
+  // iOS detection (iPad on iOS 13+ raporlar Mac olarak — touch ile ayrist)
+  if (/iphone|ipad|ipod/.test(ua)) return 'ios';
+  if (/mac/.test(ua) && (navigator as any).maxTouchPoints > 1) return 'ios';
+  return 'desktop';
+}
+
 export default function IndirPage() {
   const [activeBanner, setActiveBanner] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+  const [platform, setPlatform] = useState<Platform>('desktop');
 
-  useEffect(() => { setIsVisible(true); }, []);
+  useEffect(() => {
+    setIsVisible(true);
+    setPlatform(detectPlatform());
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -147,19 +163,56 @@ export default function IndirPage() {
           </div>
         </div>
 
-        {/* Download buttons */}
+        {/* Download buttons \u2014 kullanicinin platformuna gore ilgili buton(lar) gosterilir */}
         <div style={{ marginTop: 24, display: 'flex', flexDirection: 'column', gap: 10, width: '100%', maxWidth: 300, opacity: isVisible ? 1 : 0, transform: isVisible ? 'translateY(0)' : 'translateY(16px)', transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.5s' }}>
-          {/* Android */}
-          <a href={STORE_LINKS.android} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, padding: '14px 20px', borderRadius: 14, background: 'linear-gradient(135deg, #16a34a, #22c55e)', color: '#fff', fontSize: 15, fontWeight: 600, textDecoration: 'none', boxShadow: '0 4px 20px rgba(34,197,94,0.3), 0 2px 8px rgba(0,0,0,0.2)', transition: 'all 0.2s' }}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 2.237a.625.625 0 00-.855.216L15.2 4.88C14.207 4.414 13.124 4.15 12 4.15c-1.124 0-2.207.264-3.2.73L7.332 2.453a.625.625 0 10-1.071.645L7.67 5.392A7.95 7.95 0 004 12h16a7.95 7.95 0 00-3.67-6.608l1.409-2.294a.625.625 0 00-.216-.861zM9 9.5a1 1 0 110-2 1 1 0 010 2zm6 0a1 1 0 110-2 1 1 0 010 2zM4 13v7a2 2 0 002 2h12a2 2 0 002-2v-7H4z" /></svg>
-            Google Play&apos;den {'\u00DC'}cretsiz {'\u0130'}ndir
-          </a>
+          {/* iOS App Store \u2014 siyah orijinal stil */}
+          {(platform === 'ios' || platform === 'desktop') && (
+            <a href={STORE_LINKS.ios} target="_blank" rel="noopener noreferrer" aria-label="App Store'dan indir" style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 18px', borderRadius: 12, background: '#000', border: '1px solid rgba(255,255,255,0.15)', color: '#fff', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,0,0,0.4)', transition: 'all 0.2s' }}>
+              {/* Resmi Apple logosu */}
+              <svg width="28" height="32" viewBox="0 0 384 512" fill="#fff" aria-hidden="true">
+                <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z" />
+              </svg>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.1 }}>
+                <span style={{ fontSize: 10, opacity: 0.85, letterSpacing: 0.3 }}>{'\u0130'}ndir</span>
+                <span style={{ fontSize: 17, fontWeight: 600, letterSpacing: -0.2 }}>App Store</span>
+              </div>
+            </a>
+          )}
 
-          {/* iOS */}
-          <a href={STORE_LINKS.ios} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, padding: '14px 20px', borderRadius: 14, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.12)', color: '#F1F5F9', fontSize: 15, fontWeight: 600, textDecoration: 'none', backdropFilter: 'blur(12px)', transition: 'all 0.2s' }}>
-            <svg width="18" height="20" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z" /></svg>
-            App Store&apos;dan {'\u00DC'}cretsiz {'\u0130'}ndir
-          </a>
+          {/* Android Google Play \u2014 siyah orijinal stil, renkli ucgen */}
+          {(platform === 'android' || platform === 'desktop') && (
+            <a href={STORE_LINKS.android} target="_blank" rel="noopener noreferrer" aria-label="Google Play'den indir" style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 18px', borderRadius: 12, background: '#000', border: '1px solid rgba(255,255,255,0.15)', color: '#fff', textDecoration: 'none', boxShadow: '0 4px 16px rgba(0,0,0,0.4)', transition: 'all 0.2s' }}>
+              {/* Resmi Google Play ucgeni (4 renkli) */}
+              <svg width="28" height="32" viewBox="0 0 512 512" aria-hidden="true">
+                <defs>
+                  <linearGradient id="gp1" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#00D4FF"/>
+                    <stop offset="100%" stopColor="#0085FF"/>
+                  </linearGradient>
+                  <linearGradient id="gp2" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#FFCE00"/>
+                    <stop offset="100%" stopColor="#FFB700"/>
+                  </linearGradient>
+                  <linearGradient id="gp3" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#FF3A44"/>
+                    <stop offset="100%" stopColor="#C70039"/>
+                  </linearGradient>
+                  <linearGradient id="gp4" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#00F076"/>
+                    <stop offset="100%" stopColor="#00B956"/>
+                  </linearGradient>
+                </defs>
+                <path fill="url(#gp1)" d="M48 60v392c0 8 4 12 9 15l228-211L57 47c-5 3-9 8-9 13z"/>
+                <path fill="url(#gp4)" d="M353 187l-49-28L75 50c-3-2-7-3-10-2l225 209 63-70z"/>
+                <path fill="url(#gp3)" d="M65 464c4 1 8 0 10-2l229-110 49-28-63-70-225 210z"/>
+                <path fill="url(#gp2)" d="M442 240l-89-52-63 70 63 70 89-52c25-14 25-22 0-36z"/>
+              </svg>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.1 }}>
+                <span style={{ fontSize: 10, opacity: 0.85, letterSpacing: 0.3 }}>{'\u0130'}ndir</span>
+                <span style={{ fontSize: 17, fontWeight: 600, letterSpacing: -0.2 }}>Google Play</span>
+              </div>
+            </a>
+          )}
         </div>
 
         {/* Rating */}
