@@ -55,34 +55,38 @@ const SENTIMENT_FILTERS: { key: SentimentFilter; label: string; icon: React.Reac
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
+// Tüm 9 sentiment kategorisi: Çok Olumlu / Güçlü Olumlu / Olumlu / Hafif Olumlu /
+// Nötr / Hafif Olumsuz / Olumsuz / Güçlü Olumsuz / Çok Olumsuz
+function _isPos(s: string | null) { return !!s && s.includes('Olumlu'); }
+function _isNeg(s: string | null) { return !!s && s.includes('Olumsuz'); }
+
 function sentimentColor(s: string | null): string {
-  if (s === 'Olumlu') return '#4CAF50';
-  if (s === 'Olumsuz') return '#FF5252';
+  if (_isPos(s)) return '#4CAF50';
+  if (_isNeg(s)) return '#FF5252';
   return '#94A3B8';
 }
 
 function sentimentBg(s: string | null): string {
-  if (s === 'Olumlu') return 'rgba(76,175,80,0.12)';
-  if (s === 'Olumsuz') return 'rgba(255,82,82,0.12)';
+  if (_isPos(s)) return 'rgba(76,175,80,0.12)';
+  if (_isNeg(s)) return 'rgba(255,82,82,0.12)';
   return 'rgba(148,163,184,0.12)';
 }
 
 function sentimentBorder(s: string | null): string {
-  if (s === 'Olumlu') return 'rgba(76,175,80,0.25)';
-  if (s === 'Olumsuz') return 'rgba(255,82,82,0.25)';
+  if (_isPos(s)) return 'rgba(76,175,80,0.25)';
+  if (_isNeg(s)) return 'rgba(255,82,82,0.25)';
   return 'rgba(148,163,184,0.20)';
 }
 
 function sentimentLabel(s: string | null): string {
-  if (s === 'Olumlu') return 'Olumlu';
-  if (s === 'Olumsuz') return 'Olumsuz';
-  return 'Nötr';
+  return s || 'Nötr';
 }
 
 function scoreColor(score: number): string {
-  if (score >= 7) return '#4CAF50';
-  if (score >= 5) return '#FFD700';
-  return '#FF5252';
+  if (score >= 6) return '#4CAF50';   // Hafif Olumlu ve üzeri → yeşil
+  if (score >= 4) return '#94A3B8';   // Nötr → gri
+  if (score >= 3) return '#FFA726';   // Hafif Olumsuz → turuncu
+  return '#FF5252';                   // Olumsuz ve altı → kırmızı
 }
 
 function formatTime(dateStr: string): string {

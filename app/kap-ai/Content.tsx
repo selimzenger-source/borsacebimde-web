@@ -121,8 +121,9 @@ function sentimentBorder(s: 'olumlu' | 'notr' | 'olumsuz'): string {
 }
 
 function scoreColor(score: number): string {
-  if (score >= 7) return '#4CAF50';
-  if (score >= 5) return '#FFD700';
+  if (score >= 6) return '#4CAF50';
+  if (score >= 4) return '#94A3B8';
+  if (score >= 3) return '#FFA726';
   return '#FF5252';
 }
 
