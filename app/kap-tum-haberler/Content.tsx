@@ -55,38 +55,46 @@ const SENTIMENT_FILTERS: { key: SentimentFilter; label: string; icon: React.Reac
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-// Tüm 9 sentiment kategorisi: Çok Olumlu / Güçlü Olumlu / Olumlu / Hafif Olumlu /
-// Nötr / Hafif Olumsuz / Olumsuz / Güçlü Olumsuz / Çok Olumsuz
-function _isPos(s: string | null) { return !!s && s.includes('Olumlu'); }
-function _isNeg(s: string | null) { return !!s && s.includes('Olumsuz'); }
-
-function sentimentColor(s: string | null): string {
-  if (_isPos(s)) return '#4CAF50';
-  if (_isNeg(s)) return '#FF5252';
-  return '#94A3B8';
+// Skora göre sentiment label — DB'deki ai_sentiment'e güvenmiyoruz (tutarsız olabilir)
+function scoreToLabel(score: number | null): string {
+  if (score === null || score === undefined) return 'Nötr';
+  if (score >= 9.0) return 'Çok Olumlu';
+  if (score >= 8.0) return 'Güçlü Olumlu';
+  if (score >= 7.0) return 'Olumlu';
+  if (score >= 6.0) return 'Hafif Olumlu';
+  if (score >= 4.0) return 'Nötr';
+  if (score >= 3.0) return 'Hafif Olumsuz';
+  if (score >= 2.0) return 'Olumsuz';
+  if (score >= 1.0) return 'Güçlü Olumsuz';
+  return 'Çok Olumsuz';
 }
 
-function sentimentBg(s: string | null): string {
-  if (_isPos(s)) return 'rgba(76,175,80,0.12)';
-  if (_isNeg(s)) return 'rgba(255,82,82,0.12)';
-  return 'rgba(148,163,184,0.12)';
+function scoreColor(score: number | null): string {
+  if (!score && score !== 0) return '#94A3B8';
+  if (score >= 6) return '#4CAF50';
+  if (score >= 4) return '#94A3B8';
+  if (score >= 3) return '#FFA726';
+  return '#FF5252';
 }
 
-function sentimentBorder(s: string | null): string {
-  if (_isPos(s)) return 'rgba(76,175,80,0.25)';
-  if (_isNeg(s)) return 'rgba(255,82,82,0.25)';
-  return 'rgba(148,163,184,0.20)';
+function sentimentColor(score: number | null): string {
+  return scoreColor(score);
 }
 
-function sentimentLabel(s: string | null): string {
-  return s || 'Nötr';
+function sentimentBg(score: number | null): string {
+  if (!score && score !== 0) return 'rgba(148,163,184,0.12)';
+  if (score >= 6) return 'rgba(76,175,80,0.12)';
+  if (score >= 4) return 'rgba(148,163,184,0.12)';
+  if (score >= 3) return 'rgba(255,167,38,0.12)';
+  return 'rgba(255,82,82,0.12)';
 }
 
-function scoreColor(score: number): string {
-  if (score >= 6) return '#4CAF50';   // Hafif Olumlu ve üzeri → yeşil
-  if (score >= 4) return '#94A3B8';   // Nötr → gri
-  if (score >= 3) return '#FFA726';   // Hafif Olumsuz → turuncu
-  return '#FF5252';                   // Olumsuz ve altı → kırmızı
+function sentimentBorder(score: number | null): string {
+  if (!score && score !== 0) return 'rgba(148,163,184,0.20)';
+  if (score >= 6) return 'rgba(76,175,80,0.25)';
+  if (score >= 4) return 'rgba(148,163,184,0.20)';
+  if (score >= 3) return 'rgba(255,167,38,0.25)';
+  return 'rgba(255,82,82,0.25)';
 }
 
 function formatTime(dateStr: string): string {
@@ -140,7 +148,8 @@ function SkeletonCard() {
 // ─── Disclosure Card ─────────────────────────────────────────────────────────
 
 function DisclosureCard({ item }: { item: KapDisclosure }) {
-  const color = sentimentColor(item.ai_sentiment);
+  const score = item.ai_impact_score ?? null;
+  const color = sentimentColor(score);
   const timeStr = item.published_at ? formatTime(item.published_at) : (item.created_at ? formatTime(item.created_at) : '');
 
   return (
@@ -202,8 +211,8 @@ function DisclosureCard({ item }: { item: KapDisclosure }) {
             gap: 4,
             padding: '2px 8px',
             borderRadius: 6,
-            background: sentimentBg(item.ai_sentiment),
-            border: `1px solid ${sentimentBorder(item.ai_sentiment)}`,
+            background: sentimentBg(score),
+            border: `1px solid ${sentimentBorder(score)}`,
             color,
             fontSize: 11,
             fontWeight: 600,
@@ -224,7 +233,7 @@ function DisclosureCard({ item }: { item: KapDisclosure }) {
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
             </svg>
           )}
-          {sentimentLabel(item.ai_sentiment)}
+          {scoreToLabel(score)}
         </span>
 
         {/* AI Score */}
