@@ -53,6 +53,8 @@ export default function TemettuContent() {
   const [calendar, setCalendar] = useState<TemettuCalendarItem[]>([]);
   const [stats, setStats] = useState({ toplam: 0, yaklasan: 0, odenen: 0 });
   const [calStatus, setCalStatus] = useState<'all' | 'yaklasan' | 'odenen'>('yaklasan');
+  // Ana sekme: takvim mi sampiyonlar mi
+  const [mainTab, setMainTab] = useState<'takvim' | 'sampiyonlar'>('takvim');
 
   useEffect(() => {
     setLoading(true);
@@ -83,10 +85,10 @@ export default function TemettuContent() {
           <span>Temettü</span>
         </div>
         <h1 className="text-2xl lg:text-4xl font-bold mb-2">
-          Temettü Şampiyonları & Takvim
+          Temettü Takvimi ve Şampiyonları
         </h1>
         <p className="text-muted text-sm lg:text-base max-w-3xl">
-          BIST temettü dağıtan hisseler, yıllık temettü verimi, payout oranı, üst üste temettü
+          BIST temettü dağıtan hisseler, yıllık temettü verimi, kâr dağıtım oranı, üst üste temettü
           dağıtan şampiyonlar ve yaklaşan ödeme takvimi. Pasif gelir stratejisi geliştirmek isteyen
           yatırımcılar için kapsamlı, ücretsiz veri.
         </p>
@@ -119,7 +121,32 @@ export default function TemettuContent() {
         </section>
       )}
 
+      {/* ── Ana Tablar: Takvim | Şampiyonlar ─────────────────────────────── */}
+      <div className="flex gap-2 mb-6 border-b" style={{ borderColor: 'var(--border-primary)' }}>
+        <button
+          onClick={() => setMainTab('takvim')}
+          className="px-5 py-3 text-sm font-semibold transition-colors border-b-2"
+          style={{
+            color: mainTab === 'takvim' ? '#2979FF' : 'var(--text-secondary)',
+            borderBottomColor: mainTab === 'takvim' ? '#2979FF' : 'transparent',
+          }}
+        >
+          📅 Temettü Takvimi
+        </button>
+        <button
+          onClick={() => setMainTab('sampiyonlar')}
+          className="px-5 py-3 text-sm font-semibold transition-colors border-b-2"
+          style={{
+            color: mainTab === 'sampiyonlar' ? '#4CAF50' : 'var(--text-secondary)',
+            borderBottomColor: mainTab === 'sampiyonlar' ? '#4CAF50' : 'transparent',
+          }}
+        >
+          🏆 Şampiyonlar
+        </button>
+      </div>
+
       {/* ── Şampiyonlar period tabs ─────────────────────────────────────── */}
+      {mainTab === 'sampiyonlar' && (
       <section className="mb-10">
         <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
           <h2 className="text-xl font-semibold">Temettü Şampiyonları</h2>
@@ -208,7 +235,7 @@ export default function TemettuContent() {
                     </div>
                   </div>
                   <div>
-                    <div className="text-muted">Payout Oranı</div>
+                    <div className="text-muted">Kâr Dağıtım Oranı</div>
                     <div className="font-semibold">{fmtPct(it.payoutPct)}</div>
                   </div>
                   <div>
@@ -223,10 +250,12 @@ export default function TemettuContent() {
           )}
         </div>
       </section>
+      )}
 
       <AdBanner slot="auto" />
 
       {/* ── Takvim ────────────────────────────────────────────────────── */}
+      {mainTab === 'takvim' && (
       <section className="mb-10 mt-8">
         <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
           <h2 className="text-xl font-semibold">Temettü Takvimi</h2>
@@ -300,6 +329,7 @@ export default function TemettuContent() {
           )}
         </div>
       </section>
+      )}
 
       {/* ── SEO İçerik ────────────────────────────────────────────────── */}
       <section className="mb-10 mt-8 prose prose-sm lg:prose-base max-w-none">
@@ -343,7 +373,7 @@ export default function TemettuContent() {
             şirketler tarihsel olarak daha güvenilir kabul edilir.
           </li>
           <li>
-            <strong>Payout oranı %30-70:</strong> Dağıtım oranının çok düşük olması büyüme
+            <strong>Kâr dağıtım oranı %30-70:</strong> Dağıtım oranının çok düşük olması büyüme
             yatırımına işaret eder, çok yüksek olması ise sürdürülebilirlik riskidir.
           </li>
           <li>

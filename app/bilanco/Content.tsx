@@ -227,8 +227,17 @@ export default function BilancoContent() {
 
       <AdBanner slot="auto" />
 
-      {/* ── Bilanço Takvimi ─────────────────────────────────────────────── */}
-      {calendar.length > 0 && (
+      {/* ── Bilanço Takvimi — sadece GELECEK tarihler (bugun ve sonrasi) ─── */}
+      {(() => {
+        const today = new Date(); today.setHours(0, 0, 0, 0);
+        const upcoming = calendar.filter((c) => {
+          if (!c.expected_date) return false;
+          if (c.is_announced) return false; // Yayinlanmis olanlari gosterme
+          const d = new Date(c.expected_date);
+          return d >= today;
+        });
+        if (upcoming.length === 0) return null;
+        return (
         <section className="mb-10 mt-8">
           <h2 className="text-xl font-semibold mb-4">Yaklaşan Bilanço Takvimi</h2>
           <p className="text-muted text-sm mb-4">
@@ -236,19 +245,19 @@ export default function BilancoContent() {
             Q1 için son tarih dönem bitimini takip eden 60 gün, Q4 için 70 gündür.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            {calendar.slice(0, 20).map((c, idx) => (
+            {upcoming.slice(0, 20).map((c, idx) => (
               <div key={`${c.ticker}-${idx}`} className="card px-4 py-2.5 flex items-center gap-3">
                 <div className="font-bold text-sm w-16">{c.ticker}</div>
                 <div className="flex-1 text-xs text-muted truncate">{c.company_name || '—'}</div>
                 <span
                   className="badge text-xs"
                   style={{
-                    background: c.is_announced ? 'rgba(76,175,80,0.12)' : 'rgba(255,152,0,0.12)',
-                    color: c.is_announced ? '#4CAF50' : '#FF9800',
+                    background: 'rgba(255,152,0,0.12)',
+                    color: '#FF9800',
                     border: '1px solid currentColor',
                   }}
                 >
-                  {c.is_announced ? 'Yayınlandı' : 'Beklenen'}
+                  Beklenen
                 </span>
                 <div className="text-xs text-muted whitespace-nowrap">
                   {c.expected_date ? formatDate(c.expected_date) : '—'}
@@ -257,7 +266,8 @@ export default function BilancoContent() {
             ))}
           </div>
         </section>
-      )}
+        );
+      })()}
 
       {/* ── SEO İçerik ────────────────────────────────────────────────── */}
       <section className="mb-10 mt-8 prose prose-sm lg:prose-base max-w-none">
