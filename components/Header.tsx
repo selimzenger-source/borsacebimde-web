@@ -14,6 +14,8 @@ const navLinks = [
   { href: '/kap-tum-haberler', label: 'Tüm KAP' },
   { href: '/piyasa-haberleri', label: 'Haberler' },
   { href: '/tavan-taban', label: 'Tavan Taban' },
+  { href: '/bilanco', label: 'Bilanço' },
+  { href: '/temettu', label: 'Temettü' },
   { href: '/viop', label: 'VİOP' },
   { href: '/spk-bulten', label: 'SPK Bülten' },
   { href: '/kurum-onerileri', label: 'Kurum Önerileri' },

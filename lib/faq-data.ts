@@ -119,6 +119,92 @@ export const spkBultenFAQ: FAQItem[] = [
   },
 ];
 
+export const bilancoFAQ: FAQItem[] = [
+  {
+    question: 'Bilanço nedir?',
+    answer: 'Bilanço, bir şirketin belirli bir tarihteki varlıkları, borçları ve özkaynaklarını gösteren finansal tablodur. BIST şirketleri her üç ayda bir KAP üzerinden çeyreklik (Q1, Q2, Q3) ve yıl sonu (Q4) bilançolarını yayınlamak zorundadır.',
+  },
+  {
+    question: 'Çeyreklik bilanço ne anlama gelir?',
+    answer: 'Çeyreklik bilanço, bir şirketin üç aylık dönemlerdeki finansal performansını gösterir. Q1 Ocak-Mart, Q2 Nisan-Haziran, Q3 Temmuz-Eylül, Q4 Ekim-Aralık dönemini kapsar. Yatırımcılar çeyreklik trendleri takip ederek şirketin büyüme hızını ölçebilir.',
+  },
+  {
+    question: 'Bilançoda en önemli kalemler nelerdir?',
+    answer: 'Yatırımcılar için en kritik kalemler: Net Satışlar (ciro), Brüt Kâr, FAVÖK (EBITDA), Net Dönem Kârı, Toplam Varlıklar, Net Borç ve Özkaynaklar olarak sıralanabilir. Bu kalemlerin önceki yılın aynı dönemiyle (YoY) karşılaştırılması büyüme trendi hakkında bilgi verir.',
+  },
+  {
+    question: 'YoY (Year over Year) ne demek?',
+    answer: 'YoY (Yıllık Karşılaştırma), bir kalemin geçen yılın aynı dönemiyle yüzdesel olarak karşılaştırılmasıdır. Örneğin 2026 Q1 satışlarının 2025 Q1 satışlarıyla kıyaslanması "satış YoY %" değerini verir. Bu metrik, mevsimsel etkilerden arındırılmış gerçek büyümeyi gösterir.',
+  },
+  {
+    question: 'FAVÖK (EBITDA) nedir?',
+    answer: 'FAVÖK (Faiz, Amortisman ve Vergi Öncesi Kâr), şirketin temel faaliyetlerinden elde ettiği kârlılığı ölçer. Finansman ve muhasebe etkilerinden arındırıldığı için şirketlerin operasyonel performansını karşılaştırmak için ideal bir metriktir. Yüksek ve artan FAVÖK marjı sağlıklı bir işletme göstergesidir.',
+  },
+  {
+    question: 'Bilanço bildirimleri ne zaman yayınlanır?',
+    answer: 'BIST şirketleri konsolide bilanço için Q1, Q2, Q3 dönemlerinde dönem bitimini takip eden 60 gün, Q4 (yıl sonu) için ise 70 gün içinde KAP\'a bilanço yayınlamak zorundadır. Bağımsız denetim raporlu yıl sonu bilançolarının yayın süresi 90 gündür.',
+  },
+  {
+    question: 'Bilanço açıklamasından sonra hisse nasıl etkilenir?',
+    answer: 'Bilanço açıklaması hisse fiyatını kısa vadede önemli ölçüde etkileyebilir. Beklentinin üzerinde gelen pozitif bilanço hisseyi yukarı, beklentinin altında kalan bilanço ise aşağı taşıyabilir. Borsa Cebimde, her bilanço sonrası yapay zeka destekli analiz üreterek olumlu/olumsuz/nötr sınıflandırma ve 1-10 arası etki puanı verir.',
+  },
+  {
+    question: 'Net borç / FAVÖK oranı nedir?',
+    answer: 'Net Borç / FAVÖK, şirketin borç yükünün operasyonel kârlılığa oranını gösterir. 2x altı düşük borç, 3x üstü yüksek borç olarak değerlendirilir. Düşük oran finansal sağlamlığı, yüksek oran ise borç riskini işaret eder. Banka ve sigorta sektörlerinde bu oran kullanılmaz.',
+  },
+  {
+    question: 'Sektörel bilanço farklılıkları var mı?',
+    answer: 'Evet. Bankalar için Net Faiz Geliri, Komisyon Gelirleri, Krediler ve Mevduatlar; sigorta şirketleri için Brüt Prim ve Teknik Bölüm Dengesi; aracı kurumlar için Komisyon Gelirleri kritik kalemlerdir. Borsa Cebimde bu sektörlere özel bilanço kartları gösterir.',
+  },
+  {
+    question: 'Bilanço analizi yatırım tavsiyesi midir?',
+    answer: 'Hayır. Borsa Cebimde\'deki bilanço analizleri ve AI puanları yalnızca bilgilendirme amaçlıdır, yatırım tavsiyesi niteliği taşımaz. Yatırım kararlarınızı vermeden önce profesyonel danışmanlık almanız ve şirketin tüm yönlerini araştırmanız önerilir.',
+  },
+];
+
+export const temettuFAQ: FAQItem[] = [
+  {
+    question: 'Temettü nedir?',
+    answer: 'Temettü, anonim şirketlerin yıllık kârından pay sahiplerine dağıttığı tutardır. Şirket Genel Kurul kararıyla net dönem kârının bir kısmını ya da tamamını ortaklarına nakit olarak ya da bedelsiz hisse şeklinde dağıtabilir. BIST şirketlerinde temettü dağıtımı yıllık olarak gerçekleşir.',
+  },
+  {
+    question: 'Temettü verimi nasıl hesaplanır?',
+    answer: 'Temettü Verimi = (Brüt Hisse Başına Temettü × 100) / Hisse Fiyatı. Örneğin hisse 10 TL ve brüt temettü 1 TL ise verim %10\'dur. Yüksek verim cazip görünse de sürdürülebilirlik ve şirket sağlığı daha önemli kriterlerdir. Sadece son yılın verimi değil, son 3-5 yılın ortalaması bakılmalıdır.',
+  },
+  {
+    question: 'Brüt ve net temettü farkı nedir?',
+    answer: 'Brüt temettü şirketin açıkladığı toplam dağıtım tutarıdır. Net temettü ise %15 stopaj kesintisi sonrası yatırımcının cebine giren tutardır. Örneğin brüt 1 TL temettü için stopaj 0,15 TL, net 0,85 TL\'dir. Yatırım fonu hesaplarında stopaj farklı uygulanabilir.',
+  },
+  {
+    question: 'Eski tarih ne demek (ex-dividend)?',
+    answer: 'Temettü ödeme hakkı belirleme tarihinden önceki son işlem günüdür. Bu tarihten itibaren hisseyi alan kişiye o dönemin temettüsü ÖDENMEZ. Temettüden faydalanmak için "ex-dividend" tarihinden önce hisseye sahip olmak gerekir. Bu tarihte hisse fiyatı genellikle temettü tutarı kadar düşer.',
+  },
+  {
+    question: 'Temettü ne zaman ödenir?',
+    answer: 'Genel Kurul\'da kararlaştırılan ödeme tarihinde otomatik olarak yatırım hesabınıza işlenir. Genellikle Mart-Eylül arasında yoğunlaşır. Bazı şirketler temettüyü 2-3 taksitte dağıtır. Borsa Cebimde, takip listenizdeki hisselerin temettü tarihlerini hatırlatır.',
+  },
+  {
+    question: 'Temettü şampiyonu kimdir?',
+    answer: 'Temettü Şampiyonu, son 1, 3 veya 5 yıllık periyotlarda en yüksek temettü verimi sunan, üst üste temettü dağıtan ve payout oranı yüksek şirketlerdir. Yatırımcılar uzun vadeli pasif gelir stratejisinde bu hisseleri tercih edebilir.',
+  },
+  {
+    question: 'Payout oranı (dağıtım oranı) nedir?',
+    answer: 'Payout Oranı = (Dağıtılan Temettü / Net Dönem Kârı) × 100. Şirketin yıllık kârının ne kadarını ortaklara dağıttığını gösterir. %100\'ün üzeri = kârın tamamı + birikmiş kâr veya yedek dağıtımı, %0 = hiç temettü vermedi. %30-70 arası sürdürülebilir sayılır.',
+  },
+  {
+    question: 'Üst üste temettü neden önemli?',
+    answer: 'Bir şirketin üst üste 5-10 yıl temettü dağıtması, istikrarlı kârlılık ve güçlü nakit akışı işaretidir. Temettü kesintisi (azaltma veya tamamen iptal) genellikle hisseyi sert düşürür. Bu nedenle "Consecutive Years" (üst üste yıl) metriği güvenilir temettü hisseleri için kritik göstergedir.',
+  },
+  {
+    question: 'Temettü takvimi nasıl takip edilir?',
+    answer: 'Borsa Cebimde\'de yıllık temettü takvimi, yaklaşan ödemeler ve ödenmiş temettüler kategorilere ayrılarak listelenir. Her hisse için brüt/net dağıtım, ex-dividend tarihi, ödeme tarihi ve yıllık verim gösterilir. Mobil uygulamada favori hisselerinizin temettü tarihlerinde anlık bildirim alabilirsiniz.',
+  },
+  {
+    question: 'Bedelli ve bedelsiz temettü farkı nedir?',
+    answer: 'Bedelsiz temettü (Bedelsiz Sermaye Artırımı) hissedarlara para yerine yeni hisse verilmesidir, hisse sayınız artar ama toplam değer aynı kalır. Bedelli sermaye artırımı ise ortakların hisse satın almak için para ödediği işlemdir, yatırım gerektirir. Nakit temettü ise doğrudan hesabınıza para yatırılmasıdır.',
+  },
+];
+
 export const genelFAQ: FAQItem[] = [
   {
     question: 'Borsa Cebimde nedir?',

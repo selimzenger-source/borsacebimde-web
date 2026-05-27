@@ -27,6 +27,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/viop', changefreq: 'daily', priority: 0.8 },
     { path: '/spk-bulten', changefreq: 'weekly', priority: 0.8 },
     { path: '/spk-basvurular', changefreq: 'daily', priority: 0.8 },
+    { path: '/bilanco', changefreq: 'daily', priority: 0.9 },
+    { path: '/temettu', changefreq: 'daily', priority: 0.9 },
 
     // Indirme & bilgi
     // NOT: /androidindir ve /appstoreindir kaldirildi — canonical zaten /indir'e isaret ediyor.

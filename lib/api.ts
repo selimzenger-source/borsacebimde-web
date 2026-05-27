@@ -183,6 +183,85 @@ export interface BlogPost {
   created_at: string | null;
 }
 
+// ─── Bilanço & Temettü tipleri ───────────────────────────────────────────────
+
+export interface BilancoTopItem {
+  ticker: string;
+  period: string;
+  ai_score: number | null;
+  ai_summary: string | null;
+  ai_sentiment: 'Olumlu' | 'Olumsuz' | 'Notr' | string | null;
+  published_at: string | null;
+  fk: number | null;
+  pddd: number | null;
+  fd_favok: number | null;
+  piyasa_degeri: number | null;
+  price: number | null;
+  revenue: number | null;
+  net_income: number | null;
+  ebitda: number | null;
+}
+
+export interface BilancoTopResponse {
+  period: string;
+  count: number;
+  items: BilancoTopItem[];
+}
+
+export interface BilancoPeriod {
+  period: string;
+  count: number;
+  label: string;
+}
+
+export interface BilancoPeriodsResponse {
+  periods: BilancoPeriod[];
+}
+
+export interface BilancoCalendarItem {
+  ticker: string;
+  company_name: string | null;
+  period: string;
+  expected_date: string | null;
+  announced_date: string | null;
+  is_announced: boolean;
+}
+
+export interface TemettuSampiyon {
+  ticker: string;
+  company: string;
+  yieldPct: number | null;
+  periodPaymentYears: number | null;
+  consecutiveYears: number | null;
+  payoutPct: number | null;
+  grossPerShare: number | null;
+  aiScore: number | null;
+  latest_year: number | null;
+}
+
+export interface TemettuSampiyonResponse {
+  period: string;
+  count: number;
+  items: TemettuSampiyon[];
+}
+
+export interface TemettuCalendarItem {
+  ticker: string;
+  year: number;
+  gross_per_share: number | null;
+  net_per_share: number | null;
+  yield_pct: number | null;
+  payment_date: string | null;
+  ex_dividend_date: string | null;
+  status: 'yaklasan' | 'odenen' | string;
+}
+
+export interface TemettuCalendarResponse {
+  year: number;
+  stats: { toplam: number; yaklasan: number; odenen: number };
+  items: TemettuCalendarItem[];
+}
+
 export const api = {
   getNewsFeed: (days = 30, limit = 100, source?: string) =>
     fetchAPI<NewsFeedItem[]>('/api/v1/public/news-feed', { days, limit, ...(source ? { source } : {}) }),
@@ -213,6 +292,25 @@ export const api = {
 
   getBlogBySlug: (slug: string) =>
     fetchAPI<BlogPost>(`/api/v1/public/blogs/${slug}`),
+
+  // ─── Bilanço ─────────────────────────────────────────────────────────────
+  getBilancoPeriods: () =>
+    fetchAPI<BilancoPeriodsResponse>('/api/v1/bilanco/periods'),
+
+  /** metric: 'revenue_quarterly_yoy_pct' | 'net_income_quarterly_yoy_pct' | 'ebitda_quarterly_yoy_pct' | 'ai_score' */
+  getBilancoTop: (period: string, metric: string = 'ai_score', limit: number = 20) =>
+    fetchAPI<BilancoTopResponse>('/api/v1/bilanco/top', { period, metric, limit }),
+
+  getBilancoCalendar: (limit: number = 50) =>
+    fetchAPI<BilancoCalendarItem[]>('/api/v1/bilanco-takvim', { limit }),
+
+  // ─── Temettü ──────────────────────────────────────────────────────────────
+  /** period: '1y' | '3y' | '5y' */
+  getTemettuSampiyonlar: (period: string = '5y', limit: number = 30) =>
+    fetchAPI<TemettuSampiyonResponse>('/api/v1/temettu/sampiyonlar', { period, limit }),
+
+  getTemettuCalendar: (limit: number = 60) =>
+    fetchAPI<TemettuCalendarResponse>('/api/v1/temettu-takvim', { limit }),
 };
 
 /** Tweet text temizle */
