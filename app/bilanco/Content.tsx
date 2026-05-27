@@ -42,6 +42,17 @@ function sentimentColor(s: string | null): { bg: string; color: string; label: s
   return { bg: 'rgba(158,158,158,0.12)', color: '#9E9E9E', label: 'Nötr' };
 }
 
+// Bilanco AI puanina gore etiket — Notr/Iyi/Guclu/Zayif (score-based, dogru)
+function scoreToLabel(score: number | null | undefined): { bg: string; color: string; label: string } {
+  if (score == null) return { bg: 'rgba(158,158,158,0.12)', color: '#9E9E9E', label: '—' };
+  if (score >= 8.5) return { bg: 'rgba(255,215,0,0.15)', color: '#FFD700', label: 'Çok İyi' };
+  if (score >= 7) return { bg: 'rgba(76,175,80,0.15)', color: '#4CAF50', label: 'Güçlü' };
+  if (score >= 5.5) return { bg: 'rgba(33,150,243,0.15)', color: '#2196F3', label: 'İyi' };
+  if (score >= 4) return { bg: 'rgba(255,152,0,0.15)', color: '#FF9800', label: 'Orta' };
+  if (score >= 2.5) return { bg: 'rgba(255,82,82,0.15)', color: '#FF5252', label: 'Zayıf' };
+  return { bg: 'rgba(244,67,54,0.18)', color: '#F44336', label: 'Kötü' };
+}
+
 // ─── Skeleton ────────────────────────────────────────────────────────────────
 
 function SkeletonRow() {
@@ -161,7 +172,9 @@ export default function BilancoContent() {
             </div>
           ) : (
             items.map((it, idx) => {
-              const sent = sentimentColor(it.ai_sentiment);
+              // Bilanco AI puanina gore dogru etiket (score-based) — kap_all_disclosures
+              // sentiment'i (Nötr — routine pre-filter) yerine score'a gore etiket.
+              const sent = scoreToLabel(it.ai_score);
               return (
                 <div key={`${it.ticker}-${idx}`} className="card px-4 py-3">
                   <div className="flex items-center gap-3 flex-wrap">

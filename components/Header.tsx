@@ -7,32 +7,46 @@ import { usePathname } from 'next/navigation';
 import { useTheme } from './ThemeProvider';
 import { getStoreInfo } from '@/lib/platform';
 
-const navLinks = [
+// 5 ana link + 2 dropdown grup (Haberler, Araclar)
+const navLinks: { href: string; label: string }[] = [
   { href: '/', label: 'Ana Sayfa' },
   { href: '/halka-arz', label: 'Halka Arz' },
-  { href: '/kap-ai', label: 'KAP Pozitif' },
-  { href: '/kap-tum-haberler', label: 'Tüm KAP' },
-  { href: '/piyasa-haberleri', label: 'Haberler' },
-  { href: '/tavan-taban', label: 'Tavan Taban' },
   { href: '/bilanco', label: 'Bilanço' },
   { href: '/temettu', label: 'Temettü' },
-  { href: '/viop', label: 'VİOP' },
+];
+
+const haberlerLinks = [
+  { href: '/kap-ai', label: 'KAP Pozitif Haberler' },
+  { href: '/kap-tum-haberler', label: 'Tüm KAP Bildirimleri' },
+  { href: '/piyasa-haberleri', label: 'Piyasa Haberleri' },
+];
+
+const araclarLinks = [
+  { href: '/tavan-taban', label: 'Tavan & Taban' },
+  { href: '/viop', label: 'VİOP Gece Seansı' },
   { href: '/spk-bulten', label: 'SPK Bülten' },
   { href: '/kurum-onerileri', label: 'Kurum Önerileri' },
-  { href: '/blog', label: 'Rehber' },
+  { href: '/blog', label: 'Rehber & Blog' },
 ];
 
 export default function Header() {
   const pathname = usePathname();
   const { theme, toggle } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [haberlerOpen, setHaberlerOpen] = useState(false);
+  const [araclarOpen, setAraclarOpen] = useState(false);
   const [store, setStore] = useState(getStoreInfo());
   useEffect(() => { setStore(getStoreInfo()); }, []);
+
+  // Mobile sub-menu state
+  const [mobileHaberlerOpen, setMobileHaberlerOpen] = useState(false);
+  const [mobileAraclarOpen, setMobileAraclarOpen] = useState(false);
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
     return pathname.startsWith(href);
   };
+  const isAnyActive = (links: { href: string }[]) => links.some((l) => isActive(l.href));
 
   return (
     <header
@@ -62,13 +76,13 @@ export default function Header() {
             </div>
           </Link>
 
-          {/* Desktop nav */}
-          <nav className="hidden lg:flex items-center gap-0">
+          {/* Desktop nav — sadelestirildi: 4 ana link + 2 dropdown grup */}
+          <nav className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-2.5 py-1.5 rounded-lg text-[12px] font-medium transition-all duration-150 whitespace-nowrap"
+                className="px-3 py-1.5 rounded-lg text-[13px] font-medium transition-all duration-150 whitespace-nowrap"
                 style={{
                   color: isActive(link.href) ? '#2979FF' : 'var(--text-secondary)',
                   backgroundColor: isActive(link.href)
@@ -79,6 +93,90 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
+
+            {/* Haberler dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => setHaberlerOpen(true)}
+              onMouseLeave={() => setHaberlerOpen(false)}
+            >
+              <button
+                className="px-3 py-1.5 rounded-lg text-[13px] font-medium transition-all duration-150 whitespace-nowrap flex items-center gap-1"
+                style={{
+                  color: isAnyActive(haberlerLinks) ? '#2979FF' : 'var(--text-secondary)',
+                  backgroundColor: isAnyActive(haberlerLinks)
+                    ? (theme === 'dark' ? 'rgba(41,121,255,0.1)' : 'rgba(41,121,255,0.08)')
+                    : 'transparent',
+                }}
+              >
+                Haberler
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {haberlerOpen && (
+                <div
+                  className="absolute left-0 top-full mt-1 min-w-[220px] rounded-lg shadow-xl border py-1.5"
+                  style={{
+                    backgroundColor: theme === 'dark' ? 'rgba(11,17,32,0.97)' : 'rgba(255,255,255,0.97)',
+                    borderColor: 'var(--border-primary)',
+                  }}
+                >
+                  {haberlerLinks.map((l) => (
+                    <Link
+                      key={l.href}
+                      href={l.href}
+                      className="block px-4 py-2 text-[13px] hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                      style={{ color: isActive(l.href) ? '#2979FF' : 'var(--text-secondary)' }}
+                    >
+                      {l.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Araclar dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => setAraclarOpen(true)}
+              onMouseLeave={() => setAraclarOpen(false)}
+            >
+              <button
+                className="px-3 py-1.5 rounded-lg text-[13px] font-medium transition-all duration-150 whitespace-nowrap flex items-center gap-1"
+                style={{
+                  color: isAnyActive(araclarLinks) ? '#2979FF' : 'var(--text-secondary)',
+                  backgroundColor: isAnyActive(araclarLinks)
+                    ? (theme === 'dark' ? 'rgba(41,121,255,0.1)' : 'rgba(41,121,255,0.08)')
+                    : 'transparent',
+                }}
+              >
+                Araçlar
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {araclarOpen && (
+                <div
+                  className="absolute right-0 top-full mt-1 min-w-[220px] rounded-lg shadow-xl border py-1.5"
+                  style={{
+                    backgroundColor: theme === 'dark' ? 'rgba(11,17,32,0.97)' : 'rgba(255,255,255,0.97)',
+                    borderColor: 'var(--border-primary)',
+                  }}
+                >
+                  {araclarLinks.map((l) => (
+                    <Link
+                      key={l.href}
+                      href={l.href}
+                      className="block px-4 py-2 text-[13px] hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                      style={{ color: isActive(l.href) ? '#2979FF' : 'var(--text-secondary)' }}
+                    >
+                      {l.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
           </nav>
 
           {/* Right side */}
@@ -145,6 +243,7 @@ export default function Header() {
           }}
         >
           <nav className="max-w-6xl mx-auto px-4 py-3 flex flex-col gap-1">
+            {/* Ana linkler */}
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -161,6 +260,53 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
+
+            {/* Haberler accordion */}
+            <button
+              onClick={() => setMobileHaberlerOpen(v => !v)}
+              className="flex items-center justify-between px-4 py-2.5 rounded-lg text-sm font-medium"
+              style={{ color: isAnyActive(haberlerLinks) ? '#2979FF' : 'var(--text-secondary)' }}
+            >
+              Haberler
+              <svg className={`w-4 h-4 transition-transform ${mobileHaberlerOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {mobileHaberlerOpen && haberlerLinks.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                onClick={() => setMenuOpen(false)}
+                className="pl-8 pr-4 py-2 rounded-lg text-sm"
+                style={{ color: isActive(l.href) ? '#2979FF' : 'var(--text-muted)' }}
+              >
+                {l.label}
+              </Link>
+            ))}
+
+            {/* Araclar accordion */}
+            <button
+              onClick={() => setMobileAraclarOpen(v => !v)}
+              className="flex items-center justify-between px-4 py-2.5 rounded-lg text-sm font-medium"
+              style={{ color: isAnyActive(araclarLinks) ? '#2979FF' : 'var(--text-secondary)' }}
+            >
+              Araçlar
+              <svg className={`w-4 h-4 transition-transform ${mobileAraclarOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {mobileAraclarOpen && araclarLinks.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                onClick={() => setMenuOpen(false)}
+                className="pl-8 pr-4 py-2 rounded-lg text-sm"
+                style={{ color: isActive(l.href) ? '#2979FF' : 'var(--text-muted)' }}
+              >
+                {l.label}
+              </Link>
+            ))}
+
             <div className="pt-2 mt-1" style={{ borderTop: '1px solid var(--border-primary)' }}>
               <a
                 href={store.url}
