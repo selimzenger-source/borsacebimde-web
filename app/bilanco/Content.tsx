@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { api, BilancoTopItem, BilancoPeriod, BilancoCalendarItem, formatDate } from '@/lib/api';
+import { api, BilancoTopItem, BilancoPeriod, BilancoCalendarItem, BilancoQuarter, formatDate } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
 import InlineAppBanner from '@/components/InlineAppBanner';
@@ -51,6 +51,66 @@ function scoreToLabel(score: number | null | undefined): { bg: string; color: st
   if (score >= 4) return { bg: 'rgba(255,152,0,0.15)', color: '#FF9800', label: 'Orta' };
   if (score >= 2.5) return { bg: 'rgba(255,82,82,0.15)', color: '#FF5252', label: 'Zayıf' };
   return { bg: 'rgba(244,67,54,0.18)', color: '#F44336', label: 'Kötü' };
+}
+
+// ─── Mini Bar Chart (SVG, son 5 ceyrek) ─────────────────────────────────────
+
+function MiniBarChart({
+  title,
+  data,
+  color = '#2979FF',
+}: {
+  title: string;
+  data: { period: string; value: number | null }[];
+  color?: string;
+}) {
+  const valid = data.filter((d) => d.value !== null && !isNaN(d.value as number)) as
+    { period: string; value: number }[];
+  if (valid.length === 0) return null;
+  const maxAbs = Math.max(...valid.map((d) => Math.abs(d.value)));
+  if (maxAbs === 0) return null;
+
+  const W = 160;
+  const H = 60;
+  const gap = 6;
+  const barW = (W - gap * (data.length - 1)) / data.length;
+
+  return (
+    <div style={{ flex: 1, minWidth: 130 }}>
+      <div style={{ fontSize: 10, color: 'var(--text-muted)', textAlign: 'center', marginBottom: 4, fontWeight: 600 }}>
+        {title}
+      </div>
+      <svg viewBox={`0 0 ${W} ${H + 14}`} width="100%" preserveAspectRatio="xMidYMid meet">
+        {data.map((d, i) => {
+          if (d.value === null || isNaN(d.value)) {
+            return (
+              <text key={i} x={i * (barW + gap) + barW / 2} y={H + 11} fontSize="7"
+                fill="var(--text-muted)" textAnchor="middle">{fmtPeriod(d.period)}</text>
+            );
+          }
+          const h = (Math.abs(d.value) / maxAbs) * H;
+          const y = H - h;
+          const fill = d.value < 0 ? '#FF5252' : color;
+          const isLast = i === data.length - 1;
+          return (
+            <g key={i}>
+              <rect
+                x={i * (barW + gap)}
+                y={y}
+                width={barW}
+                height={h}
+                fill={fill}
+                opacity={isLast ? 1 : 0.6}
+                rx={2}
+              />
+              <text x={i * (barW + gap) + barW / 2} y={H + 11} fontSize="7"
+                fill="var(--text-muted)" textAnchor="middle">{fmtPeriod(d.period)}</text>
+            </g>
+          );
+        })}
+      </svg>
+    </div>
+  );
 }
 
 // ─── Skeleton ────────────────────────────────────────────────────────────────
@@ -215,6 +275,26 @@ export default function BilancoContent() {
                       </div>
                     </div>
                   </div>
+                  {/* Çeyreklik mini bar chart'lar (son 5 ceyrek) */}
+                  {it.quarterly && it.quarterly.length > 0 && (
+                    <div className="flex gap-3 mt-3 pt-3" style={{ borderTop: '1px dashed var(--border-primary)' }}>
+                      <MiniBarChart
+                        title="Çey. Satışlar"
+                        data={it.quarterly.map((q: BilancoQuarter) => ({ period: q.period, value: q.revenue }))}
+                        color="#1565C0"
+                      />
+                      <MiniBarChart
+                        title="Çey. FAVÖK"
+                        data={it.quarterly.map((q: BilancoQuarter) => ({ period: q.period, value: q.ebitda }))}
+                        color="#2E7D32"
+                      />
+                      <MiniBarChart
+                        title="Çey. Net Kâr"
+                        data={it.quarterly.map((q: BilancoQuarter) => ({ period: q.period, value: q.net_income }))}
+                        color="#2E7D32"
+                      />
+                    </div>
+                  )}
                   {it.ai_summary && (
                     <p className="text-xs text-muted mt-2 line-clamp-2">{it.ai_summary}</p>
                   )}

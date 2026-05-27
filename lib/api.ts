@@ -185,10 +185,18 @@ export interface BlogPost {
 
 // ─── Bilanço & Temettü tipleri ───────────────────────────────────────────────
 
+export interface BilancoQuarter {
+  period: string;
+  revenue: number | null;
+  ebitda: number | null;
+  net_income: number | null;
+}
+
 export interface BilancoTopItem {
   ticker: string;
   period: string;
   ai_score: number | null;
+  ai_label?: string | null;
   ai_summary: string | null;
   ai_sentiment: 'Olumlu' | 'Olumsuz' | 'Notr' | string | null;
   published_at: string | null;
@@ -200,6 +208,11 @@ export interface BilancoTopItem {
   revenue: number | null;
   net_income: number | null;
   ebitda: number | null;
+  quarterly?: BilancoQuarter[];
+  total_assets?: number | null;
+  total_equity?: number | null;
+  net_debt?: number | null;
+  sector_type?: string | null;
 }
 
 export interface BilancoTopResponse {
