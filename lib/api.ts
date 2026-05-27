@@ -297,9 +297,9 @@ export const api = {
   getBilancoPeriods: () =>
     fetchAPI<BilancoPeriodsResponse>('/api/v1/bilanco/periods'),
 
-  /** metric: 'revenue_quarterly_yoy_pct' | 'net_income_quarterly_yoy_pct' | 'ebitda_quarterly_yoy_pct' | 'ai_score' */
-  getBilancoTop: (period: string, metric: string = 'ai_score', limit: number = 20) =>
-    fetchAPI<BilancoTopResponse>('/api/v1/bilanco/top', { period, metric, limit }),
+  /** sort: 'recent' (en son yayinlanan, default) | 'ai' (en yuksek AI puan) */
+  getBilancoTop: (period: string, sort: 'recent' | 'ai' = 'recent', limit: number = 20) =>
+    fetchAPI<BilancoTopResponse>('/api/v1/bilanco/top', { period, sort, limit }),
 
   getBilancoCalendar: (limit: number = 50) =>
     fetchAPI<BilancoCalendarItem[]>('/api/v1/bilanco-takvim', { limit }),

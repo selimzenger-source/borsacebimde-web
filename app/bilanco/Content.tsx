@@ -81,7 +81,7 @@ export default function BilancoContent() {
   useEffect(() => {
     if (!activePeriod) return;
     setLoading(true);
-    api.getBilancoTop(activePeriod, 'ai_score', 20)
+    api.getBilancoTop(activePeriod, 'recent', 20)
       .then((r) => setItems(r.items))
       .catch(() => setItems([]))
       .finally(() => setLoading(false));
