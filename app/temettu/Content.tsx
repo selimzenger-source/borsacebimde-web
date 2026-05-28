@@ -53,7 +53,7 @@ export default function TemettuContent() {
 
   const [calendar, setCalendar] = useState<TemettuCalendarItem[]>([]);
   const [stats, setStats] = useState({ toplam: 0, yaklasan: 0, odenen: 0 });
-  const [calStatus, setCalStatus] = useState<'all' | 'yaklasan' | 'odenen'>('yaklasan');
+  const [calStatus, setCalStatus] = useState<'all' | 'yaklasan' | 'odendi'>('yaklasan');
   // Ana sekme: takvim mi sampiyonlar mi
   const [mainTab, setMainTab] = useState<'takvim' | 'sampiyonlar'>('takvim');
 
@@ -278,7 +278,7 @@ export default function TemettuContent() {
         <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
           <h2 className="text-xl font-semibold">Temettü Takvimi</h2>
           <div className="flex gap-2">
-            {(['yaklasan', 'odenen', 'all'] as const).map((s) => (
+            {(['yaklasan', 'odendi', 'all'] as const).map((s) => (
               <button
                 key={s}
                 onClick={() => setCalStatus(s)}
@@ -292,7 +292,7 @@ export default function TemettuContent() {
                   }`,
                 }}
               >
-                {s === 'yaklasan' ? 'Yaklaşan' : s === 'odenen' ? 'Ödenen' : 'Tümü'}
+                {s === 'yaklasan' ? 'Yaklaşan' : s === 'odendi' ? 'Ödenen' : 'Tümü'}
               </button>
             ))}
           </div>
@@ -310,14 +310,14 @@ export default function TemettuContent() {
                   className="badge"
                   style={{
                     background:
-                      c.status === 'odenen'
+                      c.status === 'odendi'
                         ? 'rgba(76,175,80,0.12)'
                         : 'rgba(255,152,0,0.12)',
-                    color: c.status === 'odenen' ? '#4CAF50' : '#FF9800',
+                    color: c.status === 'odendi' ? '#4CAF50' : '#FF9800',
                     border: '1px solid currentColor',
                   }}
                 >
-                  {c.status === 'odenen' ? 'Ödendi' : 'Yaklaşıyor'}
+                  {c.status === 'odendi' ? 'Ödendi' : 'Yaklaşıyor'}
                 </span>
                 <div className="text-xs text-muted">
                   Brüt {c.gross_per_share != null ? c.gross_per_share.toLocaleString('tr-TR', { maximumFractionDigits: 4 }) + ' TL' : '—'}
