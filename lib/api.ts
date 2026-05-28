@@ -221,6 +221,52 @@ export interface BilancoTopResponse {
   items: BilancoTopItem[];
 }
 
+// Son Bilançolar (zengin) — /api/v1/bilanco (announced_date sıralı, prev dönem dahil)
+export interface BilancoListItem {
+  ticker: string;
+  title: string;
+  published_at: string | null;
+  announced_date?: string | null;
+  ai_score: number | null;
+  ai_label?: string | null;
+  ai_summary: string | null;
+  period: string | null;
+  prev_period: string | null;
+  prev_period_balance: string | null;
+  sector_type?: string | null;
+  sector_name?: string | null;
+  // Mevcut dönem
+  revenue: number | null;
+  gross_profit: number | null;
+  ebitda: number | null;
+  net_income: number | null;
+  current_assets: number | null;
+  non_current_assets: number | null;
+  total_assets: number | null;
+  total_equity: number | null;
+  net_debt: number | null;
+  gross_margin_pct: number | null;
+  net_margin_pct: number | null;
+  roe_pct: number | null;
+  // Önceki dönem
+  revenue_prev: number | null;
+  gross_profit_prev: number | null;
+  ebitda_prev: number | null;
+  net_income_prev: number | null;
+  current_assets_prev: number | null;
+  non_current_assets_prev: number | null;
+  total_assets_prev: number | null;
+  total_equity_prev: number | null;
+  net_debt_prev: number | null;
+  quarterly: Array<{ period: string; revenue: number | null; ebitda: number | null; net_income: number | null; total_equity?: number | null }>;
+}
+
+export interface BilancoListResponse {
+  count: number;
+  offset: number;
+  items: BilancoListItem[];
+}
+
 export interface BilancoPeriod {
   period: string;
   count: number;
@@ -313,6 +359,10 @@ export const api = {
   /** sort: 'recent' (en son yayinlanan, default) | 'ai' (en yuksek AI puan) */
   getBilancoTop: (period: string, sort: 'recent' | 'ai' = 'recent', limit: number = 20) =>
     fetchAPI<BilancoTopResponse>('/api/v1/bilanco/top', { period, sort, limit }),
+
+  /** Son Bilançolar — tüm dönemler, açıklama tarihine göre (uygulamadaki feed) */
+  getLatestBilancos: (limit: number = 40) =>
+    fetchAPI<BilancoListResponse>('/api/v1/bilanco', { limit }),
 
   getBilancoCalendar: (limit: number = 50) =>
     fetchAPI<BilancoCalendarItem[]>('/api/v1/bilanco-takvim', { limit }),

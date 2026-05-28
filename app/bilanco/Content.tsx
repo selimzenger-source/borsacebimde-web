@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { api, BilancoTopItem, BilancoPeriod, BilancoCalendarItem, BilancoQuarter, formatDate } from '@/lib/api';
+import { api, BilancoListItem, BilancoCalendarItem, formatDate } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
 import InlineAppBanner from '@/components/InlineAppBanner';
@@ -51,6 +51,14 @@ function scoreToLabel(score: number | null | undefined): { bg: string; color: st
   if (score >= 4) return { bg: 'rgba(255,152,0,0.15)', color: '#FF9800', label: 'Orta' };
   if (score >= 2.5) return { bg: 'rgba(255,82,82,0.15)', color: '#FF5252', label: 'Zayıf' };
   return { bg: 'rgba(244,67,54,0.18)', color: '#F44336', label: 'Kötü' };
+}
+
+// Yüzde değişim (current vs prev)
+function pctChange(curr: number | null | undefined, prev: number | null | undefined): { txt: string; color: string } | null {
+  if (curr == null || prev == null || prev === 0) return null;
+  const pct = ((curr - prev) / Math.abs(prev)) * 100;
+  const color = pct >= 0 ? '#4CAF50' : '#FF5252';
+  return { txt: `${pct >= 0 ? '+' : ''}${pct.toFixed(0)}%`, color };
 }
 
 // ─── Mini Bar Chart (SVG, son 5 ceyrek) ─────────────────────────────────────
@@ -128,35 +136,119 @@ function SkeletonRow() {
   );
 }
 
+// ─── Zengin Bilanço Kartı (uygulamadaki BFREN düzeni) ───────────────────────
+function FinRow({ label, curr, prev, bold, signed }: { label: string; curr: number | null; prev: number | null; bold?: boolean; signed?: boolean }) {
+  const ch = pctChange(curr, prev);
+  const valColor = signed ? ((curr || 0) < 0 ? '#FF5252' : '#4CAF50') : 'var(--text-primary)';
+  return (
+    <div className="grid grid-cols-3 gap-2 items-center py-1.5" style={{ borderTop: '1px solid var(--border-primary)' }}>
+      <span className={`text-xs ${bold ? 'font-bold' : ''}`} style={{ color: 'var(--text-secondary)' }}>{label}</span>
+      <span className={`text-xs text-right ${bold ? 'font-bold' : 'font-semibold'}`} style={{ color: valColor }}>{fmtNum(curr)}</span>
+      <span className="text-xs text-right" style={{ color: ch ? ch.color : 'var(--text-muted)' }}>{ch ? ch.txt : '—'}</span>
+    </div>
+  );
+}
+
+function BilancoCard({ it }: { it: BilancoListItem }) {
+  // TTM ROE = son 4 çeyrek net kâr / özkaynak
+  const q = it.quarterly || [];
+  const niTTM = q.length >= 4 ? q.slice(-4).reduce((s, x) => s + (x.net_income || 0), 0)
+    : q.length > 0 ? q.reduce((s, x) => s + (x.net_income || 0), 0) * (4 / q.length) : null;
+  const roe = (it.total_equity && niTTM != null && it.total_equity > 0) ? (niTTM / it.total_equity) * 100 : null;
+  const ndFavok = (it.net_debt != null && it.ebitda && it.ebitda !== 0) ? it.net_debt / it.ebitda : null;
+  const sc = scoreToLabel(it.ai_score);
+
+  const Metric = ({ label, value, color }: { label: string; value: string; color?: string }) => (
+    <div className="text-center">
+      <div className="text-[10px] uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>{label}</div>
+      <div className="text-sm font-bold mt-0.5" style={{ color: color || 'var(--text-primary)' }}>{value}</div>
+    </div>
+  );
+
+  return (
+    <div className="card px-4 py-4">
+      {/* Header */}
+      <div className="flex items-center gap-2 flex-wrap mb-3">
+        <span className="font-extrabold text-lg">{it.ticker}</span>
+        <span className="badge text-xs" style={{ background: 'rgba(41,121,255,0.12)', color: '#2979FF', border: '1px solid rgba(41,121,255,0.3)' }}>{fmtPeriod(it.period)}</span>
+        {it.sector_name && <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{it.sector_name}</span>}
+        {it.ai_score != null && (
+          <span className="badge ml-auto text-xs" style={{ background: sc.bg, color: sc.color, border: `1px solid ${sc.color}55` }}>
+            {sc.label} · {it.ai_score.toFixed(1)}
+          </span>
+        )}
+      </div>
+
+      {/* Marj satırı */}
+      <div className="grid grid-cols-4 gap-2 mb-4">
+        <Metric label="Brüt Marj" value={it.gross_margin_pct != null ? `%${it.gross_margin_pct.toFixed(1)}` : '—'} />
+        <Metric label="Net Marj" value={it.net_margin_pct != null ? `%${it.net_margin_pct.toFixed(1)}` : '—'} />
+        <Metric label="ROE" value={roe != null ? `%${roe.toFixed(1)}` : '—'} color={roe == null ? undefined : roe >= 15 ? '#4CAF50' : roe >= 5 ? '#FFD700' : '#FF5252'} />
+        <Metric label="Net Borç/FAVÖK" value={ndFavok != null ? `${ndFavok.toFixed(2)}x` : '—'} color={(it.net_debt || 0) < 0 ? '#4CAF50' : undefined} />
+      </div>
+
+      <div className="grid lg:grid-cols-2 gap-4">
+        {/* Özet Gelir Tablosu */}
+        <div>
+          <div className="flex justify-between text-[11px] mb-1" style={{ color: 'var(--text-muted)' }}>
+            <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>Özet Gelir Tablosu</span>
+            <span>{fmtPeriod(it.period)} · {fmtPeriod(it.prev_period)} · %</span>
+          </div>
+          <FinRow label="Satışlar" curr={it.revenue} prev={it.revenue_prev} bold />
+          <FinRow label="Brüt Kâr" curr={it.gross_profit} prev={it.gross_profit_prev} />
+          <FinRow label="FAVÖK" curr={it.ebitda} prev={it.ebitda_prev} />
+          <FinRow label="Net Kâr" curr={it.net_income} prev={it.net_income_prev} bold signed />
+        </div>
+        {/* Özet Bilanço */}
+        <div>
+          <div className="flex justify-between text-[11px] mb-1" style={{ color: 'var(--text-muted)' }}>
+            <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>Özet Bilanço</span>
+            <span>{fmtPeriod(it.period)} · {fmtPeriod(it.prev_period_balance)} · %</span>
+          </div>
+          <FinRow label="Dönen Varlık" curr={it.current_assets} prev={it.current_assets_prev} />
+          <FinRow label="Duran Varlık" curr={it.non_current_assets} prev={it.non_current_assets_prev} />
+          <FinRow label="Toplam Varlık" curr={it.total_assets} prev={it.total_assets_prev} />
+          <FinRow label="Net Borç" curr={it.net_debt} prev={it.net_debt_prev} signed />
+          <FinRow label="Özkaynaklar" curr={it.total_equity} prev={it.total_equity_prev} bold />
+        </div>
+      </div>
+
+      {/* Çeyreklik grafikler */}
+      {q.length > 0 && (
+        <div className="flex gap-3 mt-4 pt-3" style={{ borderTop: '1px dashed var(--border-primary)' }}>
+          <MiniBarChart title="Çey. Satışlar" data={q.slice(-5).map((x) => ({ period: x.period, value: x.revenue }))} color="#1565C0" />
+          <MiniBarChart title="Çey. FAVÖK" data={q.slice(-5).map((x) => ({ period: x.period, value: x.ebitda }))} color="#2E7D32" />
+          <MiniBarChart title="Çey. Net Kâr" data={q.slice(-5).map((x) => ({ period: x.period, value: x.net_income }))} color="#2E7D32" />
+        </div>
+      )}
+
+      {/* AI yorumu */}
+      {it.ai_summary && (
+        <div className="mt-3 pt-3 text-xs" style={{ borderTop: '1px dashed var(--border-primary)', color: 'var(--text-secondary)' }}>
+          <span className="font-bold" style={{ color: sc.color }}>🤖 AI Bilanço Yorumu: </span>{it.ai_summary}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Main ────────────────────────────────────────────────────────────────────
 
 export default function BilancoContent() {
-  const [periods, setPeriods] = useState<BilancoPeriod[]>([]);
-  const [activePeriod, setActivePeriod] = useState<string>('');
-  const [items, setItems] = useState<BilancoTopItem[]>([]);
+  const [items, setItems] = useState<BilancoListItem[]>([]);
   const [calendar, setCalendar] = useState<BilancoCalendarItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.getBilancoPeriods()
-      .then((r) => {
-        setPeriods(r.periods.slice(0, 4));
-        if (r.periods.length > 0) setActivePeriod(r.periods[0].period);
-      })
-      .catch(() => {});
+    // Son Bilançolar — açıklama tarihine göre (uygulamadaki feed ile aynı)
+    api.getLatestBilancos(40)
+      .then((r) => setItems(r.items || []))
+      .catch(() => setItems([]))
+      .finally(() => setLoading(false));
     api.getBilancoCalendar(30)
       .then(setCalendar)
       .catch(() => {});
   }, []);
-
-  useEffect(() => {
-    if (!activePeriod) return;
-    setLoading(true);
-    api.getBilancoTop(activePeriod, 'recent', 20)
-      .then((r) => setItems(r.items))
-      .catch(() => setItems([]))
-      .finally(() => setLoading(false));
-  }, [activePeriod]);
 
   return (
     <div className="container-page py-6 lg:py-10">
@@ -182,125 +274,21 @@ export default function BilancoContent() {
         message="Takip listenizdeki şirketlerin yeni bilançosu yayınlandığında uygulamadan anlık push bildirimi gelsin."
       />
 
-      {/* ── Period tabs ─────────────────────────────────────────────────── */}
-      {periods.length > 0 && (
-        <section className="mb-6">
-          <h2 className="text-lg font-semibold mb-3">Dönem Seçin</h2>
-          <div className="flex flex-wrap gap-2">
-            {periods.map((p) => (
-              <button
-                key={p.period}
-                onClick={() => setActivePeriod(p.period)}
-                className={`badge px-4 py-2 transition-all ${
-                  activePeriod === p.period ? 'ring-2 ring-blue-500' : ''
-                }`}
-                style={{
-                  background:
-                    activePeriod === p.period
-                      ? 'rgba(41,121,255,0.18)'
-                      : 'rgba(158,158,158,0.10)',
-                  color: activePeriod === p.period ? '#2979FF' : 'var(--text-secondary)',
-                  border: `1px solid ${
-                    activePeriod === p.period ? 'rgba(41,121,255,0.45)' : 'rgba(158,158,158,0.25)'
-                  }`,
-                }}
-              >
-                {fmtPeriod(p.period)}{' '}
-                <span className="opacity-60 text-xs">({p.count})</span>
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* ── En İyi AI Puanlı Bilançolar ─────────────────────────────────── */}
+      {/* ── Son Bilançolar — uygulamadaki gibi tarih sıralı zengin kartlar ── */}
       <section className="mb-10">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold">
-            {activePeriod ? fmtPeriod(activePeriod) : ''} Dönemi En Yüksek AI Puanlı Bilançolar
-          </h2>
+          <h2 className="text-xl font-semibold">Son Açıklanan Bilançolar</h2>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-4">
           {loading ? (
-            <>
-              {Array.from({ length: 6 }).map((_, i) => <SkeletonRow key={i} />)}
-            </>
+            <>{Array.from({ length: 6 }).map((_, i) => <SkeletonRow key={i} />)}</>
           ) : items.length === 0 ? (
             <div className="card px-5 py-6 text-center text-muted text-sm">
-              Bu dönem için bilanço verisi henüz yayınlanmadı.
+              Bilanço verisi henüz yayınlanmadı.
             </div>
           ) : (
-            items.map((it, idx) => {
-              // Bilanco AI puanina gore dogru etiket (score-based) — kap_all_disclosures
-              // sentiment'i (Nötr — routine pre-filter) yerine score'a gore etiket.
-              const sent = scoreToLabel(it.ai_score);
-              return (
-                <div key={`${it.ticker}-${idx}`} className="card px-4 py-3">
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <div className="font-bold text-base lg:text-lg w-20">{it.ticker}</div>
-                    <span
-                      className="badge"
-                      style={{
-                        background: sent.bg,
-                        color: sent.color,
-                        border: `1px solid ${sent.color}40`,
-                      }}
-                    >
-                      {sent.label}
-                    </span>
-                    {it.ai_score != null && (
-                      <span className="badge" style={{ background: 'rgba(41,121,255,0.12)', color: '#2979FF', border: '1px solid rgba(41,121,255,0.3)' }}>
-                        AI {it.ai_score.toFixed(1)}
-                      </span>
-                    )}
-                    <span className="text-xs text-muted ml-auto">{fmtPeriod(it.period)}</span>
-                  </div>
-                  <div className="grid grid-cols-3 gap-3 mt-3 text-xs">
-                    <div>
-                      <div className="text-muted">Net Satış</div>
-                      <div className="font-semibold">{fmtNum(it.revenue)}</div>
-                    </div>
-                    <div>
-                      <div className="text-muted">FAVÖK</div>
-                      <div className="font-semibold">{fmtNum(it.ebitda)}</div>
-                    </div>
-                    <div>
-                      <div className="text-muted">Net Kâr</div>
-                      <div
-                        className="font-semibold"
-                        style={{ color: (it.net_income || 0) < 0 ? '#FF5252' : '#4CAF50' }}
-                      >
-                        {fmtNum(it.net_income)}
-                      </div>
-                    </div>
-                  </div>
-                  {/* Çeyreklik mini bar chart'lar (son 5 ceyrek) */}
-                  {it.quarterly && it.quarterly.length > 0 && (
-                    <div className="flex gap-3 mt-3 pt-3" style={{ borderTop: '1px dashed var(--border-primary)' }}>
-                      <MiniBarChart
-                        title="Çey. Satışlar"
-                        data={it.quarterly.map((q: BilancoQuarter) => ({ period: q.period, value: q.revenue }))}
-                        color="#1565C0"
-                      />
-                      <MiniBarChart
-                        title="Çey. FAVÖK"
-                        data={it.quarterly.map((q: BilancoQuarter) => ({ period: q.period, value: q.ebitda }))}
-                        color="#2E7D32"
-                      />
-                      <MiniBarChart
-                        title="Çey. Net Kâr"
-                        data={it.quarterly.map((q: BilancoQuarter) => ({ period: q.period, value: q.net_income }))}
-                        color="#2E7D32"
-                      />
-                    </div>
-                  )}
-                  {it.ai_summary && (
-                    <p className="text-xs text-muted mt-2 line-clamp-2">{it.ai_summary}</p>
-                  )}
-                </div>
-              );
-            })
+            items.map((it, idx) => <BilancoCard key={`${it.ticker}-${idx}`} it={it} />)
           )}
         </div>
       </section>
