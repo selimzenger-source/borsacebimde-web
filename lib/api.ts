@@ -360,17 +360,18 @@ export const api = {
   getBilancoTop: (period: string, sort: 'recent' | 'ai' = 'recent', limit: number = 20) =>
     fetchAPI<BilancoTopResponse>('/api/v1/bilanco/top', { period, sort, limit }),
 
-  /** Son Bilançolar — tüm dönemler, açıklama tarihine göre (uygulamadaki feed) */
-  getLatestBilancos: (limit: number = 40) =>
-    fetchAPI<BilancoListResponse>('/api/v1/bilanco', { limit }),
+  /** Son Bilançolar — tüm dönemler, açıklama tarihine göre (uygulamadaki feed).
+   *  tickers verilirse sadece o hisseler (arama için). */
+  getLatestBilancos: (limit: number = 40, tickers?: string) =>
+    fetchAPI<BilancoListResponse>('/api/v1/bilanco', tickers ? { limit, tickers } : { limit }),
 
   getBilancoCalendar: (limit: number = 50) =>
     fetchAPI<BilancoCalendarItem[]>('/api/v1/bilanco-takvim', { limit }),
 
   // ─── Temettü ──────────────────────────────────────────────────────────────
-  /** period: '1y' | '3y' | '5y' */
-  getTemettuSampiyonlar: (period: string = '5y', limit: number = 30) =>
-    fetchAPI<TemettuSampiyonResponse>('/api/v1/temettu/sampiyonlar', { period, limit }),
+  /** period: '1y' | '5y' | '10y' · sortBy: 'yield' (verim) | 'streak' (en uzun seri) */
+  getTemettuSampiyonlar: (period: string = '5y', limit: number = 30, sortBy: 'yield' | 'streak' = 'yield') =>
+    fetchAPI<TemettuSampiyonResponse>('/api/v1/temettu/sampiyonlar', { period, limit, sort_by: sortBy }),
 
   getTemettuCalendar: (limit: number = 60) =>
     fetchAPI<TemettuCalendarResponse>('/api/v1/temettu-takvim', { limit }),

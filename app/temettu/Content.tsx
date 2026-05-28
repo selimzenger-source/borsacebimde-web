@@ -8,12 +8,12 @@ import InlineAppBanner from '@/components/InlineAppBanner';
 import FAQ from '@/components/FAQ';
 import { temettuFAQ } from '@/lib/faq-data';
 
-type Period = '1y' | '3y' | '5y';
+type Period = '1y' | '5y' | '10y';
 
 const PERIOD_LABELS: Record<Period, string> = {
-  '1y': '1 Yıllık',
-  '3y': '3 Yıllık',
-  '5y': '5 Yıllık',
+  '1y': '1 Yıl',
+  '5y': '5 Yıl',
+  '10y': '10 Yıl',
 };
 
 // ─── Formatters ──────────────────────────────────────────────────────────────
@@ -47,6 +47,7 @@ function SkeletonRow() {
 
 export default function TemettuContent() {
   const [period, setPeriod] = useState<Period>('5y');
+  const [sortBy, setSortBy] = useState<'yield' | 'streak'>('yield');
   const [items, setItems] = useState<TemettuSampiyon[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -58,11 +59,11 @@ export default function TemettuContent() {
 
   useEffect(() => {
     setLoading(true);
-    api.getTemettuSampiyonlar(period, 25)
+    api.getTemettuSampiyonlar(period, 25, sortBy)
       .then((r) => setItems(r.items))
       .catch(() => setItems([]))
       .finally(() => setLoading(false));
-  }, [period]);
+  }, [period, sortBy]);
 
   useEffect(() => {
     api.getTemettuCalendar(60)
@@ -171,9 +172,26 @@ export default function TemettuContent() {
           </div>
         </div>
 
+        {/* Sıralama: Verim | En Uzun Seri (uygulamadaki gibi) */}
+        <div className="flex gap-2 mb-3">
+          {([['yield', '📈 Verime Göre'], ['streak', '🔥 En Uzun Seri']] as const).map(([k, lbl]) => (
+            <button
+              key={k}
+              onClick={() => setSortBy(k)}
+              className="badge px-3 py-1.5 transition-all"
+              style={{
+                background: sortBy === k ? 'rgba(76,175,80,0.18)' : 'rgba(158,158,158,0.10)',
+                color: sortBy === k ? '#4CAF50' : 'var(--text-secondary)',
+                border: `1px solid ${sortBy === k ? 'rgba(76,175,80,0.45)' : 'rgba(158,158,158,0.25)'}`,
+              }}
+            >
+              {lbl}
+            </button>
+          ))}
+        </div>
+
         <p className="text-xs text-muted mb-3">
-          {PERIOD_LABELS[period]} dönemde en istikrarlı temettü dağıtan, en yüksek verimli ve
-          en yüksek üst üste yıl sayısına sahip hisseler.
+          {PERIOD_LABELS[period]} dönemde {sortBy === 'streak' ? 'en uzun süre üst üste temettü dağıtan' : 'en yüksek temettü verimli'} hisseler.
         </p>
 
         <div className="space-y-2">

@@ -238,6 +238,9 @@ export default function BilancoContent() {
   const [items, setItems] = useState<BilancoListItem[]>([]);
   const [calendar, setCalendar] = useState<BilancoCalendarItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState('');
+  const [searched, setSearched] = useState<BilancoListItem[] | null>(null);
+  const [searching, setSearching] = useState(false);
 
   useEffect(() => {
     // Son Bilançolar — açıklama tarihine göre (uygulamadaki feed ile aynı)
@@ -249,6 +252,30 @@ export default function BilancoContent() {
       .then(setCalendar)
       .catch(() => {});
   }, []);
+
+  // Hisse arama — yazılan ticker'ı backend'den getir (tüm BIST, son 40 ile sınırlı değil)
+  useEffect(() => {
+    const q = query.trim().toUpperCase();
+    if (q.length < 2) { setSearched(null); return; }
+    setSearching(true);
+    const t = setTimeout(() => {
+      api.getLatestBilancos(800, q)
+        .then((r) => setSearched(r.items || []))
+        .catch(() => setSearched([]))
+        .finally(() => setSearching(false));
+    }, 400);
+    return () => clearTimeout(t);
+  }, [query]);
+
+  // Gösterilecek: arama varsa (yüklü 40'tan substring + backend tam-eşleşme), yoksa son 40
+  const shown = (() => {
+    const q = query.trim().toUpperCase();
+    if (q.length < 2) return items;
+    const map = new Map<string, BilancoListItem>();
+    items.filter((it) => it.ticker.includes(q)).forEach((it) => map.set(it.ticker, it));
+    (searched || []).forEach((it) => map.set(it.ticker, it));
+    return Array.from(map.values());
+  })();
 
   return (
     <div className="container-page py-6 lg:py-10">
@@ -277,18 +304,44 @@ export default function BilancoContent() {
       {/* ── Son Bilançolar — uygulamadaki gibi tarih sıralı zengin kartlar ── */}
       <section className="mb-10">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold">Son Açıklanan Bilançolar</h2>
+          <h2 className="text-xl font-semibold">
+            {query.trim().length >= 2 ? 'Arama Sonuçları' : 'Son Açıklanan Bilançolar'}
+          </h2>
+        </div>
+
+        {/* Hisse arama */}
+        <div className="mb-4 relative">
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''))}
+            placeholder="Hisse ara (ör: SASA, TUPRS)"
+            maxLength={6}
+            className="w-full px-4 py-3 rounded-xl text-sm outline-none"
+            style={{ background: 'var(--bg-secondary, rgba(158,158,158,0.08))', border: '1px solid var(--border-primary)', color: 'var(--text-primary)' }}
+          />
+          {query.length > 0 && (
+            <button
+              onClick={() => setQuery('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted text-lg"
+              aria-label="Temizle"
+            >×</button>
+          )}
         </div>
 
         <div className="space-y-4">
           {loading ? (
             <>{Array.from({ length: 6 }).map((_, i) => <SkeletonRow key={i} />)}</>
-          ) : items.length === 0 ? (
+          ) : searching ? (
+            <div className="card px-5 py-6 text-center text-muted text-sm">Aranıyor…</div>
+          ) : shown.length === 0 ? (
             <div className="card px-5 py-6 text-center text-muted text-sm">
-              Bilanço verisi henüz yayınlanmadı.
+              {query.trim().length >= 2
+                ? `"${query}" için bilanço bulunamadı.`
+                : 'Bilanço verisi henüz yayınlanmadı.'}
             </div>
           ) : (
-            items.map((it, idx) => <BilancoCard key={`${it.ticker}-${idx}`} it={it} />)
+            shown.map((it, idx) => <BilancoCard key={`${it.ticker}-${idx}`} it={it} />)
           )}
         </div>
       </section>
