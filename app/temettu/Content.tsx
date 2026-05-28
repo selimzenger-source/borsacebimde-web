@@ -43,6 +43,62 @@ function SkeletonRow() {
   );
 }
 
+// ─── Takvim Kartı (uygulamadaki gibi: tarih + gün rozeti) ───────────────────
+const TR_AYLAR = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'];
+function CalCard({ c }: { c: TemettuCalendarItem }) {
+  const d = c.payment_date ? new Date(c.payment_date) : null;
+  const valid = d && !isNaN(d.getTime());
+  let daysLeft: number | null = null;
+  if (valid) {
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    daysLeft = Math.round((d!.getTime() - today.getTime()) / 86400000);
+  }
+  const paid = c.status === 'odendi';
+  return (
+    <div className="card px-4 py-3 flex items-center gap-3">
+      {/* Tarih sütunu */}
+      <div className="text-center w-12 flex-shrink-0">
+        {valid ? (
+          <>
+            <div className="text-xl font-extrabold leading-none" style={{ color: 'var(--text-primary)' }}>
+              {String(d!.getDate()).padStart(2, '0')}
+            </div>
+            <div className="text-[10px] uppercase mt-0.5" style={{ color: 'var(--text-muted)' }}>{TR_AYLAR[d!.getMonth()]}</div>
+          </>
+        ) : (
+          <div className="text-[10px]" style={{ color: 'var(--text-muted)' }}>tarih<br />bekliyor</div>
+        )}
+      </div>
+      <div className="w-px self-stretch" style={{ background: 'var(--border-primary)' }} />
+      {/* Ticker + gün rozeti */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="font-bold text-base">{c.ticker}</span>
+          {!paid && daysLeft != null && daysLeft >= 0 && (
+            <span className="badge text-xs" style={{ background: 'rgba(255,152,0,0.15)', color: '#FF9800', border: '1px solid rgba(255,152,0,0.35)' }}>
+              {daysLeft === 0 ? 'Bugün' : `${daysLeft} gün`}
+            </span>
+          )}
+          {paid && (
+            <span className="badge text-xs" style={{ background: 'rgba(76,175,80,0.15)', color: '#4CAF50', border: '1px solid rgba(76,175,80,0.35)' }}>Ödendi</span>
+          )}
+        </div>
+        <div className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
+          Brüt {c.gross_per_share != null ? c.gross_per_share.toLocaleString('tr-TR', { maximumFractionDigits: 4 }) + ' ₺' : '—'}
+          {' · '}Net {c.net_per_share != null ? c.net_per_share.toLocaleString('tr-TR', { maximumFractionDigits: 4 }) + ' ₺' : '—'}
+        </div>
+      </div>
+      {/* Verim */}
+      {c.yield_pct != null && (
+        <div className="text-right flex-shrink-0">
+          <div className="font-bold" style={{ color: '#4CAF50' }}>%{c.yield_pct.toFixed(2)}</div>
+          <div className="text-[10px]" style={{ color: 'var(--text-muted)' }}>verim</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Main ────────────────────────────────────────────────────────────────────
 
 export default function TemettuContent() {
@@ -75,6 +131,35 @@ export default function TemettuContent() {
   }, []);
 
   const filteredCal = calStatus === 'all' ? calendar : calendar.filter((c) => c.status === calStatus);
+
+  // Tarih gruplaması (uygulamadaki gibi: Bu Hafta / Bu Ay / Gelecek / Ödenenler)
+  const calSections = (() => {
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const parseD = (s: string | null) => { if (!s) return null; const d = new Date(s); return isNaN(d.getTime()) ? null : d; };
+    const diffDays = (d: Date) => Math.round((d.getTime() - today.getTime()) / 86400000);
+    const buckets: Record<string, TemettuCalendarItem[]> = { week: [], month: [], future: [], past: [], none: [] };
+    for (const c of filteredCal) {
+      const d = parseD(c.payment_date);
+      if (!d) { buckets.none.push(c); continue; }
+      const diff = diffDays(d);
+      if (diff < 0) buckets.past.push(c);
+      else if (diff <= 7) buckets.week.push(c);
+      else if (diff <= 31) buckets.month.push(c);
+      else buckets.future.push(c);
+    }
+    const ascD = (a: TemettuCalendarItem, b: TemettuCalendarItem) => (a.payment_date || '').localeCompare(b.payment_date || '');
+    const descD = (a: TemettuCalendarItem, b: TemettuCalendarItem) => (b.payment_date || '').localeCompare(a.payment_date || '');
+    buckets.week.sort(ascD); buckets.month.sort(ascD); buckets.future.sort(ascD);
+    buckets.past.sort(descD);
+    buckets.none.sort((a, b) => (b.yield_pct ?? 0) - (a.yield_pct ?? 0));
+    return ([
+      ['🔥 Bu Hafta', buckets.week],
+      ['📅 Bu Ay', buckets.month],
+      ['Gelecek Aylar', buckets.future],
+      ['✓ Ödenenler', buckets.past],
+      ['Tarih Belirlenmedi', buckets.none],
+    ] as const).filter(([, arr]) => arr.length > 0);
+  })();
 
   return (
     <div className="container-page py-6 lg:py-10">
@@ -297,55 +382,21 @@ export default function TemettuContent() {
             ))}
           </div>
         </div>
-        <div className="space-y-2">
-          {filteredCal.length === 0 ? (
-            <div className="card px-5 py-6 text-center text-muted text-sm">
-              Kayıt bulunamadı.
-            </div>
-          ) : (
-            filteredCal.slice(0, 30).map((c, idx) => (
-              <div key={`${c.ticker}-${idx}`} className="card px-4 py-3 flex items-center gap-3 flex-wrap">
-                <div className="font-bold w-20">{c.ticker}</div>
-                <span
-                  className="badge"
-                  style={{
-                    background:
-                      c.status === 'odendi'
-                        ? 'rgba(76,175,80,0.12)'
-                        : 'rgba(255,152,0,0.12)',
-                    color: c.status === 'odendi' ? '#4CAF50' : '#FF9800',
-                    border: '1px solid currentColor',
-                  }}
-                >
-                  {c.status === 'odendi' ? 'Ödendi' : 'Yaklaşıyor'}
-                </span>
-                <div className="text-xs text-muted">
-                  Brüt {c.gross_per_share != null ? c.gross_per_share.toLocaleString('tr-TR', { maximumFractionDigits: 4 }) + ' TL' : '—'}
-                </div>
-                <div className="text-xs text-muted">
-                  Net {c.net_per_share != null ? c.net_per_share.toLocaleString('tr-TR', { maximumFractionDigits: 4 }) + ' TL' : '—'}
-                </div>
-                {c.yield_pct != null && (
-                  <span
-                    className="badge"
-                    style={{
-                      background: 'rgba(76,175,80,0.12)',
-                      color: '#4CAF50',
-                      border: '1px solid rgba(76,175,80,0.3)',
-                    }}
-                  >
-                    %{c.yield_pct.toFixed(2)}
-                  </span>
-                )}
-                {c.payment_date && (
-                  <div className="text-xs text-muted ml-auto whitespace-nowrap">
-                    {formatDate(c.payment_date)}
-                  </div>
-                )}
+        {calSections.length === 0 ? (
+          <div className="card px-5 py-6 text-center text-muted text-sm">Kayıt bulunamadı.</div>
+        ) : (
+          calSections.map(([title, arr]) => (
+            <div key={title} className="mb-6">
+              <div className="flex items-center gap-2 mb-2">
+                <h3 className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>{title}</h3>
+                <span className="text-xs" style={{ color: 'var(--text-muted)' }}>({arr.length})</span>
               </div>
-            ))
-          )}
-        </div>
+              <div className="space-y-2">
+                {arr.map((c, idx) => <CalCard key={`${c.ticker}-${idx}`} c={c} /> )}
+              </div>
+            </div>
+          ))
+        )}
       </section>
       )}
 
