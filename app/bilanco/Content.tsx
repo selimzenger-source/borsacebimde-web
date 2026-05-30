@@ -53,6 +53,17 @@ function scoreToLabel(score: number | null | undefined): { bg: string; color: st
   return { bg: 'rgba(244,67,54,0.18)', color: '#F44336', label: 'Kötü' };
 }
 
+// AI metinlerindeki teknik kısaltmaları sadeleştir
+function humanizeAi(text?: string | null): string {
+  if (!text) return '';
+  return text
+    .replace(/\bYoY\b/gi, 'yıllık (geçen yılın aynı dönemine göre)')
+    .replace(/\bQoQ\b/gi, 'çeyreklik (önceki çeyreğe göre)')
+    .replace(/\bTTM\b/g, 'son 12 ay')
+    .replace(/\by\/y\b/gi, 'yıllık')
+    .replace(/\bg\.y\.g\b/gi, 'geçen yıla göre');
+}
+
 // Yüzde değişim (current vs prev)
 function pctChange(curr: number | null | undefined, prev: number | null | undefined): { txt: string; color: string } | null {
   if (curr == null || prev == null || prev === 0) return null;
@@ -78,40 +89,38 @@ function MiniBarChart({
   const maxAbs = Math.max(...valid.map((d) => Math.abs(d.value)));
   if (maxAbs === 0) return null;
 
-  const W = 160;
-  const H = 60;
-  const gap = 6;
+  const W = 170;
+  const H = 50;     // bar çizim alanı
+  const TOP = 16;   // bar üstü değer etiketi payı
+  const BOT = 13;   // alt dönem etiketi payı
+  const gap = 7;
   const barW = (W - gap * (data.length - 1)) / data.length;
 
   return (
     <div style={{ flex: 1, minWidth: 130 }}>
-      <div style={{ fontSize: 10, color: 'var(--text-muted)', textAlign: 'center', marginBottom: 4, fontWeight: 600 }}>
+      <div style={{ fontSize: 12, color: 'var(--text-primary)', textAlign: 'center', marginBottom: 6, fontWeight: 700 }}>
         {title}
       </div>
-      <svg viewBox={`0 0 ${W} ${H + 14}`} width="100%" preserveAspectRatio="xMidYMid meet">
+      <svg viewBox={`0 0 ${W} ${TOP + H + BOT}`} width="100%" preserveAspectRatio="xMidYMid meet">
         {data.map((d, i) => {
+          const x = i * (barW + gap);
           if (d.value === null || isNaN(d.value)) {
             return (
-              <text key={i} x={i * (barW + gap) + barW / 2} y={H + 11} fontSize="7"
+              <text key={i} x={x + barW / 2} y={TOP + H + 10} fontSize="7.5"
                 fill="var(--text-muted)" textAnchor="middle">{fmtPeriod(d.period)}</text>
             );
           }
-          const h = (Math.abs(d.value) / maxAbs) * H;
-          const y = H - h;
+          const h = Math.max((Math.abs(d.value) / maxAbs) * H, 2);
+          const y = TOP + (H - h);
           const fill = d.value < 0 ? '#FF5252' : color;
           const isLast = i === data.length - 1;
           return (
             <g key={i}>
-              <rect
-                x={i * (barW + gap)}
-                y={y}
-                width={barW}
-                height={h}
-                fill={fill}
-                opacity={isLast ? 1 : 0.6}
-                rx={2}
-              />
-              <text x={i * (barW + gap) + barW / 2} y={H + 11} fontSize="7"
+              {/* Bar üstü değer etiketi (uygulamadaki gibi) */}
+              <text x={x + barW / 2} y={y - 3} fontSize="7.5" fontWeight="700"
+                fill={fill} textAnchor="middle">{fmtNum(d.value)}</text>
+              <rect x={x} y={y} width={barW} height={h} fill={fill} opacity={isLast ? 1 : 0.55} rx={2} />
+              <text x={x + barW / 2} y={TOP + H + 10} fontSize="7.5"
                 fill="var(--text-muted)" textAnchor="middle">{fmtPeriod(d.period)}</text>
             </g>
           );
@@ -156,6 +165,10 @@ function BilancoCard({ it }: { it: BilancoListItem }) {
     : q.length > 0 ? q.reduce((s, x) => s + (x.net_income || 0), 0) * (4 / q.length) : null;
   const roe = (it.total_equity && niTTM != null && it.total_equity > 0) ? (niTTM / it.total_equity) * 100 : null;
   const ndFavok = (it.net_debt != null && it.ebitda && it.ebitda !== 0) ? it.net_debt / it.ebitda : null;
+  // Borç / Özkaynak (uygulamadaki alt kutu için)
+  const de = (it.total_equity && it.net_debt != null && it.total_equity > 0) ? it.net_debt / it.total_equity : null;
+  const roeColor = roe == null ? 'var(--text-muted)' : roe >= 15 ? '#4CAF50' : roe >= 5 ? '#FFD700' : '#FF5252';
+  const deColor = de == null ? 'var(--text-muted)' : de <= 1 ? '#4CAF50' : de <= 2 ? '#FFD700' : '#FF5252';
   const sc = scoreToLabel(it.ai_score);
 
   const Metric = ({ label, value, color }: { label: string; value: string; color?: string }) => (
@@ -213,19 +226,56 @@ function BilancoCard({ it }: { it: BilancoListItem }) {
         </div>
       </div>
 
-      {/* Çeyreklik grafikler */}
+      {/* Çeyreklik grafikler — uygulamadaki 2 sütunlu düzen (3 grafik + ROE/Borç kutusu) */}
       {q.length > 0 && (
-        <div className="flex gap-3 mt-4 pt-3" style={{ borderTop: '1px dashed var(--border-primary)' }}>
-          <MiniBarChart title="Çey. Satışlar" data={q.slice(-5).map((x) => ({ period: x.period, value: x.revenue }))} color="#1565C0" />
-          <MiniBarChart title="Çey. FAVÖK" data={q.slice(-5).map((x) => ({ period: x.period, value: x.ebitda }))} color="#2E7D32" />
-          <MiniBarChart title="Çey. Net Kâr" data={q.slice(-5).map((x) => ({ period: x.period, value: x.net_income }))} color="#2E7D32" />
+        <div className="grid grid-cols-2 gap-3 mt-4 pt-3" style={{ borderTop: '1px dashed var(--border-primary)' }}>
+          {[
+            { title: 'Çeyreklik Satışlar', key: 'revenue' as const, color: '#1565C0' },
+            { title: 'Çeyreklik FAVÖK', key: 'ebitda' as const, color: '#2E7D32' },
+            { title: 'Çeyreklik Net Kâr', key: 'net_income' as const, color: '#2E7D32' },
+          ].map((c) => (
+            <div
+              key={c.key}
+              className="rounded-xl border p-3 flex items-center"
+              style={{ borderColor: 'var(--border-primary)', backgroundColor: 'var(--bg-secondary)' }}
+            >
+              <MiniBarChart
+                title={c.title}
+                data={q.slice(-5).map((x) => ({ period: x.period, value: x[c.key] }))}
+                color={c.color}
+              />
+            </div>
+          ))}
+
+          {/* 4. hücre: ROE + Borç/Özkaynak kutusu (uygulamadaki gibi) */}
+          <div
+            className="rounded-xl border p-3 flex flex-col items-center justify-center text-center gap-1"
+            style={{ borderColor: 'var(--border-primary)', backgroundColor: 'var(--bg-secondary)' }}
+          >
+            <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>ROE (Özkaynak Karlılığı)</div>
+            <div className="flex items-center gap-1.5">
+              <span style={{ width: 9, height: 9, borderRadius: 5, background: roeColor }} />
+              <span className="font-extrabold" style={{ fontSize: 19, color: roeColor }}>
+                {roe != null ? `%${roe.toFixed(1)}` : '—'}
+              </span>
+            </div>
+            <div style={{ height: 1, width: '70%', background: 'var(--border-primary)', margin: '5px 0' }} />
+            <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>Borç / Özkaynak</div>
+            <div className="flex items-center gap-1.5">
+              <span style={{ width: 9, height: 9, borderRadius: 5, background: deColor }} />
+              <span className="font-extrabold" style={{ fontSize: 19, color: deColor }}>
+                {de != null ? `${de.toFixed(2)}x` : '—'}
+              </span>
+            </div>
+            <div style={{ fontSize: 8.5, color: 'var(--text-muted)', marginTop: 3 }}>Güncel bilanço verisiyle hesaplanır</div>
+          </div>
         </div>
       )}
 
       {/* AI yorumu */}
       {it.ai_summary && (
         <div className="mt-3 pt-3 text-xs" style={{ borderTop: '1px dashed var(--border-primary)', color: 'var(--text-secondary)' }}>
-          <span className="font-bold" style={{ color: sc.color }}>🤖 AI Bilanço Yorumu: </span>{it.ai_summary}
+          <span className="font-bold" style={{ color: sc.color }}>🤖 AI Bilanço Yorumu: </span>{humanizeAi(it.ai_summary)}
         </div>
       )}
     </div>
