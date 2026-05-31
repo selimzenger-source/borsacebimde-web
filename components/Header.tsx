@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -35,6 +35,14 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [haberlerOpen, setHaberlerOpen] = useState(false);
   const [araclarOpen, setAraclarOpen] = useState(false);
+
+  // Dropdown hover — kapanışta küçük gecikme (trigger→menü geçişinde kaybolmasın)
+  const haberlerTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const araclarTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const openHaberler = () => { if (haberlerTimer.current) clearTimeout(haberlerTimer.current); setHaberlerOpen(true); };
+  const closeHaberler = () => { if (haberlerTimer.current) clearTimeout(haberlerTimer.current); haberlerTimer.current = setTimeout(() => setHaberlerOpen(false), 200); };
+  const openAraclar = () => { if (araclarTimer.current) clearTimeout(araclarTimer.current); setAraclarOpen(true); };
+  const closeAraclar = () => { if (araclarTimer.current) clearTimeout(araclarTimer.current); araclarTimer.current = setTimeout(() => setAraclarOpen(false), 200); };
   const [store, setStore] = useState(getStoreInfo());
   useEffect(() => { setStore(getStoreInfo()); }, []);
 
@@ -97,8 +105,8 @@ export default function Header() {
             {/* Haberler dropdown */}
             <div
               className="relative"
-              onMouseEnter={() => setHaberlerOpen(true)}
-              onMouseLeave={() => setHaberlerOpen(false)}
+              onMouseEnter={openHaberler}
+              onMouseLeave={closeHaberler}
             >
               <button
                 className="px-3 py-1.5 rounded-lg text-[13px] font-medium transition-all duration-150 whitespace-nowrap flex items-center gap-1"
@@ -115,23 +123,25 @@ export default function Header() {
                 </svg>
               </button>
               {haberlerOpen && (
-                <div
-                  className="absolute left-0 top-full mt-1 min-w-[220px] rounded-lg shadow-xl border py-1.5"
-                  style={{
-                    backgroundColor: theme === 'dark' ? 'rgba(11,17,32,0.97)' : 'rgba(255,255,255,0.97)',
-                    borderColor: 'var(--border-primary)',
-                  }}
-                >
-                  {haberlerLinks.map((l) => (
-                    <Link
-                      key={l.href}
-                      href={l.href}
-                      className="block px-4 py-2 text-[13px] hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-                      style={{ color: isActive(l.href) ? '#2979FF' : 'var(--text-secondary)' }}
-                    >
-                      {l.label}
-                    </Link>
-                  ))}
+                <div className="absolute left-0 top-full pt-2 min-w-[220px] z-50">
+                  <div
+                    className="rounded-lg shadow-xl border py-1.5"
+                    style={{
+                      backgroundColor: theme === 'dark' ? 'rgba(11,17,32,0.97)' : 'rgba(255,255,255,0.97)',
+                      borderColor: 'var(--border-primary)',
+                    }}
+                  >
+                    {haberlerLinks.map((l) => (
+                      <Link
+                        key={l.href}
+                        href={l.href}
+                        className="block px-4 py-2 text-[13px] hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                        style={{ color: isActive(l.href) ? '#2979FF' : 'var(--text-secondary)' }}
+                      >
+                        {l.label}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
@@ -139,8 +149,8 @@ export default function Header() {
             {/* Araclar dropdown */}
             <div
               className="relative"
-              onMouseEnter={() => setAraclarOpen(true)}
-              onMouseLeave={() => setAraclarOpen(false)}
+              onMouseEnter={openAraclar}
+              onMouseLeave={closeAraclar}
             >
               <button
                 className="px-3 py-1.5 rounded-lg text-[13px] font-medium transition-all duration-150 whitespace-nowrap flex items-center gap-1"
@@ -157,23 +167,25 @@ export default function Header() {
                 </svg>
               </button>
               {araclarOpen && (
-                <div
-                  className="absolute right-0 top-full mt-1 min-w-[220px] rounded-lg shadow-xl border py-1.5"
-                  style={{
-                    backgroundColor: theme === 'dark' ? 'rgba(11,17,32,0.97)' : 'rgba(255,255,255,0.97)',
-                    borderColor: 'var(--border-primary)',
-                  }}
-                >
-                  {araclarLinks.map((l) => (
-                    <Link
-                      key={l.href}
-                      href={l.href}
-                      className="block px-4 py-2 text-[13px] hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-                      style={{ color: isActive(l.href) ? '#2979FF' : 'var(--text-secondary)' }}
-                    >
-                      {l.label}
-                    </Link>
-                  ))}
+                <div className="absolute right-0 top-full pt-2 min-w-[220px] z-50">
+                  <div
+                    className="rounded-lg shadow-xl border py-1.5"
+                    style={{
+                      backgroundColor: theme === 'dark' ? 'rgba(11,17,32,0.97)' : 'rgba(255,255,255,0.97)',
+                      borderColor: 'var(--border-primary)',
+                    }}
+                  >
+                    {araclarLinks.map((l) => (
+                      <Link
+                        key={l.href}
+                        href={l.href}
+                        className="block px-4 py-2 text-[13px] hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                        style={{ color: isActive(l.href) ? '#2979FF' : 'var(--text-secondary)' }}
+                      >
+                        {l.label}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
