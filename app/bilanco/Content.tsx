@@ -291,10 +291,11 @@ export default function BilancoContent() {
   const [query, setQuery] = useState('');
   const [searched, setSearched] = useState<BilancoListItem[] | null>(null);
   const [searching, setSearching] = useState(false);
+  const [visible, setVisible] = useState(40); // "Daha Fazla Yükle" ile artar
 
   useEffect(() => {
     // Son Bilançolar — açıklama tarihine göre (uygulamadaki feed ile aynı)
-    api.getLatestBilancos(40)
+    api.getLatestBilancos(150)
       .then((r) => setItems(r.items || []))
       .catch(() => setItems([]))
       .finally(() => setLoading(false));
@@ -391,7 +392,17 @@ export default function BilancoContent() {
                 : 'Bilanço verisi henüz yayınlanmadı.'}
             </div>
           ) : (
-            shown.map((it, idx) => <BilancoCard key={`${it.ticker}-${idx}`} it={it} />)
+            <>
+              {shown.slice(0, visible).map((it, idx) => <BilancoCard key={`${it.ticker}-${idx}`} it={it} />)}
+              {shown.length > visible && (
+                <button
+                  onClick={() => setVisible((v) => v + 40)}
+                  className="w-full mt-2 py-3 rounded-xl border border-[var(--border-primary)] text-sm font-semibold text-[#2979FF] hover:bg-[#2979FF]/10 transition-colors"
+                >
+                  Daha Fazla Yükle ({shown.length - visible} bilanço daha)
+                </button>
+              )}
+            </>
           )}
         </div>
       </section>
