@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { api, BilancoListItem, BilancoCalendarItem, formatDate } from '@/lib/api';
 import AdBanner from '@/components/AdBanner';
 import AppStoreBanner from '@/components/AppStoreBanner';
@@ -158,6 +158,41 @@ function FinRow({ label, curr, prev, bold, signed }: { label: string; curr: numb
   );
 }
 
+async function shareBilancoOnTwitter(cardEl: HTMLElement, ticker: string, period: string | null | undefined): Promise<{ ok: boolean; msg: string }> {
+  // html2canvas dinamik yükle (CDN — bundle şişirmesin)
+  const ensureHtml2Canvas = async (): Promise<any> => {
+    if ((window as any).html2canvas) return (window as any).html2canvas;
+    await new Promise<void>((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+      s.onload = () => resolve();
+      s.onerror = () => reject(new Error('html2canvas yüklenemedi'));
+      document.head.appendChild(s);
+    });
+    return (window as any).html2canvas;
+  };
+  try {
+    const h2c = await ensureHtml2Canvas();
+    const canvas = await h2c(cardEl, {
+      backgroundColor: '#0d0d10', scale: 2, useCORS: true, logging: false,
+      ignoreElements: (el: Element) => (el as HTMLElement).hasAttribute?.('data-share-btn'),
+    });
+    const dataUrl: string = canvas.toDataURL('image/png');
+    const b64 = dataUrl.split(',')[1];
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://sz-bist-finans-api.onrender.com';
+    const res = await fetch(`${apiBase}/api/v1/share-bilanco-tweet`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ticker, period, image_base64: b64 }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data?.success) return { ok: true, msg: 'X\'te paylaşıldı ✓' };
+    return { ok: false, msg: data?.detail || 'Paylaşım başarısız' };
+  } catch (e: any) {
+    return { ok: false, msg: e?.message || 'Beklenmedik hata' };
+  }
+}
+
 function BilancoCard({ it }: { it: BilancoListItem }) {
   // TTM ROE = son 4 çeyrek net kâr / özkaynak
   const q = it.quarterly || [];
@@ -178,8 +213,22 @@ function BilancoCard({ it }: { it: BilancoListItem }) {
     </div>
   );
 
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [sharing, setSharing] = useState(false);
+  const [shareMsg, setShareMsg] = useState<{ ok: boolean; msg: string } | null>(null);
+
+  const handleShare = async () => {
+    if (!cardRef.current || sharing) return;
+    setSharing(true);
+    setShareMsg(null);
+    const r = await shareBilancoOnTwitter(cardRef.current, it.ticker, it.period);
+    setShareMsg(r);
+    setSharing(false);
+    if (r.ok) setTimeout(() => setShareMsg(null), 4000);
+  };
+
   return (
-    <div className="card px-4 py-4">
+    <div className="card px-4 py-4" ref={cardRef}>
       {/* Header */}
       <div className="flex items-center gap-2 flex-wrap mb-3">
         <span className="font-extrabold text-lg">{it.ticker}</span>
@@ -190,7 +239,35 @@ function BilancoCard({ it }: { it: BilancoListItem }) {
             {sc.label} · {it.ai_score.toFixed(1)}
           </span>
         )}
+        {/* X'te paylaş — html2canvas + backend share endpoint */}
+        <button
+          onClick={handleShare}
+          disabled={sharing}
+          data-share-btn
+          className="ml-auto inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-md transition"
+          style={{
+            background: sharing ? 'rgba(99,102,241,0.15)' : 'rgba(29,161,242,0.12)',
+            color: '#1DA1F2', border: '1px solid rgba(29,161,242,0.35)',
+            cursor: sharing ? 'wait' : 'pointer', opacity: sharing ? 0.7 : 1,
+          }}
+          title="X'te (Twitter) paylaş"
+        >
+          <span aria-hidden>𝕏</span>
+          <span>{sharing ? 'Paylaşılıyor…' : "X'te Paylaş"}</span>
+        </button>
       </div>
+      {shareMsg && (
+        <div
+          className="text-xs mb-2 px-2 py-1 rounded"
+          style={{
+            background: shareMsg.ok ? 'rgba(76,175,80,0.12)' : 'rgba(255,82,82,0.12)',
+            color: shareMsg.ok ? '#4CAF50' : '#FF5252',
+            border: `1px solid ${shareMsg.ok ? '#4CAF5055' : '#FF525255'}`,
+          }}
+        >
+          {shareMsg.msg}
+        </div>
+      )}
 
       {/* Marj satırı */}
       <div className="grid grid-cols-4 gap-2 mb-4">
