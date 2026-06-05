@@ -216,9 +216,23 @@ function BilancoCard({ it }: { it: BilancoListItem }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [sharing, setSharing] = useState(false);
   const [shareMsg, setShareMsg] = useState<{ ok: boolean; msg: string } | null>(null);
+  // İki-adımlı onay: ilk tık "Emin misin?" der, ikinci tık gönderir (kazara tek
+  // tıkla resmi hesaptan tweet gitmesin diye)
+  const [armed, setArmed] = useState(false);
+  const armTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleShare = async () => {
     if (!cardRef.current || sharing) return;
+    // 1. tık: onay iste, gönderme
+    if (!armed) {
+      setArmed(true);
+      if (armTimer.current) clearTimeout(armTimer.current);
+      armTimer.current = setTimeout(() => setArmed(false), 4000);
+      return;
+    }
+    // 2. tık: onaylandı → gönder
+    if (armTimer.current) clearTimeout(armTimer.current);
+    setArmed(false);
     setSharing(true);
     setShareMsg(null);
     const r = await shareBilancoOnTwitter(cardRef.current, it.ticker, it.period);
@@ -246,14 +260,15 @@ function BilancoCard({ it }: { it: BilancoListItem }) {
           data-share-btn
           className="ml-auto inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-md transition"
           style={{
-            background: sharing ? 'rgba(99,102,241,0.15)' : 'rgba(29,161,242,0.12)',
-            color: '#1DA1F2', border: '1px solid rgba(29,161,242,0.35)',
+            background: sharing ? 'rgba(99,102,241,0.15)' : armed ? 'rgba(255,170,0,0.18)' : 'rgba(29,161,242,0.12)',
+            color: armed ? '#FFAA00' : '#1DA1F2',
+            border: `1px solid ${armed ? 'rgba(255,170,0,0.45)' : 'rgba(29,161,242,0.35)'}`,
             cursor: sharing ? 'wait' : 'pointer', opacity: sharing ? 0.7 : 1,
           }}
-          title="X'te (Twitter) paylaş"
+          title={armed ? 'Onaylamak için tekrar bas' : "X'te (Twitter) paylaş"}
         >
           <span aria-hidden>𝕏</span>
-          <span>{sharing ? 'Paylaşılıyor…' : "X'te Paylaş"}</span>
+          <span>{sharing ? 'Paylaşılıyor…' : armed ? 'Emin misin? Tekrar bas' : "X'te Paylaş"}</span>
         </button>
       </div>
       {shareMsg && (
