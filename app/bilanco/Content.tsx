@@ -146,13 +146,29 @@ function SkeletonRow() {
 }
 
 // ─── Zengin Bilanço Kartı (uygulamadaki BFREN düzeni) ───────────────────────
+// Sütun düzeni — uygulamadaki gibi: Etiket | Güncel | Önceki | % (4 kolon)
+const FIN_GRID = '1fr 4.2rem 4.2rem 3rem';
+
+// Başlık satırı: dönem etiketleri (26 Q1 | 25 Q4 | %)
+function FinHeader({ cur, prev }: { cur: string; prev: string }) {
+  return (
+    <div className="grid items-center pb-1 mb-0.5" style={{ gridTemplateColumns: FIN_GRID, columnGap: '0.4rem', borderBottom: '1px dashed var(--border-primary)' }}>
+      <span />
+      <span className="text-[10px] text-right font-semibold" style={{ color: 'var(--text-muted)' }}>{cur}</span>
+      <span className="text-[10px] text-right font-semibold" style={{ color: 'var(--text-muted)' }}>{prev}</span>
+      <span className="text-[10px] text-right font-semibold" style={{ color: 'var(--text-muted)' }}>%</span>
+    </div>
+  );
+}
+
 function FinRow({ label, curr, prev, bold, signed }: { label: string; curr: number | null; prev: number | null; bold?: boolean; signed?: boolean }) {
   const ch = pctChange(curr, prev);
   const valColor = signed ? ((curr || 0) < 0 ? '#FF5252' : '#4CAF50') : 'var(--text-primary)';
   return (
-    <div className="grid grid-cols-3 gap-2 items-center py-1.5" style={{ borderTop: '1px solid var(--border-primary)' }}>
+    <div className="grid items-center py-1.5" style={{ gridTemplateColumns: FIN_GRID, columnGap: '0.4rem', borderTop: '1px solid var(--border-primary)' }}>
       <span className={`text-xs ${bold ? 'font-bold' : ''}`} style={{ color: 'var(--text-secondary)' }}>{label}</span>
       <span className={`text-xs text-right ${bold ? 'font-bold' : 'font-semibold'}`} style={{ color: valColor }}>{fmtNum(curr)}</span>
+      <span className="text-xs text-right font-medium" style={{ color: 'var(--text-muted)' }}>{fmtNum(prev)}</span>
       <span className="text-xs text-right" style={{ color: ch ? ch.color : 'var(--text-muted)' }}>{ch ? ch.txt : '—'}</span>
     </div>
   );
@@ -295,10 +311,8 @@ function BilancoCard({ it }: { it: BilancoListItem }) {
       <div className="grid lg:grid-cols-2 gap-4">
         {/* Özet Gelir Tablosu */}
         <div>
-          <div className="flex justify-between text-[11px] mb-1" style={{ color: 'var(--text-muted)' }}>
-            <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>Özet Gelir Tablosu</span>
-            <span>{fmtPeriod(it.period)} · {fmtPeriod(it.prev_period)} · %</span>
-          </div>
+          <div className="text-[11px] mb-1 font-semibold" style={{ color: 'var(--text-primary)' }}>Özet Gelir Tablosu</div>
+          <FinHeader cur={fmtPeriod(it.period)} prev={fmtPeriod(it.prev_period)} />
           <FinRow label="Satışlar" curr={it.revenue} prev={it.revenue_prev} bold />
           <FinRow label="Brüt Kâr" curr={it.gross_profit} prev={it.gross_profit_prev} />
           <FinRow label="FAVÖK" curr={it.ebitda} prev={it.ebitda_prev} />
@@ -306,10 +320,8 @@ function BilancoCard({ it }: { it: BilancoListItem }) {
         </div>
         {/* Özet Bilanço */}
         <div>
-          <div className="flex justify-between text-[11px] mb-1" style={{ color: 'var(--text-muted)' }}>
-            <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>Özet Bilanço</span>
-            <span>{fmtPeriod(it.period)} · {fmtPeriod(it.prev_period_balance)} · %</span>
-          </div>
+          <div className="text-[11px] mb-1 font-semibold" style={{ color: 'var(--text-primary)' }}>Özet Bilanço</div>
+          <FinHeader cur={fmtPeriod(it.period)} prev={fmtPeriod(it.prev_period_balance)} />
           <FinRow label="Dönen Varlık" curr={it.current_assets} prev={it.current_assets_prev} />
           <FinRow label="Duran Varlık" curr={it.non_current_assets} prev={it.non_current_assets_prev} />
           <FinRow label="Toplam Varlık" curr={it.total_assets} prev={it.total_assets_prev} />
