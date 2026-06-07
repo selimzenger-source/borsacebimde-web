@@ -22,6 +22,13 @@ export interface ApiBlogPost {
 
 const API_BASE = 'https://sz-bist-finans-api.onrender.com';
 
+// Her BUILD'e özel cache-buster (modül yüklenince 1 kez = build anı). force-cache
+// ile birlikte: AYNI build içinde tüm sayfalar aynı sonucu paylaşır (robust, flaky
+// API'de tutarlı) AMA her yeni build farklı _v → taze veri (yeni bloglar görünür).
+// no-store kullanılmadı çünkü her fetch'i bağımsızlaştırıp build'de bazı detay
+// sayfalarının boş/üretilmemiş kalmasına (404) yol açıyordu.
+const BUILD_ID = Date.now();
+
 export async function fetchAllBlogs(): Promise<ApiBlogPost[]> {
   // Render build container'da API cold start olabilir — retry + uzun timeout.
   const MAX_ATTEMPTS = 3;
@@ -29,10 +36,8 @@ export async function fetchAllBlogs(): Promise<ApiBlogPost[]> {
     try {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 45000); // 45s timeout
-      const res = await fetch(`${API_BASE}/api/v1/public/blogs`, {
-        // no-store: her build TAZE blog listesi çeksin. force-cache, build cache'inden
-        // eski listeyi (yeni blog YOKKEN) döndürüp yeni blogların sayfasını üretmiyordu (404).
-        cache: 'no-store',
+      const res = await fetch(`${API_BASE}/api/v1/public/blogs?_v=${BUILD_ID}`, {
+        cache: 'force-cache',
         signal: controller.signal,
         headers: {
           'User-Agent': 'borsacebimde-web-build/1.0',
@@ -63,8 +68,8 @@ export async function fetchAllBlogs(): Promise<ApiBlogPost[]> {
 
 export async function fetchBlogBySlug(slug: string): Promise<ApiBlogPost | null> {
   try {
-    const res = await fetch(`${API_BASE}/api/v1/public/blogs/${slug}`, {
-      cache: 'no-store',
+    const res = await fetch(`${API_BASE}/api/v1/public/blogs/${slug}?_v=${BUILD_ID}`, {
+      cache: 'force-cache',
     });
     if (res.ok) return await res.json();
   } catch {
