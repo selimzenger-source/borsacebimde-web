@@ -30,7 +30,9 @@ export async function fetchAllBlogs(): Promise<ApiBlogPost[]> {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 45000); // 45s timeout
       const res = await fetch(`${API_BASE}/api/v1/public/blogs`, {
-        cache: 'force-cache',
+        // no-store: her build TAZE blog listesi çeksin. force-cache, build cache'inden
+        // eski listeyi (yeni blog YOKKEN) döndürüp yeni blogların sayfasını üretmiyordu (404).
+        cache: 'no-store',
         signal: controller.signal,
         headers: {
           'User-Agent': 'borsacebimde-web-build/1.0',
@@ -62,7 +64,7 @@ export async function fetchAllBlogs(): Promise<ApiBlogPost[]> {
 export async function fetchBlogBySlug(slug: string): Promise<ApiBlogPost | null> {
   try {
     const res = await fetch(`${API_BASE}/api/v1/public/blogs/${slug}`, {
-      cache: 'force-cache',
+      cache: 'no-store',
     });
     if (res.ok) return await res.json();
   } catch {
