@@ -524,6 +524,11 @@ export default function HomePage() {
                   if (aiScore >= 6) sentiment = 'olumlu';
                   else if (aiScore <= 4) sentiment = 'olumsuz';
                 }
+                // Yeni kısa tweet formatında "/10" puanı yok — sentiment 🟢/🔴 emojiyle gelir
+                if (sentiment === 'notr') {
+                  if (rawText.includes('🔴') || rawText.includes('⚠️')) sentiment = 'olumsuz';
+                  else if (rawText.includes('🟢') || rawText.includes('⚡') || rawText.includes('🌙')) sentiment = 'olumlu';
+                }
                 if (sentiment === 'notr') {
                   const lower = rawText.toLowerCase();
                   if (lower.includes('olumlu') || lower.includes('pozitif')) sentiment = 'olumlu';
@@ -604,8 +609,25 @@ export default function HomePage() {
                   )}
                   <div className="p-4 flex flex-col gap-2">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="badge" style={sourceBadgeStyle(item.source)}>
-                        {sourceLabel(item.source)}
+                      {/* KAP rozetinde etiket+renk sentiment'e göre: negatif habere
+                          "KAP Pozitif Haber" (yeşil) basılıyordu — düzeltildi */}
+                      <span
+                        className="badge"
+                        style={
+                          isKap && sentiment === 'olumsuz'
+                            ? { background: 'rgba(255,82,82,0.12)', color: '#FF5252', border: '1px solid rgba(255,82,82,0.25)' }
+                            : isKap && sentiment === 'notr'
+                            ? { background: 'var(--bg-surface)', color: 'var(--text-secondary)', border: '1px solid var(--border-primary)' }
+                            : sourceBadgeStyle(item.source)
+                        }
+                      >
+                        {isKap && sourceLabel(item.source).includes('KAP')
+                          ? sentiment === 'olumsuz'
+                            ? 'KAP Negatif Haber'
+                            : sentiment === 'olumlu'
+                            ? 'KAP Pozitif Haber'
+                            : 'KAP Haber'
+                          : sourceLabel(item.source)}
                       </span>
                       {timeStr && (
                         <span style={{ color: 'var(--text-muted)', fontSize: 11 }}>
