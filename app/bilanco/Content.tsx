@@ -227,14 +227,24 @@ async function shareBilancoOnTwitter(cardEl: HTMLElement, ticker: string, period
       URL.revokeObjectURL(url);
     }
 
+    // X Web Intent dışarıdan görsel KABUL ETMEZ (X kısıtı) — kullanıcıya
+    // pencere açılmadan ÖNCE kaçırılmayacak şekilde yapıştırmayı söyle.
+    const isMac = /Mac|iPhone|iPad/.test(navigator.userAgent);
+    const pasteKey = isMac ? 'Cmd+V' : 'Ctrl+V';
+    if (copied) {
+      alert(`✅ Bilanço görseli panonuza kopyalandı!\n\nŞimdi açılacak X penceresinde tweet kutusuna tıklayıp ${pasteKey} ile görseli YAPIŞTIRIN, sonra paylaşın.`);
+    } else {
+      alert('📥 Bilanço görseli indirildi!\n\nŞimdi açılacak X penceresinde görseli tweete sürükleyin veya 🖼 butonuyla ekleyin, sonra paylaşın.');
+    }
+
     // X tweet taslağını kullanıcının KENDİ hesabında aç
     window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text),
                 '_blank', 'width=560,height=640');
 
     return {
       ok: true,
-      msg: copied ? 'Görsel panoya kopyalandı — açılan X penceresinde Ctrl+V ile yapıştırın ✓'
-                  : 'Görsel indirildi — açılan X penceresinde tweete ekleyin ✓',
+      msg: copied ? `Görsel panoda — X penceresinde ${pasteKey} ile yapıştırın ✓`
+                  : 'Görsel indirildi — X penceresinde tweete ekleyin ✓',
     };
   } catch (e: any) {
     return { ok: false, msg: e?.message || 'Beklenmedik hata' };
