@@ -174,6 +174,11 @@ function FinRow({ label, curr, prev, bold, signed }: { label: string; curr: numb
   );
 }
 
+// X'te Paylaş — KULLANICININ KENDİ HESABINDAN (Web Intent).
+// Eskiden /api/v1/share-bilanco-tweet'e POST edip BorsaCebimde resmi
+// hesabından atıyordu — herkese açık sitede kabul edilemez. Yeni akış:
+// kart görseli panoya kopyalanır (desteklenmezse indirilir) ve X tweet
+// taslağı kullanıcının KENDİ hesabında açılır; görseli Ctrl+V ile ekler.
 async function shareBilancoOnTwitter(cardEl: HTMLElement, ticker: string, period: string | null | undefined): Promise<{ ok: boolean; msg: string }> {
   // html2canvas dinamik yükle (CDN — bundle şişirmesin)
   const ensureHtml2Canvas = async (): Promise<any> => {
@@ -187,23 +192,50 @@ async function shareBilancoOnTwitter(cardEl: HTMLElement, ticker: string, period
     });
     return (window as any).html2canvas;
   };
+  // Dönem: "2026-Q1" → "2026 1.Çeyrek"
+  let perTxt = '';
+  if (period) {
+    const m = period.match(/^(\d{4})-Q(\d)$/);
+    perTxt = m ? `${m[1]} ${m[2]}.Çeyrek ` : period.replace('-', ' ') + ' ';
+  }
+  const text =
+    `#${ticker} ${perTxt}bilançosunu açıkladı.. #bilanço 👇\n\n` +
+    `📌 Detaylı AI analizi ve yorumunu ve bütün #bist bilançolarını anlık uygulamamızda bulabilirsiniz...\n\n` +
+    `🔗 http://borsacebimde.com`;
   try {
     const h2c = await ensureHtml2Canvas();
     const canvas = await h2c(cardEl, {
       backgroundColor: '#0d0d10', scale: 2, useCORS: true, logging: false,
       ignoreElements: (el: Element) => (el as HTMLElement).hasAttribute?.('data-share-btn'),
     });
-    const dataUrl: string = canvas.toDataURL('image/png');
-    const b64 = dataUrl.split(',')[1];
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://sz-bist-finans-api.onrender.com';
-    const res = await fetch(`${apiBase}/api/v1/share-bilanco-tweet`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ticker, period, image_base64: b64 }),
-    });
-    const data = await res.json().catch(() => ({}));
-    if (res.ok && data?.success) return { ok: true, msg: 'X\'te paylaşıldı ✓' };
-    return { ok: false, msg: data?.detail || 'Paylaşım başarısız' };
+    const blob: Blob | null = await new Promise((res) => canvas.toBlob(res, 'image/png'));
+    if (!blob) throw new Error('Görsel üretilemedi');
+
+    // Görseli panoya kopyala; desteklenmiyorsa indir (kullanıcı tweete ekler)
+    let copied = false;
+    try {
+      if (navigator.clipboard && (window as any).ClipboardItem) {
+        await navigator.clipboard.write([new (window as any).ClipboardItem({ 'image/png': blob })]);
+        copied = true;
+      }
+    } catch { /* pano desteklenmiyor → indir */ }
+    if (!copied) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `bilanco-${ticker}.png`;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // X tweet taslağını kullanıcının KENDİ hesabında aç
+    window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text),
+                '_blank', 'width=560,height=640');
+
+    return {
+      ok: true,
+      msg: copied ? 'Görsel panoya kopyalandı — açılan X penceresinde Ctrl+V ile yapıştırın ✓'
+                  : 'Görsel indirildi — açılan X penceresinde tweete ekleyin ✓',
+    };
   } catch (e: any) {
     return { ok: false, msg: e?.message || 'Beklenmedik hata' };
   }
@@ -232,29 +264,17 @@ function BilancoCard({ it }: { it: BilancoListItem }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [sharing, setSharing] = useState(false);
   const [shareMsg, setShareMsg] = useState<{ ok: boolean; msg: string } | null>(null);
-  // İki-adımlı onay: ilk tık "Emin misin?" der, ikinci tık gönderir (kazara tek
-  // tıkla resmi hesaptan tweet gitmesin diye)
-  const [armed, setArmed] = useState(false);
-  const armTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Kullanıcının KENDİ X hesabında taslak açılır — iki adımlı onaya gerek yok
+  const armed = false;
 
   const handleShare = async () => {
     if (!cardRef.current || sharing) return;
-    // 1. tık: onay iste, gönderme
-    if (!armed) {
-      setArmed(true);
-      if (armTimer.current) clearTimeout(armTimer.current);
-      armTimer.current = setTimeout(() => setArmed(false), 4000);
-      return;
-    }
-    // 2. tık: onaylandı → gönder
-    if (armTimer.current) clearTimeout(armTimer.current);
-    setArmed(false);
     setSharing(true);
     setShareMsg(null);
     const r = await shareBilancoOnTwitter(cardRef.current, it.ticker, it.period);
     setShareMsg(r);
     setSharing(false);
-    if (r.ok) setTimeout(() => setShareMsg(null), 4000);
+    if (r.ok) setTimeout(() => setShareMsg(null), 6000);
   };
 
   return (
