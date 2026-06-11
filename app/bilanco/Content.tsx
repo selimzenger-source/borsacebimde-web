@@ -198,10 +198,10 @@ async function shareBilancoOnTwitter(cardEl: HTMLElement, ticker: string, period
     const m = period.match(/^(\d{4})-Q(\d)$/);
     perTxt = m ? `${m[1]} ${m[2]}.Çeyrek ` : period.replace('-', ' ') + ' ';
   }
+  // Link YOK (X harici linki cezalandırıyor + kullanıcı istemedi) — marka görselde zaten var
   const text =
     `#${ticker} ${perTxt}bilançosunu açıkladı.. #bilanço 👇\n\n` +
-    `📌 Detaylı AI analizi ve yorumunu ve bütün #bist bilançolarını anlık uygulamamızda bulabilirsiniz...\n\n` +
-    `🔗 http://borsacebimde.com`;
+    `📌 Detaylı AI analizi ve yorumunu ve bütün #bist bilançolarını anlık Borsa Cebimde uygulamasında bulabilirsiniz...`;
   try {
     const h2c = await ensureHtml2Canvas();
     const canvas = await h2c(cardEl, {
