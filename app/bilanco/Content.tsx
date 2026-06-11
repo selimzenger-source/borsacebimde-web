@@ -211,6 +211,19 @@ async function shareBilancoOnTwitter(cardEl: HTMLElement, ticker: string, period
     const blob: Blob | null = await new Promise((res) => canvas.toBlob(res, 'image/png'));
     if (!blob) throw new Error('Görsel üretilemedi');
 
+    // ── MOBİL: Web Share API (dosya destekli) — paylaşım menüsünden X seçilince
+    // görsel + metin OTOMATİK ekli gelir. Masaüstünde pano+intent akışı sürer.
+    try {
+      const file = new File([blob], `bilanco-${ticker}.png`, { type: 'image/png' });
+      if (typeof navigator.share === 'function' && navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file], text });
+        return { ok: true, msg: 'Paylaşım menüsü açıldı — X\'i seçin, görsel ve metin hazır ✓' };
+      }
+    } catch (shareErr: any) {
+      if (shareErr?.name === 'AbortError') return { ok: false, msg: 'Paylaşım iptal edildi' };
+      // NotAllowedError vb. → masaüstü akışına düş
+    }
+
     // Görseli panoya kopyala; desteklenmiyorsa indir (kullanıcı tweete ekler)
     let copied = false;
     try {
