@@ -67,6 +67,10 @@ function humanizeAi(text?: string | null): string {
 // Yüzde değişim (current vs prev)
 function pctChange(curr: number | null | undefined, prev: number | null | undefined): { txt: string; color: string } | null {
   if (curr == null || prev == null || prev === 0) return null;
+  // İşaret değişiminde (zarar→kâr / kâr→zarar) % anlamsız — Fintables gibi N/A
+  if ((curr > 0 && prev < 0) || (curr < 0 && prev > 0)) {
+    return { txt: 'N/A', color: 'var(--text-muted)' };
+  }
   const pct = ((curr - prev) / Math.abs(prev)) * 100;
   const color = pct >= 0 ? '#4CAF50' : '#FF5252';
   return { txt: `${pct >= 0 ? '+' : ''}${pct.toFixed(0)}%`, color };
